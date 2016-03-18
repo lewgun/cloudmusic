@@ -1,0 +1,14 @@
+// Place your settings in this file to overwrite default and user settings.
+//http://stackoverflow.com/questions/31587949/hide-js-map-files-in-visual-studio-code
+{
+	  "files.exclude": {
+        "**/.git": true,
+        "**/.DS_Store": true,
+		"**/*.js": {"when": "$(basename).ts"},
+		"**/*.js.map": true,
+        "**/.vscode": true,
+        "*.log": true
+        
+		
+    }
+}
