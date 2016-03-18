@@ -46,7 +46,7 @@ export module Crypto {
 // var bytes  = CryptoJS.AES.decrypt(ciphertext.toString(), 'secret key 123');
 // var plaintext = bytes.toString(CryptoJS.enc.Utf8);
 
-        CryptoJS.AES()
+        CryptoJS.AES
 
 
 		return "hello module";
