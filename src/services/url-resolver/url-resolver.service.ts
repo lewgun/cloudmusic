@@ -6,6 +6,6 @@ import {UrlResolver} from 'angular2/compiler';
 export class MyUrlResolver extends UrlResolver {
 	
 	resolve( baseUrl: string, url: string ): string {	
-		return super.resolve("src/app/components/", url);
+		return super.resolve("src/components/", url);
 	}
 }
