@@ -5,6 +5,7 @@ import {UrlResolver} from 'angular2/compiler';
 import {MyUrlResolver } from './services/url-resolver/url-resolver.service';
 import {AppComponent} from './components/app/app.component';
 
+
 bootstrap(AppComponent,
  [HTTP_PROVIDERS, 
   provide(UrlResolver, {useClass: MyUrlResolver})])

@@ -1,32 +1,38 @@
 {
- "name": "cloudmusic",
- "version": "1.0.0",
- "description": "",
- "main": "index.js",
- "scripts": {
+  "name": "cloudmusic",
+  "version": "1.0.0",
+  "description": "a classroom for learning go and ng2",
+  "main": "index.js",
+  "dependencies": {
+    "angular2": "^2.0.0-beta.11",
+    "concurrently": "^2.0.0",
+    "es6-promise": "^3.1.2",
+    "es6-shim": "^0.35.0",
+    "lite-server": "^2.1.0",
+    "reflect-metadata": "^0.1.2",
+    "rxjs": "^5.0.0-beta.2",
+    "systemjs": "^0.19.24",
+    "typings": "^0.7.9",
+    "underscore": "^1.8.3",
+    "zone.js": "^0.6.4"
+  },
+  "scripts": {
     "postinstall": "npm run typings install",
     "tsc": "tsc",
     "tsc:w": "tsc -w",
     "lite": "lite-server",
-	"start": "concurrently \"npm run tsc:w\" \"npm run lite\" ",    
-    "app": "concurrent \"npm run tsc:w\" \"npm run lite\" ",
+    "start": "concurrent \"npm run tsc:w\" \"npm run lite\" ",
     "typings": "typings"
- },
- "author": "",
- "license": "ISC",
- "devDependencies": {
-    "concurrently": "^2.0.0",
-    "lite-server": "^2.1.0",
-    "typescript": "^1.8.7",
-    "typings": "^0.6.10"
- },
- "dependencies": {
-    "angular2": "^2.0.0-beta.8",
-    "es6-promise": "^3.1.2",
-    "es6-shim": "^0.33.13",
-    "reflect-metadata": "^0.1.2",
-    "rxjs": "^5.0.0-beta.2",
-    "zone.js": "^0.5.15",
-	"systemjs": "0.19.6"
- }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lewgun/cloudmusic.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lewgun/cloudmusic/issues"
+  },
+  "homepage": "https://github.com/lewgun/cloudmusic#readme"
 }
