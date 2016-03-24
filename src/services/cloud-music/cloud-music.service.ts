@@ -1,8 +1,15 @@
-import {Injectable, OnInit} from 'angular2/core';
+import {Injectable, OnInit, Inject} from 'angular2/core';
 
-import {Crypto} from '../crypto/crypto.service'
-import {HttpService} from '../http/http.service'
-import { WebLoginUrl, PhoneLoginUrl, PhoneLoginParams, WebLoginParams }  from '../../types/types'
+import {CryptoService} from '../crypto/crypto.service';
+import {HttpService} from '../http/http.service';
+import {IsCellPhone} from '../utils/utils.service'
+
+import {
+    WebLoginUrl,
+    PhoneLoginUrl,
+    PhoneLoginParams,
+    WebLoginParams
+}  from '../../types/types';
 
 
 //https://github.com/darknessomi/musicbox/blob/master/NEMbox/api.py
@@ -10,38 +17,43 @@ import { WebLoginUrl, PhoneLoginUrl, PhoneLoginParams, WebLoginParams }  from '.
 @Injectable()
 export class CloudMusicService implements OnInit {
 
-    private _crypto: Crypto
-
-    constructor() { }
-    ngOnInit() {
-        this._crypto = new Crypto();
+    constructor(
+        @Inject(CryptoService) private _crypto: CryptoService,
+        @Inject(HttpService) private _http: HttpService) {
+        console.log("hello from CloudMusicService");
     }
 
-    private _isCellPhone(txt: string): boolean {
-        const re = /0\d{2,3}\d{7,8}$|^1[34578]\d{9}$/;
-        return re.test(txt)
-    }
+    ngOnInit() { }
 
-    _phoneLogin(username: string, password: string) {
+
+    private _phoneLogin(username: string, password: string) {
         let params: PhoneLoginParams = {
             'phone': username,
             'password': password,
             'rememberLogin': 'true'
         }
+
+        this._loginHelper(PhoneLoginUrl, JSON.stringify(params));
     }
 
-    _webLogin(username: string, password: string) {
+    private _webLogin(username: string, password: string) {
         let params: WebLoginParams = {
             'username': username,
             'password': password,
             'rememberLogin': 'true'
         }
 
-        let data = this._crypto.aesRsaEncrypt(JSON.stringify(params));
+        this._loginHelper(WebLoginUrl, JSON.stringify(params));
+    }
+
+    private _loginHelper(action: string, params: string) {
+        let data = this._crypto.aesRsaEncrypt(params);
+
+        this._http.Post(action, data)
     }
 
     Login(username: string, password: string) {
-        if (this._isCellPhone(username)) {
+        if (IsCellPhone(username)) {
             return this._phoneLogin(username, password)
         }
 

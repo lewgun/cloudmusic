@@ -11,6 +11,7 @@
 
 import {createHash, createCipheriv} from 'crypto'
 import * as bigInt from 'big-integer';
+import {RequestParams} from '../../types/types'
 
 
 let modulus = '00e0b509f6259df8642dbc35662901477df22677ec152b5ff68ace615bb7b725152b3ab17a876aea8a5aa76d2e417629ec4ee341f56135fccf695280104e0312ecbda92557c93870114af6c9d05c4f7f0c3685b7a46bee255932575cce10b424d813cfe4875d3e82047b97ddef52741d546b8e289dc6935b3ece0462db0a22b8e7';
@@ -67,7 +68,7 @@ function createSecretKey(size) {
 // byte array
 function pack(bytes: any): string {
     let chars = [];
-    for(let i = 0, n = bytes.length; i < n;) {
+    for (let i = 0, n = bytes.length; i < n;) {
         chars.push(((bytes[i++] & 0xff) << 8) | (bytes[i++] & 0xff));
     }
     return String.fromCharCode.apply(null, chars);
@@ -75,7 +76,7 @@ function pack(bytes: any): string {
 
 function unpack(str: string): any {
     let bytes = [];
-    for(let i = 0, n = str.length; i < n; i++) {
+    for (let i = 0, n = str.length; i < n; i++) {
         let char = str.charCodeAt(i);
         bytes.push(char >>> 8, char & 0xFF);
     }
@@ -83,14 +84,11 @@ function unpack(str: string): any {
 }
 
 
-
-//RequestParams
-export interface RequestParams {
-    params: string;
-    encSecKey: string;
-}
-
-export class Crypto {
+export class CryptoService {
+    
+    constructor() {
+        console.log("hello from CryptoService");
+    }
 
     MD5(plain: string, encoding: string = "hex"): string {
         let h = createHash("md5");
@@ -106,18 +104,18 @@ export class Crypto {
             encSecKey: rsaEncrypt(secKey, pubKey, modulus)
         }
     }
-    
+
     encryptID(id): string {
         let bMagic = unpack('3go8&$8*3*3h0k(2)2');
         let bID = unpack(id);
-        
+
         let magicLen = bMagic.length;
         let idLen = bID.length;
-        
-        for ( let i = 0; i < idLen; i++ ) {
+
+        for (let i = 0; i < idLen; i++) {
             bID[i] ^= bMagic[i % magicLen];
         }
-        
+
         /*
           var res = this.MD5(pack(bID), "base64");
           res = res.replace('/', '_');
@@ -126,6 +124,6 @@ export class Crypto {
         */
         return this.MD5(pack(bID), "base64").replace('/', '_').replace('+', '-');
     }
-    
+
 
 }

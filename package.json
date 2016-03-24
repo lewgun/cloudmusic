@@ -22,7 +22,7 @@
         "browserify": "browserify src/boot.js -o src/app.js -s app",
         "uglify": "uglifyjs src/app.js -m -o src/app.min.js",
         "start": "concurrent \"npm run tsc:w\" \"npm run lite\" ",
-        "all": "npm run tsc &&  npm run browserify && npm run lite"
+        "all": "concurrent \"npm run tsc\"  \"npm run browserify\" \"npm run lite\" \"npm run uglifyjs src/app.js -m -o src/app.min.js\" "
     },
     "repository": {
         "type": "git",

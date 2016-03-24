@@ -13,3 +13,9 @@ export interface PhoneLoginParams {
     password: string;
     rememberLogin: string;
 }
+
+//RequestParams
+export interface RequestParams {
+    params: string;
+    encSecKey: string;
+}
