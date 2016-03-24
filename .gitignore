@@ -7,7 +7,6 @@ typings/
 *.js.map
 
 #file
-src/services/cloud-music/user.ts
-
+src/components/app/user.ts
 
 npm-debug.*
