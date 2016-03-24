@@ -6,12 +6,16 @@
         "emitDecoratorMetadata": true,
         "module": "commonjs",
         "noImplicitAny": false,
-        "watch": true 
+        "watch": true,
+        "allowJs": true
     },
     "exclude": [
         "node_modules",
         "typings/main",
-        "typings/main.d.ts"
+        "typings/main.d.ts",
+        "src/app.js",
+        "src/app.min.js",
+        "config.js"
     ]
 }
 
