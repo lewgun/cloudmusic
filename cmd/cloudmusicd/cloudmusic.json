@@ -1,0 +1,7 @@
+{
+    "webserver": {
+        "port": 88,
+        "prefix": "",
+        "run_mode": "debug"
+    }
+}
