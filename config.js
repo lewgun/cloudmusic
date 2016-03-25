@@ -10,5 +10,5 @@ System.config({
     defaultJSExtensions: true,
     map: mapping
 });
-System.import('src/app.min');
+System.import('src/frontend/app');
 

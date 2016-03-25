@@ -19,8 +19,8 @@
         "tsc": "tsc",
         "tsc:w": "tsc -w",
         "lite": "lite-server",
-        "browserify": "browserify src/boot.js -o src/app.js -s app",
-        "uglify": "uglifyjs src/app.js -m -o src/app.min.js",
+        "browserify": "browserify src/frontend/boot.js -o src/frontend/app.js -s app",
+        "uglify": "uglifyjs src/frontend/app.js -m -o src/frontend/app.min.js",
         "start": "concurrent \"npm run tsc:w\" \"npm run lite\" ",
         "all": "concurrent \"npm run tsc\"  \"npm run browserify\" \"npm run lite\" \"npm run uglify\" "
     },

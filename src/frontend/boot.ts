@@ -14,8 +14,9 @@ bootstrap(AppComponent,
         HttpService,
         CryptoService,
         provide(UrlResolver, { useClass: MyUrlResolver }),
-        provide(RequestOptions,{
-            useFactory: ()=> {
+        provide(RequestOptions, {
+            useFactory: () => {
+                console.log("hello from: RequestOptions");
                 return new RequestOptions({
                     headers: new Headers(RawHeaders)
                 });

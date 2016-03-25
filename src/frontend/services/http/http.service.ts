@@ -1,9 +1,5 @@
 import {Injectable, Inject, OnInit} from 'angular2/core';
-import {
-    Http,
-    Headers,
-    RequestOptionsArgs,
-} from 'angular2/http';
+import {Http} from 'angular2/http';
 
 import {
     DefaultTime,
@@ -14,9 +10,6 @@ import {
 
 @Injectable()
 export class HttpService implements OnInit {
-
-
-
     constructor( @Inject(Http) private _http: Http) {
         console.log("hello from HttpService");
     }
@@ -27,16 +20,9 @@ export class HttpService implements OnInit {
 
         console.log("hello from HttpService's Post");
 
-        let h = new Headers(this._header);
-        let opts: RequestOptionsArgs = {
-            headers: h
-        };
-
-
         this._http.post(
             action,
-            JSON.stringify(req),
-            opts).subscribe(
+            JSON.stringify(req)).subscribe(
             data => console.log(data),
             err => console.log(err),
             () => console.log("finisehd"));

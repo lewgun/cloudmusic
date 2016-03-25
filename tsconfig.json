@@ -13,9 +13,8 @@
         "node_modules",
         "typings/main",
         "typings/main.d.ts",
-        "src/app.js",
-        "src/app.min.js",
+        "src/frontend/app.js",
+        "src/frontend/app.min.js",
         "config.js"
     ]
 }
-
