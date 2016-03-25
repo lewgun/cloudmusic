@@ -29,7 +29,7 @@ export const TopList: TopListPair[] = [
 export const DefaultTime: number = 10;
 export const WebLoginUrl = "https://music.163.com/weapi/login/";
 export const PhoneLoginUrl = "https://music.163.com/weapi/login/cellphone";
-export const BaseUrlPath = "src/frontend/components"
+export const BaseUrlPath = "src/components"
 
 //https://github.com/kittencup/angular2-ama-cn/issues/22
 export const RawHeaders = {

@@ -7,6 +7,6 @@ typings/
 *.js.map
 
 #file
-src/frontend/components/app/user.ts
+web/src/components/app/user.ts
 
 npm-debug.*
