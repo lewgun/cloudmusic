@@ -126,6 +126,8 @@ func (f *Caller) register(s interface{}) {
 		}
 
 		mi.signature = f.generateSignature(mn, mi)
+		fmt.Println(mi.signature)
+
 		f.calls[mn] = mi
 	}
 }
