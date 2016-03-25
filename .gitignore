@@ -7,6 +7,6 @@ typings/
 *.js.map
 
 #file
-web/src/components/app/user.ts
+cmd/cloudmusicd/web/src/components/app/user.ts
 
 npm-debug.*
