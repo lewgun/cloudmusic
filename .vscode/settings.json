@@ -1,14 +1,27 @@
 // Place your settings in this file to overwrite default and user settings.
 //http://stackoverflow.com/questions/31587949/hide-js-map-files-in-visual-studio-code
 {
-	  "files.exclude": {
+    "files.exclude": {
         "**/.git": true,
         "**/.DS_Store": true,
-		"**/*.js": {"when": "$(basename).ts"},
-		"**/*.js.map": true,
-      //  "**/.vscode": true,
+        "**/*.js": {
+            "when": "$(basename).ts"
+        },
+        "**/*.js.map": true,
+        //  "**/.vscode": true,
         "*.log": true
-        
-		
-    }
+    },
+    
+    "go.buildOnSave": true,
+    "go.lintOnSave": true,
+    "go.vetOnSave": true,
+    "go.buildFlags": [],
+    "go.lintFlags": [],
+    "go.vetFlags": [],
+    "go.coverOnSave": false,
+    "go.useCodeSnippetsOnFunctionSuggest": false,
+    "go.formatOnSave": false,
+    "go.formatTool": "goreturns",
+    "go.goroot": "D:/Program Files/go1.6.windows-amd64/go",
+    "go.gopath": "D:/Projects/local"
 }
