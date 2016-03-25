@@ -1,0 +1,12 @@
+#Folders
+node_modules
+typings/
+
+#ext
+*.js
+*.js.map
+
+#file
+src/components/app/user.ts
+
+npm-debug.*
