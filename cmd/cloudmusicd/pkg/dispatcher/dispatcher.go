@@ -34,6 +34,7 @@ func (d *dispatcher) register(objs ...interface{}) {
 	for _, obj := range objs {
 
 		t := reflect.TypeOf(obj)
+      
 
 		name := t.Elem().Name()
 		if _, isExisted := d.typeNames[name]; isExisted {

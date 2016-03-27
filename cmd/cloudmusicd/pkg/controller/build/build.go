@@ -17,7 +17,7 @@ func (b Build) Tsc(ctx *gin.Context) (interface{}, error) {
 
 //Browserify
 func (b Build) Browserify(ctx *gin.Context) (interface{}, error) {
-	return "hello from Build.Browserify", nil
+     return "hello from Build.Browserify", nil
 }
 
 //Uglify
