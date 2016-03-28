@@ -21,4 +21,5 @@ export interface RequestParams {
     by: string;
     params: string;
     encSecKey: string;
+    csrf_token: string;
 }

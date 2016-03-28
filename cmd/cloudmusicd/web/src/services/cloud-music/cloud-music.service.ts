@@ -37,7 +37,7 @@ export class CloudMusicService implements OnInit {
             'csrf_token': this._crypto.createSecretKey(32)
         }
 
-        this._loginHelper(JSON.stringify(params), LoginByMobile);
+        this._loginHelper(JSON.stringify(params), LoginByMobile, params.csrf_token);
     }
 
     private _webLogin(username: string, password: string) {
@@ -48,12 +48,13 @@ export class CloudMusicService implements OnInit {
             'csrf_token': this._crypto.createSecretKey(32)
         }
 
-        this._loginHelper(JSON.stringify(params), LoginByID);
+        this._loginHelper(JSON.stringify(params), LoginByID, params.csrf_token);
     }
 
-    private _loginHelper( params: string, by: string ) {
+    private _loginHelper( params: string, by: string, csrf_token: string ) {
         let data = this._crypto.aesRsaEncrypt(params);
         data.by = by;
+        data.csrf_token = csrf_token
         this._http.Post(LoginUrl, data)
     }
 

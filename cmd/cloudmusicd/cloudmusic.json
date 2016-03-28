@@ -1,6 +1,6 @@
 {
     "webserver": {
-        "port": 88,
+        "port": 8088,
         "prefix": "",
         "run_mode": "debug"
     }
