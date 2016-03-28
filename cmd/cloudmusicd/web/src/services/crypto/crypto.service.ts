@@ -53,16 +53,7 @@ function rsaEncrypt(text, exponent, modulus) {
     return addPadding(biRet.toString(radix), modulus);
 }
 
-function createSecretKey(size) {
-    let keys = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    let key = "";
-    for (let i = 0; i < size; i++) {
-        let pos = Math.random() * keys.length;
-        pos = Math.floor(pos);
-        key = key + keys.charAt(pos)
-    }
-    return key;
-}
+
 
 
 // byte array
@@ -98,11 +89,23 @@ export class CryptoService {
     }
 
     aesRsaEncrypt(plain: string): RequestParams {
-        let secKey = createSecretKey(16);
+        let secKey = this.createSecretKey(16);
         return {
             params: aesEncrypt(aesEncrypt(plain, nonce), secKey),
-            encSecKey: rsaEncrypt(secKey, pubKey, modulus)
+            encSecKey: rsaEncrypt(secKey, pubKey, modulus),
+            by: ""
         }
+    }
+
+    createSecretKey(size) {
+        let keys = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        let key = "";
+        for (let i = 0; i < size; i++) {
+            let pos = Math.random() * keys.length;
+            pos = Math.floor(pos);
+            key = key + keys.charAt(pos)
+        }
+        return key;
     }
 
     encryptID(id): string {

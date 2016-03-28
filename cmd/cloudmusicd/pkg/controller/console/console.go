@@ -7,6 +7,8 @@ import (
 	"net/http/cookiejar"
 	"net/url"
 	"strings"
+	// "encoding/base64"
+	//  "os"
 
 	"github.com/lewgun/cloudmusic/cmd/cloudmusicd/pkg/dispatcher"
 	"github.com/lewgun/cloudmusic/pkg/misc"
@@ -16,7 +18,7 @@ import (
 )
 
 const (
-	musicAPIBase  = "https://music.163.com/"
+	musicAPIBase  = "http://music.163.com/"
 	webLoginUrl   = "https://music.163.com/weapi/login/"
 	phoneLoginUrl = "https://music.163.com/weapi/login/cellphone"
 )
@@ -32,6 +34,7 @@ type Console struct {
 	header http.Header
 }
 
+func unused(...interface{}) {}
 func init() {
 
 	cookies, err := cookiejar.New(nil)
@@ -44,21 +47,25 @@ func init() {
 		panic(fmt.Sprintf("failed to parse netease api url %s: %s", musicAPIBase, err))
 	}
 
-	// netease api requires some cookies to work
+	//netease api requires some cookies to work
 	cookies.SetCookies(apiUrl, []*http.Cookie{
-		&http.Cookie{Name: "appver", Value: "1.5.2"},
-		// &http.Cookie{Name: "os", Value: "pc"},
-		// &http.Cookie{Name: "osver", Value: "Microsoft-Windows-7-Ultimate-Edition-build-7600-64bit"},
+		&http.Cookie{Name: "appver", Value: "2.0.2"},
+		&http.Cookie{Name: "os", Value: "pc"},
+		&http.Cookie{Name: "osver", Value: "Microsoft-Windows-7-Ultimate-Edition-build-7600-64bit"},
 	})
+
+	unused(cookies, apiUrl, err)
 
 	header := http.Header{}
 	header.Add("Accept", "*/*")
 	header.Add("Accept-Encoding", "gzip,deflate,sdch")
-	header.Add("Accept-Language", "zh-CN,zh;q=0.8,gl;q=0.6,zh-TW;q=0.4*")
-	header.Add("Connection", "application/x-www-form-urlencoded")
+	header.Add("Accept-Language", "zh-CN,zh;q=0.8,en;q=0.6")
+	header.Add("Connection", "keep-alive")
+	header.Add("Content-Type", "application/x-www-form-urlencoded")
 	header.Add("Host", "music.163.com")
-	header.Add("Referer", "http://music.163.com/search/")
-	header.Add("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.152 Safari/537.36")
+	header.Add("Origin", "http://music.163.com")
+	header.Add("Referer", "http://music.163.com/")
+	header.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.87 Safari/537.36")
 
 	c := &Console{
 		client: &http.Client{},
@@ -72,26 +79,31 @@ func init() {
 func (c *Console) Login(ctx *gin.Context) (interface{}, error) {
 	params := &types.LoginReq{}
 	ctx.BindJSON(params)
+	fmt.Println(params)
 
-	var url string
+	var action string
 	switch params.By {
 	case byID:
-		url = webLoginUrl
+		action = webLoginUrl
 
 	case byMobile:
-		url = phoneLoginUrl
+		action = phoneLoginUrl
 
 	default:
 		return nil, fmt.Errorf("unkonwn login method")
 
 	}
 
-	fmt.Println(fmt.Sprintf("params=%s&encSecKey=%s", params.Params, params.EncSecKey))
+	action = "http://music.163.com/weapi/login/cellphone/?csrf_token="
+
+	v := url.Values{}
+	v.Set("params", params.Params)
+	v.Set("encSecKey", params.EncSecKey)
+
 	req, _ := http.NewRequest(
 		"POST",
-		url,
-		// strings.NewReader(fmt.Sprintf("params=%s&encSecKey=%s",params.Params,  params.EncSecKey)))
-		strings.NewReader(fmt.Sprintf("params=%s&encSecKey=%s", "fdsfasdfa", "fdsfasd")))
+		action,
+		strings.NewReader(v.Encode()))
 
 	req.Header = c.header
 
@@ -99,10 +111,9 @@ func (c *Console) Login(ctx *gin.Context) (interface{}, error) {
 
 	defer resp.Body.Close()
 	d, _ := ioutil.ReadAll(resp.Body)
+	fmt.Println(string(d))
 
-	fmt.Println("get value: ")
-	fmt.Println(string(d), len(d))
-
+	unused(d)
 	return params.Params, nil
 }
 

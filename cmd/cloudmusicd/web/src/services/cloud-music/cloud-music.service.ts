@@ -33,7 +33,8 @@ export class CloudMusicService implements OnInit {
         let params: PhoneLoginParams = {
             'phone': username,
             'password': password,
-            'rememberLogin': 'true'
+            'rememberLogin': 'true',
+            'csrf_token': this._crypto.createSecretKey(32)
         }
 
         this._loginHelper(JSON.stringify(params), LoginByMobile);
@@ -43,7 +44,8 @@ export class CloudMusicService implements OnInit {
         let params: WebLoginParams = {
             'username': username,
             'password': password,
-            'rememberLogin': 'true'
+            'rememberLogin': 'true',
+            'csrf_token': this._crypto.createSecretKey(32)
         }
 
         this._loginHelper(JSON.stringify(params), LoginByID);

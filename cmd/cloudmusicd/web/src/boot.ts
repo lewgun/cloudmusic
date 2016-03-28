@@ -13,14 +13,16 @@ bootstrap(AppComponent,
     [HTTP_PROVIDERS,
         HttpService,
         CryptoService,
-        provide(UrlResolver, { useClass: MyUrlResolver }),
-        provide(RequestOptions, {
-            useFactory: () => {
-                console.log("hello from: RequestOptions");
-                return new RequestOptions({
-                    headers: new Headers(RawHeaders)
-                });
-            }
-        })])
+        provide(UrlResolver, { useClass: MyUrlResolver })
+        // provide(RequestOptions, {
+        //     useFactory: () => {
+        //         console.log("hello from: RequestOptions");
+        //         return new RequestOptions({
+        //             headers: new Headers(RawHeaders)
+        //         });
+        //     }
+        // })
+        
+        ])
     .then(success => console.log('Bootstrap CloudMusic successfully!!!'))
     .catch(err => console.log(err));

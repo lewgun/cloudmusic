@@ -6,12 +6,14 @@ export interface WebLoginParams {
     username: string;
     password: string;
     rememberLogin: string;
+    csrf_token: string;
 }
 
 export interface PhoneLoginParams {
     phone: string;
     password: string;
     rememberLogin: string;
+        csrf_token: string;
 }
 
 //RequestParams
