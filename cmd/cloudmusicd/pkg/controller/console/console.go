@@ -1,12 +1,21 @@
 package console
 
 import (
-	"github.com/gin-gonic/gin"
+	"github.com/lewgun/cloudmusic/cmd/cloudmusicd/pkg/dispatcher"
 	"github.com/lewgun/cloudmusic/pkg/misc"
+
+	"github.com/gin-gonic/gin"
 )
 
+type Console struct {
+}
+
+func init() {
+	dispatcher.Register(&Console{})
+}
+
 //Login admin login
-func Login(c *gin.Context) {
+func (c *Console) Login(ctx *gin.Context) (interface{}, error) {
 	// auth := &types.Auth{}
 	// c.BindJSON(auth)
 	// login := &types.Login{
@@ -27,6 +36,7 @@ func Login(c *gin.Context) {
 	// }
 	// internal.SaveSession(c, user.Uid)
 	// misc.SimpleResponse(c, gin.H{"account": auth.Name, "uid": user.Uid})
+	return nil, nil
 }
 
 // logout endpoint

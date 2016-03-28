@@ -6,6 +6,7 @@ import (
 	"os/exec"
 
 	"github.com/gin-gonic/gin"
+
 	"github.com/lewgun/cloudmusic/cmd/cloudmusicd/pkg/dispatcher"
 )
 
@@ -19,8 +20,8 @@ func runCmd(cmd *exec.Cmd) error {
 	defer os.Chdir(cwd)
 
 	os.Chdir(webRoot)
-	return cmd.Start()
-	// return cmd.Wait()
+	cmd.Start()
+	return cmd.Wait()
 
 }
 
@@ -61,21 +62,22 @@ func (b Build) Uglify(ctx *gin.Context) (interface{}, error) {
 func (b Build) All(ctx *gin.Context) (interface{}, error) {
 
 	err := runCmd(exec.Command("npm", "run", "tsc"))
-	if err != nil {
-		fmt.Println(err)
-		return nil, err
-	}
+	// if err != nil {
+	// 	return nil, err
+	// }
+	fmt.Println("npm run tsc finished")
 	err = runCmd(exec.Command("npm", "run", "browserify"))
 	if err != nil {
-		fmt.Println(err)
 		return nil, err
 	}
 
+	fmt.Println("npm run browserify finished")
+
 	err = runCmd(exec.Command("npm", "run", "uglify"))
 	if err != nil {
-		fmt.Println(err)
 		return nil, err
 	}
+	fmt.Println("npm run browserify uglify")
 
 	return "npm run all is finished", nil
 }

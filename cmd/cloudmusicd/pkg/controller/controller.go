@@ -2,6 +2,8 @@ package controller
 
 import (
 	_ "github.com/lewgun/cloudmusic/cmd/cloudmusicd/pkg/controller/build"
+	_ "github.com/lewgun/cloudmusic/cmd/cloudmusicd/pkg/controller/console"
+
 	"github.com/lewgun/cloudmusic/cmd/cloudmusicd/pkg/dispatcher"
 
 	"github.com/gin-gonic/gin"

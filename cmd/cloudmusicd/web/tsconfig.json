@@ -6,7 +6,7 @@
         "emitDecoratorMetadata": true,
         "module": "commonjs",
         "noImplicitAny": false,
-        "watch": true,
+      //  "watch": true,
         "allowJs": true
     },
     "exclude": [

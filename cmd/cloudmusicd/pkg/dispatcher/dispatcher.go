@@ -86,25 +86,26 @@ func (d *dispatcher) call(ctx *gin.Context) {
 
 	}()
 
+	fmt.Println("11111111")
 	retVal, err := d.caller.Call(methodName, ctx)
 	if err != nil {
-		ctx.Writer.WriteString(fmt.Sprintf("run: %s failed with error: %v\n", methodName, err))
+		misc.SimpleResponse(ctx, fmt.Sprintf("run: %s failed with error: %v\n", methodName, err))
 		return
 	}
-
+	fmt.Println("2222222222")
 	if retVal[1] != nil {
-		fmt.Println("errrrrrrrrrr")
 		//err = retVal[1].(error)
 		misc.SimpleResponse(ctx, retVal[1])
 		return
 	}
-
+	fmt.Println("333333333")
 	if err != nil {
 		misc.SimpleResponse(ctx, retVal[0])
 		return
 	}
-
+	fmt.Println("44444444")
 	misc.SimpleResponse(ctx, retVal[0].(string))
+	fmt.Println("555555555", retVal[0].(string))
 
 }
 
