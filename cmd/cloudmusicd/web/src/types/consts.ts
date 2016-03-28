@@ -27,9 +27,10 @@ export const TopList: TopListPair[] = [
 ];
 
 export const DefaultTime: number = 10;
-export const serverBashPath = "http://127.0.0.1:88/"
-// export const WebLoginUrl = "https://music.163.com/weapi/login/";
-// export const PhoneLoginUrl = "https://music.163.com/weapi/login/cellphone";
+
+export const LoginByID = "id"
+export const LoginByMobile = "cellphone"
+
 
 export const LoginUrl = "./do/console/login"
 

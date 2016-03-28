@@ -7,6 +7,8 @@ import {IsCellPhone} from '../utils/utils.service'
 import {
     // WebLoginUrl,
     // PhoneLoginUrl,
+    LoginByMobile,
+    LoginByID,
     LoginUrl,
     PhoneLoginParams,
     WebLoginParams
@@ -34,7 +36,7 @@ export class CloudMusicService implements OnInit {
             'rememberLogin': 'true'
         }
 
-        this._loginHelper(JSON.stringify(params));
+        this._loginHelper(JSON.stringify(params), LoginByMobile);
     }
 
     private _webLogin(username: string, password: string) {
@@ -44,13 +46,12 @@ export class CloudMusicService implements OnInit {
             'rememberLogin': 'true'
         }
 
-        this._loginHelper(JSON.stringify(params));
+        this._loginHelper(JSON.stringify(params), LoginByID);
     }
 
-    private _loginHelper( params: string) {
+    private _loginHelper( params: string, by: string ) {
         let data = this._crypto.aesRsaEncrypt(params);
-        console.log(data)
-
+        data.by = by;
         this._http.Post(LoginUrl, data)
     }
 
