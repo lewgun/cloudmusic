@@ -22,6 +22,8 @@
     "go.useCodeSnippetsOnFunctionSuggest": false,
     "go.formatOnSave": false,
     "go.formatTool": "goreturns",
-    "go.goroot": "/usr/local/go",
-    "go.gopath": "/Users/liu/Sources/go/the3rd:/Users/liu/Sources/go/local"
+    // "go.goroot": "/usr/local/go",
+    // "go.gopath": "/Users/liu/Sources/go/the3rd:/Users/liu/Sources/go/local"
+    "go.goroot": "D:/Program Files/go1.6.windows-amd64/go",
+    "go.gopath": "D:/Projects/local"
 }

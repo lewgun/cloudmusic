@@ -14,7 +14,7 @@ func SimpleResponse(c *gin.Context, any interface{}) {
 		result = "result"
 	)
 
-	obj = map[string]string{result: "success"}
+	obj = map[string]interface{}{result: "success"}
 
 	switch param := any.(type) {
 	case error:
@@ -34,6 +34,9 @@ func SimpleResponse(c *gin.Context, any interface{}) {
 		}
 
 		obj = param
+
+	case string:
+		obj = any
 
 	}
 
