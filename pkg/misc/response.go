@@ -37,12 +37,12 @@ func SimpleResponse(c *gin.Context, any interface{}) {
 
 	case string:
 		obj = any
-    
-    default:
-          obj = gin.H{
-              "result": "success",
-               "data": any,
-            }  
+
+	default:
+		obj = gin.H{
+			"result": "success",
+			"data":   any,
+		}
 	}
 
 	c.JSON(200, obj)
