@@ -32,6 +32,7 @@ const (
 type Console struct {
 	client *http.Client
 	header http.Header
+	jar    *cookiejar.Jar
 }
 
 func unused(...interface{}) {}
@@ -47,9 +48,19 @@ func init() {
 	header.Add("Host", "music.163.com")
 	header.Add("Referer", "http://music.163.com/")
 	header.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.87 Safari/537.36")
+
+	jar, err := cookiejar.New(nil)
+
+	if err != nil {
+		panic(fmt.Errorf("failed to init netease httpclient cookiejar: %s", err))
+	}
+
 	c := &Console{
-		client: &http.Client{},
+		client: &http.Client{
+			Jar: jar,
+		},
 		header: header,
+		jar:    jar,
 	}
 
 	dispatcher.Register(c)
@@ -73,33 +84,45 @@ func (c *Console) Login(ctx *gin.Context) (interface{}, error) {
 
 	}
 
-	header, data, err := c.post(action, &params.BaseParams)
+	_, data, err := c.post(action, &params.BaseParams)
 	if err != nil {
 		return nil, err
 	}
 
-	fmt.Println(string(data))
+	unused(data)
+	// fmt.Println(string(data))
 
-	c.setCookie(header["Set-Cookie"])
+	c.printCookies(musicAPIBase)
 
 	return params.Params, nil
 }
 
-func (c *Console) setCookie(cookies []string) error {
-	jar, err := cookiejar.New(nil)
-	if nil != err {
-		return fmt.Errorf("failed to init netease httpclient cookiejar: %s", err)
-	}
+func (c *Console) printCookies(rawURL string) {
 
-	apiURL, err := url.Parse(musicAPIBase)
-	if nil != err {
-		return fmt.Errorf("failed to parse netease api url %s: %s", musicAPIBase, err)
-	}
+	domain, _ := url.ParseRequestURI(rawURL)
 
-	jar.SetCookies(apiURL, []*http.Cookie{
-		&http.Cookie{Name: "set-cookie", Value: strings.Join(cookies, " ")},
-	})
-	return nil
+	cookies := c.jar.Cookies(domain)
+
+	cookieNum := len(cookies)
+	fmt.Printf("cookieNum=%d\n", cookies)
+
+	for i := 0; i < cookieNum; i++ {
+		var curCk *http.Cookie = cookies[i]
+		//fmt.Printf("curCk.Raw=%s", curCk.Raw)
+		fmt.Printf(" Cookie [%d]", i)
+		fmt.Printf(" Name\t=%s ", curCk.Name)
+		fmt.Printf(" Value\t=% s", curCk.Value)
+		fmt.Printf(" Path\t=%s ", curCk.Path)
+		fmt.Printf(" Domain\t=%s ", curCk.Domain)
+		fmt.Printf(" Expires\t=%s ", curCk.Expires)
+		fmt.Printf(" RawExpires=%s ", curCk.RawExpires)
+		fmt.Printf(" MaxAge\t=%d ", curCk.MaxAge)
+		fmt.Printf(" Secure\t=%t ", curCk.Secure)
+		fmt.Printf(" HttpOnly=%t ", curCk.HttpOnly)
+		fmt.Printf(" Raw\t=%s ", curCk.Raw)
+		fmt.Printf(" Unparsed=%s ", curCk.Unparsed)
+		fmt.Println()
+	}
 }
 
 func (c *Console) post(action string, p *types.BaseParams) (http.Header, []byte, error) {
