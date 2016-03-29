@@ -75,6 +75,7 @@ func (c *Console) Login(ctx *gin.Context) (interface{}, error) {
 	var action string
 	switch params.By {
 	case byID:
+		fmt.Println("lgoin by id")
 		action = webLoginURL
 
 	case byMobile:
@@ -90,9 +91,16 @@ func (c *Console) Login(ctx *gin.Context) (interface{}, error) {
 		return nil, err
 	}
 
+	fmt.Println(string(data))
+
 	obj, err := objx.FromJSON(string(data))
+	//  obj.Get("code").Float64()
 	if err != nil {
 		return nil, err
+	}
+
+	if int(obj.Get("code").Float64()) != 200 {
+		return nil, fmt.Errorf(string(data))
 	}
 
 	m := obj.Get("profile").Data().(map[string]interface{})
