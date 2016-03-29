@@ -1,0 +1,29 @@
+
+<div class="modal">
+    <header>{{title}}</header>
+    <form [ngFormModel]='myForm' (ngSubmit)="onSubmit(myForm.value)" >
+            <div class="row">
+                <label for="account">Account:</label>
+                <input type="text"
+                        name="account"
+                        id="account"
+                        placeholder="Account"
+                        #account = "ngForm"
+                        [ngFormControl]="myForm.controls['account']" />
+                <control-message control="account"></control-message>
+            </div>
+            <div class="row">
+                <label for="password">Password:</label>
+                <input type="password"
+                    name="account"
+                    id="password"
+                    placeholder="Password"
+                    #password="ngForm"
+                    [ngFormControl]="myForm.controls['password']" >
+                <control-message control="password"></control-message>
+            </div>	
+
+        <!--<button type="submit" [disabled]="!myForm.valid">Submit</button>-->
+        <button type="submit" >Submit</button>
+    </form>
+</div>
