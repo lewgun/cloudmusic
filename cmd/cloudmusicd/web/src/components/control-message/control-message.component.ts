@@ -11,23 +11,23 @@ import {ValidationService} from '../../services/validation/validation.service';
 
 export class ControlMessageComponent {
     controlName: string;
-    constructor( @Host() private _formDir: NgFormModel) {}
-    
+    constructor( @Host() private _formDir: NgFormModel) { }
+
     get errorMessage() {
-        
+
         //Find the control in the Host(Parent)form
         let c = this._formDir.form.find(this.controlName);
-        
-        for ( let propertyName in c.errors) {
-            
+
+        for (let propertyName in c.errors) {
+
             // If control has a error          
             if (c.errors.hasOwnProperty(propertyName) && c.touched) {
-                
+
                 // Return the appropriate error message from the Validation Service
-                return ValidationService.validatorErrorMessage( propertyName);
+                return ValidationService.validatorErrorMessage(propertyName);
             }
         } // end of  for ( let propertyName in c.errors) {
-        
-        return null;    
+
+        return null;
     }
 }

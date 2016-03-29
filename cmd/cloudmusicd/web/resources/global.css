@@ -1,0 +1,127 @@
+input, button {
+  display: block;
+}
+
+.modal {
+    position: relative; 
+	width: 480px;
+	height: 280px;
+	padding: 10px 8px;
+	margin: 0px auto;
+	border: 1px solid gray;
+	box-shadow: 10px 10px 8px #888;
+}
+
+
+form .row {
+    position: relative;
+    height: 60px;
+    margin-bottom: 10px;
+}
+
+form .row label {
+    position: absolute;
+    top: 50%;
+    margin-top: -30px;
+    display: inline-block;
+    font-size: 1.1em;
+    font-weight: bold;
+    margin-left: 10px;
+    line-height: 60px;
+    width: 86px;
+}
+
+form .row input {
+        position: absolute;
+        top: 50%;
+        margin-top: -20px;
+        left: 106px;
+    
+        display: inline-block;
+        color: #555;
+        background-color: #fff;
+        background-image: none;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 1em;
+        height: 40px;
+        width: 172px;
+        padding: 5px;
+        
+}
+
+
+form .row  control-message {
+      position: absolute;
+      top: 50%;
+      left: 288px;    
+      display: inline-block;
+      margin-top: -30px;
+      color: #E82C0C;
+      width: 182px;
+      height: 60px;
+      font-size: 0.8em;
+} 
+
+.modal header { 
+    
+    display: block;
+    padding-top: 0px;
+    height: 60px;
+    margin: 10px auto; 
+    font-size: 2.5em;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-weight: bold;
+    text-align: center;
+    line-height: 60px;
+}
+
+form button {
+    
+  position: absolute;
+  left: 50%;
+  
+  width: 102px;
+  height:42px;
+  
+  margin-left: -51px;
+  margin-top: 4px;
+  color: #fff;
+  background-color: #337ab7;
+  border: 1px solid #2e6da4;
+  border-radius: 3px;
+  padding: 4px 8px;
+  font-size: 1em;
+  font-weight: 300;
+}
+
+form button[disabled] {
+  background-color: #337ab7;
+  border-color: #2e6da4;
+  opacity: .65;
+  cursor: not-allowed;
+}
+
+
+
+.modal a:hover {
+	font-size: 32px;
+	cursor: pointer;
+}
+
+.modal .close {
+    position: absolute;
+    left: 100%;
+    top: 0;
+    margin: -20px 0 0 -20px;
+    
+    width: 40px;
+	height: 40px;
+
+	display:  block;
+  	font-size: 28px;
+
+    line-height:  40px;
+    text-align: center;
+
+}
