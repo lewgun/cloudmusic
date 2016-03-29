@@ -1,7 +1,10 @@
 package console
 
 import (
+	"compress/gzip"
 	"fmt"
+	"io"
+	"io/ioutil"
 	"net/http"
 	"net/http/cookiejar"
 	"net/url"
@@ -16,8 +19,8 @@ import (
 
 const (
 	musicAPIBase  = "http://music.163.com/"
-	webLoginUrl   = "https://music.163.com/weapi/login?csrf_token="
-	phoneLoginUrl = "https://music.163.com/weapi/login/cellphone/?csrf_token="
+	webLoginURL   = "https://music.163.com/weapi/login?csrf_token="
+	phoneLoginURL = "https://music.163.com/weapi/login/cellphone/?csrf_token="
 )
 
 const (
@@ -33,23 +36,6 @@ type Console struct {
 
 func unused(...interface{}) {}
 
-func setCookies() error {
-	cookies, err := cookiejar.New(nil)
-	if nil != err {
-		return fmt.Errorf("failed to init netease httpclient cookiejar: %s", err)
-	}
-
-	apiURL, err := url.Parse(musicAPIBase)
-	if nil != err {
-		return fmt.Errorf("failed to parse netease api url %s: %s", musicAPIBase, err)
-	}
-
-	cookies.SetCookies(apiURL, []*http.Cookie{
-	// 	&http.Cookie{Name: "appver", Value: "1.5.2"},
-	})
-	return nil
-}
-
 func init() {
 
 	header := http.Header{}
@@ -59,7 +45,6 @@ func init() {
 	header.Add("Connection", "keep-alive")
 	header.Add("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
 	header.Add("Host", "music.163.com")
-	//header.Add("Origin", "http://music.163.com")
 	header.Add("Referer", "http://music.163.com/")
 	header.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.87 Safari/537.36")
 	c := &Console{
@@ -72,25 +57,56 @@ func init() {
 
 //Login admin login
 func (c *Console) Login(ctx *gin.Context) (interface{}, error) {
-	params := &types.LoginReq{}
+	params := &types.LoginParams{}
 	ctx.BindJSON(params)
 
 	var action string
 	switch params.By {
 	case byID:
-		action = webLoginUrl
+		action = webLoginURL
 
 	case byMobile:
-		action = phoneLoginUrl
+		action = phoneLoginURL
 
 	default:
 		return nil, fmt.Errorf("unkonwn login method")
 
 	}
 
+	header, data, err := c.post(action, &params.BaseParams)
+	if err != nil {
+		return nil, err
+	}
+
+	fmt.Println(string(data))
+
+	c.setCookie(header["Set-Cookie"])
+
+	return params.Params, nil
+}
+
+func (c *Console) setCookie(cookies []string) error {
+	jar, err := cookiejar.New(nil)
+	if nil != err {
+		return fmt.Errorf("failed to init netease httpclient cookiejar: %s", err)
+	}
+
+	apiURL, err := url.Parse(musicAPIBase)
+	if nil != err {
+		return fmt.Errorf("failed to parse netease api url %s: %s", musicAPIBase, err)
+	}
+
+	jar.SetCookies(apiURL, []*http.Cookie{
+		&http.Cookie{Name: "set-cookie", Value: strings.Join(cookies, " ")},
+	})
+	return nil
+}
+
+func (c *Console) post(action string, p *types.BaseParams) (http.Header, []byte, error) {
+
 	v := url.Values{}
-	v.Set("params", params.Params)
-	v.Set("encSecKey", params.EncSecKey)
+	v.Set("params", p.Params)
+	v.Set("encSecKey", p.EncSecKey)
 
 	req, _ := http.NewRequest(
 		"POST",
@@ -99,19 +115,23 @@ func (c *Console) Login(ctx *gin.Context) (interface{}, error) {
 
 	req.Header = c.header
 
-	resp, _ := c.client.Do(req)
+	rspn, _ := c.client.Do(req)
 
-	defer resp.Body.Close()
+	defer rspn.Body.Close()
 
-	for k, vs := range resp.Header {
-		fmt.Printf("%s ", k)
-		for _, v := range vs {
-			fmt.Printf("%v ", v)
-		}
-        fmt.Println()
+	var reader io.ReadCloser
+	switch rspn.Header.Get("Content-Encoding") {
+	case "gzip":
+		reader, _ = gzip.NewReader(rspn.Body)
+		defer reader.Close()
+
+	default:
+		reader = rspn.Body
 	}
 
-	return params.Params, nil
+	data, err := ioutil.ReadAll(reader)
+	return rspn.Header, data, err
+
 }
 
 // logout endpoint
