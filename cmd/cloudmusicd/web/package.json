@@ -4,18 +4,18 @@
     "description": "a classroom for learning go and ng2",
     "main": "index.js",
     "dependencies": {
-        "angular2": "latest",
-        "big-integer": "^1.6.12",
-        "es6-promise": "latest",
-        "es6-shim": "latest",
-        "lite-server": "latest",
+        "angular2": "2.0.0-beta.12",
+        "systemjs": "0.19.24",
+        "es6-shim": "^0.35.0",
         "reflect-metadata": "0.1.2",
         "rxjs": "5.0.0-beta.2",
-        "systemjs": "latest",
-        "typings": "latest",
-        "zone.js": "latest"
+        "big-integer": "^1.6.12",
+        "zone.js": "0.6.6"
     },
-    "devDependencies": {},
+    "devDependencies": {
+        "typescript": "^1.8.9",
+        "typings": "^0.7.9"
+    },
     "scripts": {
         "tsc": "tsc",
         "tsc:w": "tsc -w",

@@ -7,7 +7,7 @@ import {MyUrlResolver } from './services/url-resolver/url-resolver.service';
 import {AppComponent} from './components/app/app.component';
 import {HttpService} from './services/http/http.service';
 import {CryptoService} from './services/crypto/crypto.service';
-import {RawHeaders} from './types/types'
+//import {RawHeaders} from './types/types'
 
 bootstrap(AppComponent,
     [HTTP_PROVIDERS,

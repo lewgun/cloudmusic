@@ -93,8 +93,7 @@ export class CryptoService {
         return {
             params: aesEncrypt(aesEncrypt(plain, nonce), secKey),
             encSecKey: rsaEncrypt(secKey, pubKey, modulus),
-            by: "",
-            csrf_token:""
+            by: ""
         }
     }
 

@@ -94,7 +94,6 @@ func (c *Console) Login(ctx *gin.Context) (interface{}, error) {
 	fmt.Println(string(data))
 
 	obj, err := objx.FromJSON(string(data))
-	//  obj.Get("code").Float64()
 	if err != nil {
 		return nil, err
 	}
