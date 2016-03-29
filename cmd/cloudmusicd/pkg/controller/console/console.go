@@ -102,7 +102,7 @@ func (c *Console) Login(ctx *gin.Context) (interface{}, error) {
 
 	}
 
-	action = fmt.Sprintf("https://music.163.com/weapi/login/cellphone/?csrf_token=%s", params.CSRFToken)
+	action = fmt.Sprintf("https://music.163.com/weapi/login/cellphone/?csrf_token=")
 
 	v := url.Values{}
 	v.Set("params", params.Params)
@@ -122,9 +122,9 @@ func (c *Console) Login(ctx *gin.Context) (interface{}, error) {
 	header.Add("Content-Type", "application/x-www-form-urlencoded")
 	header.Add("Host", "music.163.com")
 	header.Add("Origin", "http://music.163.com")
-	header.Add("Referer", "http://music.163.com/")
+	header.Add("Referer", "http://music.163.com")
 	header.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.87 Safari/537.36")
-  //  header.Add("Cookie", fmt.Sprintf(" __csrf=%s",params.CSRFToken))
+  //  header.Add("Cookie", fmt.Sprintf(" __csrf=%s;appver=2.0.2",params.CSRFToken))
 	header.Add("DNT", "1")
 
 

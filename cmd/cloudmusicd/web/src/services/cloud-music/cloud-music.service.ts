@@ -32,30 +32,27 @@ export class CloudMusicService implements OnInit {
     private _phoneLogin(username: string, password: string) {
         let params: PhoneLoginParams = {
             'phone': username,
-            'password': password,
+            'password': this._crypto.MD5(password),
             'rememberLogin': 'true'
-            'csrf_token': this._crypto.createSecretKey(32)
         }
 
        // this._loginHelper(JSON.stringify(params), LoginByMobile, this._crypto.createSecretKey(32));
-         this._loginHelper(JSON.stringify(params), LoginByMobile, params.csrf_token);
+         this._loginHelper(JSON.stringify(params), LoginByMobile);
     }
 
     private _webLogin(username: string, password: string) {
         let params: WebLoginParams = {
             'username': username,
             'password': password,
-            'rememberLogin': 'true',
-            'csrf_token': this._crypto.createSecretKey(32)
+            'rememberLogin': 'true'
         }
 
-        this._loginHelper(JSON.stringify(params), LoginByID, params.csrf_token);
+        this._loginHelper(JSON.stringify(params), LoginByID);
     }
 
-    private _loginHelper( params: string, by: string, csrf_token: string ) {
+    private _loginHelper( params: string, by: string ) {
         let data = this._crypto.aesRsaEncrypt(params);
         data.by = by;
-        data.csrf_token = csrf_token
         this._http.Post(LoginUrl, data)
     }
 
