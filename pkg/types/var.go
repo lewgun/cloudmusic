@@ -8,8 +8,16 @@ type BaseParams struct {
 }
 
 //LoginParams
-type LoginParams struct {
+type LoginReq struct {
     BaseParams
     By string `json:"by"`
+
+}
+
+type Profile struct {
+    UserID int `json:"userId"`
+    AvatarURL string `json:"avatarUrl"`
+    NickName string  `json:"nickname"`
+    Signature string  `json:"signature"`
 
 }

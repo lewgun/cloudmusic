@@ -92,15 +92,11 @@ func (d *dispatcher) call(ctx *gin.Context) {
 		return
 	}
 	if retVal[1] != nil {
-		//err = retVal[1].(error)
 		misc.SimpleResponse(ctx, retVal[1])
 		return
 	}
-	if err != nil {
-		misc.SimpleResponse(ctx, retVal[0])
-		return
-	}
-	misc.SimpleResponse(ctx, retVal[0].(string))
+
+	misc.SimpleResponse(ctx, retVal[0])
 
 }
 

@@ -15,6 +15,7 @@ import (
 	"github.com/lewgun/cloudmusic/pkg/types"
 
 	"github.com/gin-gonic/gin"
+	"github.com/stretchr/objx"
 )
 
 const (
@@ -68,7 +69,7 @@ func init() {
 
 //Login admin login
 func (c *Console) Login(ctx *gin.Context) (interface{}, error) {
-	params := &types.LoginParams{}
+	params := &types.LoginReq{}
 	ctx.BindJSON(params)
 
 	var action string
@@ -84,48 +85,30 @@ func (c *Console) Login(ctx *gin.Context) (interface{}, error) {
 
 	}
 
-	_, data, err := c.post(action, &params.BaseParams)
+	data, err := c.post(action, &params.BaseParams)
 	if err != nil {
 		return nil, err
 	}
 
-	unused(data)
-	// fmt.Println(string(data))
-
-	c.printCookies(musicAPIBase)
-
-	return params.Params, nil
-}
-
-func (c *Console) printCookies(rawURL string) {
-
-	domain, _ := url.ParseRequestURI(rawURL)
-
-	cookies := c.jar.Cookies(domain)
-
-	cookieNum := len(cookies)
-	fmt.Printf("cookieNum=%d\n", cookies)
-
-	for i := 0; i < cookieNum; i++ {
-		var curCk *http.Cookie = cookies[i]
-		//fmt.Printf("curCk.Raw=%s", curCk.Raw)
-		fmt.Printf(" Cookie [%d]", i)
-		fmt.Printf(" Name\t=%s ", curCk.Name)
-		fmt.Printf(" Value\t=% s", curCk.Value)
-		fmt.Printf(" Path\t=%s ", curCk.Path)
-		fmt.Printf(" Domain\t=%s ", curCk.Domain)
-		fmt.Printf(" Expires\t=%s ", curCk.Expires)
-		fmt.Printf(" RawExpires=%s ", curCk.RawExpires)
-		fmt.Printf(" MaxAge\t=%d ", curCk.MaxAge)
-		fmt.Printf(" Secure\t=%t ", curCk.Secure)
-		fmt.Printf(" HttpOnly=%t ", curCk.HttpOnly)
-		fmt.Printf(" Raw\t=%s ", curCk.Raw)
-		fmt.Printf(" Unparsed=%s ", curCk.Unparsed)
-		fmt.Println()
+	obj, err := objx.FromJSON(string(data))
+	if err != nil {
+		return nil, err
 	}
+
+	m := obj.Get("profile").Data().(map[string]interface{})
+
+	temp := m["userId"].(float64)
+	profile := &types.Profile{
+		UserID:    int(temp),
+		Signature: m["signature"].(string),
+		NickName:  m["nickname"].(string),
+		AvatarURL: m["avatarUrl"].(string),
+	}
+
+	return profile, nil
 }
 
-func (c *Console) post(action string, p *types.BaseParams) (http.Header, []byte, error) {
+func (c *Console) post(action string, p *types.BaseParams) ([]byte, error) {
 
 	v := url.Values{}
 	v.Set("params", p.Params)
@@ -152,8 +135,7 @@ func (c *Console) post(action string, p *types.BaseParams) (http.Header, []byte,
 		reader = rspn.Body
 	}
 
-	data, err := ioutil.ReadAll(reader)
-	return rspn.Header, data, err
+	return ioutil.ReadAll(reader)
 
 }
 
