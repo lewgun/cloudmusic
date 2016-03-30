@@ -2,18 +2,16 @@
     <header>{{title}}</header>
     <form [ngFormModel]='myForm' (ngSubmit)="onSubmit(myForm.value)">
         <div class="row">
-            <label for="account">Account:</label>
-            <input type="text" name="account" id="account" placeholder="Account" #account="ngForm" [ngFormControl]="myForm.controls['account']"
-            />
-            <!--<control-message control="account"></control-message>-->
+            <label for="username">用户名:</label>
+            <input type="text" ngControl="username" id="username" #username required />
         </div>
+        <control-message control="username"></control-message>
+    
         <div class="row">
-            <label for="password">Password:</label>
-            <input type="password" name="account" id="password" placeholder="Password" #password="ngForm" [ngFormControl]="myForm.controls['password']">
-            <!--<control-message control="password"></control-message>-->
+            <label for="password">密码:</label>
+            <input type="password" ngControl="password" id="password">
         </div>
-
-        <!--<button type="submit" [disabled]="!myForm.valid">Submit</button>-->
-        <button type="submit">Submit</button>
+        <control-message control="password"></control-message>
+        <button type="submit" [disabled]="!myForm.valid">登录</button>
     </form>
 </div>

@@ -95,6 +95,11 @@ func (d *dispatcher) call(ctx *gin.Context) {
 		misc.SimpleResponse(ctx, retVal[1])
 		return
 	}
+    
+    if methodName == "Build.All" {
+        ctx.Redirect(302, "/")
+        return 
+    }
 
 	misc.SimpleResponse(ctx, retVal[0])
 

@@ -36,6 +36,7 @@ func SimpleResponse(c *gin.Context, any interface{}) {
 		obj = param
 
 	case string:
+        fmt.Println("response", param)
 		obj = any
 
 	default:

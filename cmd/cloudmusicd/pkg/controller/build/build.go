@@ -77,7 +77,7 @@ func (b Build) All(ctx *gin.Context) (interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println("npm run browserify uglify")
+	fmt.Println("npm run  uglify finished")
 
 	return "npm run all is finished", nil
 }
