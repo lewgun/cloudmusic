@@ -13,18 +13,20 @@ import {
 
 import {LoginComponent} from '../login/login.component';
 import {DashboardComponent} from '../dashboard/dashboard.component';
+import {ProfileComponent} from '../profile/profile.component'
 
 @RouteConfig([
-    { path: "/login", name: "Login", component: LoginComponent, useAsDefault: true },
+    { path: "/login", name: "Login", component: LoginComponent , useAsDefault: true },
 
     // dashboard child route
-    { path: "/dashboard/...", name: "Dashboard", component: DashboardComponent }
+  //  { path: "/dashboard/...", name: "Dashboard", component: DashboardComponent /*, useAsDefault: true*/}
+       { path: '/profile', name: 'Profile', component: ProfileComponent }
 ])
 @Component({
     selector: 'app',
     templateUrl: 'app/app.component.html',
     styleUrls: ['app/app.component.css'],
-    directives: [LoginComponent, /*DashboardComponent,*/ ROUTER_DIRECTIVES],
+    directives: [LoginComponent, DashboardComponent, ROUTER_DIRECTIVES],
     providers: [ROUTER_PROVIDERS, CloudMusicService]
 })
 export class AppComponent implements OnInit {

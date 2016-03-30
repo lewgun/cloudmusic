@@ -18,7 +18,7 @@ import { CloudMusicService} from '../../services/cloud-music/cloud-music.service
 @Component({
     selector: 'login',
     directives: [ControlMessageComponent],
-    providers: [FORM_PROVIDERS],
+    providers: [FORM_PROVIDERS ],
     templateUrl: 'login/login.component.html',
     styleUrls: ["login/login.component.css"]
 })
@@ -39,10 +39,10 @@ export class LoginComponent {
 
     login(account: { username: string, password: string }) {
 
-        this._cloudMusic.Login(account.username, account.password)
+      //  this._cloudMusic.Login(account.username, account.password)
         
         // Like <a [routerLink]="['Profile']">Heroes</a>
-        this._router.navigate(['Profile']);
+        this._router.navigate(['Profile', {userId:1234, nickame:"lewgun", signature:"hello world2", avatarUrl:"http://a/b/c.jpg" }]);
 
     }
 
