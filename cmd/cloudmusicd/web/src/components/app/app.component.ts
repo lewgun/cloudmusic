@@ -13,14 +13,12 @@ import {
 
 import {LoginComponent} from '../login/login.component';
 import {DashboardComponent} from '../dashboard/dashboard.component';
-import {ProfileComponent} from '../profile/profile.component'
 
 @RouteConfig([
     { path: "/login", name: "Login", component: LoginComponent , useAsDefault: true },
 
     // dashboard child route
-  //  { path: "/dashboard/...", name: "Dashboard", component: DashboardComponent /*, useAsDefault: true*/}
-       { path: '/profile', name: 'Profile', component: ProfileComponent }
+    { path: "/dashboard/...", name: "Dashboard", component: DashboardComponent /*, useAsDefault: true*/}
 ])
 @Component({
     selector: 'app',
@@ -35,6 +33,5 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit() {
-        // this._cloudMusic.Login(account.username, account.password);
     }
 }

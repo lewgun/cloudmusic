@@ -42,7 +42,8 @@ export class LoginComponent {
       //  this._cloudMusic.Login(account.username, account.password)
         
         // Like <a [routerLink]="['Profile']">Heroes</a>
-        this._router.navigate(['Profile', {userId:1234, nickame:"lewgun", signature:"hello world2", avatarUrl:"http://a/b/c.jpg" }]);
+        //note route to other branch!!!!!!!!!
+        this._router.navigate(['/Dashboard/Profile', {userId:1234, nickname:"lewgun", signature:"hello world2", avatar:"abcd" }]);
 
     }
 

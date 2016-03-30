@@ -18,7 +18,7 @@ export class ProfileComponent implements OnInit {
         private _routeParams: RouteParams) {
         this.nickname = _routeParams.get('nickname');
         this.signature = _routeParams.get('signature');
-        this.avatarUrl = _routeParams.get('avatarUrl');
+        this.avatarUrl = _routeParams.get('avatar'); 
 
     }
 
