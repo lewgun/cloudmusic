@@ -6,19 +6,19 @@ import {CloudMusicService} from "../../services/cloud-music/cloud-music.service"
 import {account} from './user'
 
 import {
-     RouteConfig,
-     ROUTER_DIRECTIVES, 
-     ROUTER_PROVIDERS
-    } from 'angular2/router';
-    
- import {LoginComponent} from '../login/login.component';
-// import {DashboardComponent} from './dashboard/dashboard.component';
+    RouteConfig,
+    ROUTER_DIRECTIVES,
+    ROUTER_PROVIDERS
+} from 'angular2/router';
 
-@RouteConfig([ 
-  { path: "/login", name: "Login", component: LoginComponent, useAsDefault: true },
-  
-  // dashboard child route
-  //{ path: "/dashboard/...", name: "Dashboard", component: DashboardComponent, useAsDefault: true }
+import {LoginComponent} from '../login/login.component';
+import {DashboardComponent} from '../dashboard/dashboard.component';
+
+@RouteConfig([
+    { path: "/login", name: "Login", component: LoginComponent, useAsDefault: true },
+
+    // dashboard child route
+    { path: "/dashboard/...", name: "Dashboard", component: DashboardComponent }
 ])
 @Component({
     selector: 'app',
@@ -29,9 +29,9 @@ import {
 })
 export class AppComponent implements OnInit {
     constructor() {
-        
+
     }
-    
+
     ngOnInit() {
         // this._cloudMusic.Login(account.username, account.password);
     }

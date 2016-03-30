@@ -40,6 +40,9 @@ export class LoginComponent {
     login(account: { username: string, password: string }) {
 
         this._cloudMusic.Login(account.username, account.password)
+        
+        // Like <a [routerLink]="['Profile']">Heroes</a>
+        this._router.navigate(['Profile']);
 
     }
 
