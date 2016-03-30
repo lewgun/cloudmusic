@@ -20,3 +20,9 @@ export interface RequestParams {
     params: string;
     encSecKey: string;
 }
+export interface Profile {
+    userId: number;
+    nickname: string;
+    signature: string;
+    avatarUrl: string
+}

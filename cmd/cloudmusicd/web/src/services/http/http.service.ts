@@ -16,16 +16,24 @@ export class HttpService implements OnInit {
     ngOnInit() { }
 
     Get() { }
-    Post(action: string, req: RequestParams) {
+    Post(action: string, req: RequestParams): Promise<any> {
 
         console.log("hello from HttpService's Post");
 
-        this._http.post(
-            action,
-            JSON.stringify(req)).subscribe(
-            data => console.log(data),
-            err => console.log(err),
-            () => console.log("finisehd"));
+        let p = new Promise((resolve, reject) => {
+
+            this._http.post(
+                action,
+                JSON.stringify(req)).
+                subscribe(
+                data => {
+                    resolve(data.json());
+                },
+                err => reject(err),
+                () => console.log("finisehd"));
+        });
+        return p;
+
 
     }
 

@@ -9,7 +9,8 @@ import {
     LoginByID,
     LoginUrl,
     PhoneLoginParams,
-    WebLoginParams
+    WebLoginParams,
+    Profile
 }  from '../../types/types';
 
 
@@ -27,33 +28,34 @@ export class CloudMusicService implements OnInit {
     ngOnInit() { }
 
 
-    private _phoneLogin(username: string, password: string) {
+    private _phoneLogin(username: string, password: string): Promise<Profile> {
         let params: PhoneLoginParams = {
             'phone': username,
             'password': this._crypto.MD5(password),
             'rememberLogin': 'true'
         }
 
-        this._loginHelper(JSON.stringify(params), LoginByMobile);
+        return this._loginHelper(JSON.stringify(params), LoginByMobile);
     }
 
-    private _webLogin(username: string, password: string) {
+    private _webLogin(username: string, password: string): Promise<any> {
         let params: WebLoginParams = {
             'username': username,
             'password': password,
             'rememberLogin': 'true'
         }
 
-        this._loginHelper(JSON.stringify(params), LoginByID);
+        return this._loginHelper(JSON.stringify(params), LoginByID);
     }
 
-    private _loginHelper(params: string, by: string) {
+    private _loginHelper(params: string, by: string): Promise<any> {
         let data = this._crypto.aesRsaEncrypt(params);
         data.by = by;
-        this._http.Post(LoginUrl, data)
+        return this._http.Post(LoginUrl, data);
+
     }
 
-    Login(username: string, password: string) {
+    Login(username: string, password: string): Promise<any> {
 
         if (IsCellPhone(username)) {
             return this._phoneLogin(username, password)
