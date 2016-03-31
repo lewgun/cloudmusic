@@ -47,8 +47,6 @@ func (d *dispatcher) register(objs ...interface{}) {
 
 func (d *dispatcher) call(ctx *gin.Context) {
 
-	//	fmt.Printf("%s\n%s\n%s\n%s\n", ctx.Request.Method, ctx.Request.RequestURI, ctx.Request.URL.RawPath, ctx.Request.URL.Path)
-
 	fields := strings.Split(ctx.Request.URL.Path, "/")
 
 	temp := fields[:0]
@@ -91,21 +89,18 @@ func (d *dispatcher) call(ctx *gin.Context) {
 		misc.SimpleResponse(ctx, fmt.Sprintf("run: %s failed with error: %v\n", methodName, err))
 		return
 	}
-	if retVal[1] != nil {
-		misc.SimpleResponse(ctx, retVal[1])
+	if retVal[0] != nil {
+		misc.SimpleResponse(ctx, retVal[0])
 		return
 	}
     
     if methodName == "Build.All" {
         ctx.Redirect(302, "/")
-        return 
     }
-
-	misc.SimpleResponse(ctx, retVal[0])
 
 }
 
-func (d *dispatcher) Command(*gin.Context) (interface{}, error) {
+func (d *dispatcher) Command(ctx *gin.Context)  error {
 
 	var commands []string
 
@@ -113,8 +108,8 @@ func (d *dispatcher) Command(*gin.Context) (interface{}, error) {
 		commands = append(commands, c)
 	}
 
-	fmt.Println(strings.Join(commands, "/"))
-	return strings.Join(commands, "/"), nil
+	ctx.Writer.WriteString( strings.Join(commands, "/"))
+    return  nil
 }
 
 var _dispatcher *dispatcher

@@ -26,40 +26,42 @@ func runCmd(cmd *exec.Cmd) error {
 }
 
 //Tsc
-func (b Build) Tsc(ctx *gin.Context) (interface{}, error) {
+func (b Build) Tsc(ctx *gin.Context)  error {
 
 	err := runCmd(exec.Command("npm", "run", "tsc"))
 	if err != nil {
-		return nil, err
+		return  err
 	}
 
-	return "npm run tsc is finished", nil
+    ctx.Writer.WriteString( "npm run tsc is finished")
+	return nil
 }
 
 //Browserify
-func (b Build) Browserify(ctx *gin.Context) (interface{}, error) {
+func (b Build) Browserify(ctx *gin.Context) error {
 
 	err := runCmd(exec.Command("npm", "run", "browserify"))
 	if err != nil {
-		return nil, err
+		return  err
 	}
 
-	return "npm run browserify is finished", nil
+    ctx.Writer.WriteString("npm run browserify is finished")
+	return  nil
 }
 
 //Uglify
-func (b Build) Uglify(ctx *gin.Context) (interface{}, error) {
+func (b Build) Uglify(ctx *gin.Context)  error {
 
 	err := runCmd(exec.Command("npm", "run", "uglify"))
 	if err != nil {
-		return nil, err
+		return  err
 	}
-
-	return "npm run uglify is finished", nil
+    ctx.Writer.WriteString("npm run uglify is finished")
+	return  nil
 }
 
 //All
-func (b Build) All(ctx *gin.Context) (interface{}, error) {
+func (b Build) All(ctx *gin.Context) error {
 
 	err := runCmd(exec.Command("npm", "run", "tsc"))
 	// if err != nil {
@@ -68,23 +70,27 @@ func (b Build) All(ctx *gin.Context) (interface{}, error) {
 	fmt.Println("npm run tsc finished")
 	err = runCmd(exec.Command("npm", "run", "browserify"))
 	if err != nil {
-		return nil, err
+		return  err
 	}
 
 	fmt.Println("npm run browserify finished")
 
 	err = runCmd(exec.Command("npm", "run", "uglify"))
 	if err != nil {
-		return nil, err
+		return err
 	}
 	fmt.Println("npm run  uglify finished")
 
-	return "npm run all is finished", nil
+    ctx.Writer.WriteString("npm run all is finished")
+	return  nil
 }
 
 //Command show all supported commands
-func (b Build) Command(ctx *gin.Context) (interface{}, error) {
-	return "npm run tsc/uglify/browserify/all", nil
+func (b Build) Command(ctx *gin.Context) error {
+    
+    ctx.Writer.WriteString("npm run tsc/uglify/browserify/all")
+	return  nil
+    
 }
 
 func init() {

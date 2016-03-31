@@ -26,8 +26,33 @@ export class HttpService implements OnInit {
                 action,
                 JSON.stringify(req)).
                 subscribe(
-                data => {
-                    resolve(data.json());
+                rawData => {
+                    let jsonData = rawData.json();
+
+                    /*
+                    {
+                        result: "fail",
+                        faildesc: "...."
+                    }
+                     */
+                    if (jsonData.result !== "success") {
+                        reject(jsonData.faildesc);
+                        return;
+                    }
+
+                    /*
+                    {
+                        result: "success",
+                        data: {...}
+                    }
+                     */
+                    let data = JSON.parse(jsonData.data);
+                    if (data.code !== 200) {
+                        reject(data.code);
+                        return;
+                    }
+
+                    resolve(data);
                 },
                 err => reject(err),
                 () => console.log("finisehd"));

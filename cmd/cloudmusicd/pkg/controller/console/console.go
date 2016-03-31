@@ -15,7 +15,7 @@ import (
 	"github.com/lewgun/cloudmusic/pkg/types"
 
 	"github.com/gin-gonic/gin"
-	"github.com/stretchr/objx"
+//	"github.com/stretchr/objx"
 )
 
 const (
@@ -68,7 +68,7 @@ func init() {
 }
 
 //Login admin login
-func (c *Console) Login(ctx *gin.Context) (interface{}, error) {
+func (c *Console) Login(ctx *gin.Context) error {
 	params := &types.LoginReq{}
 	ctx.BindJSON(params)
 
@@ -82,37 +82,41 @@ func (c *Console) Login(ctx *gin.Context) (interface{}, error) {
 		action = phoneLoginURL
 
 	default:
-		return nil, fmt.Errorf("unkonwn login method")
+		return  fmt.Errorf("unkonwn login method")
 
 	}
 
 	data, err := c.post(action, &params.BaseParams)
 	if err != nil {
-		return nil, err
+		return  err
 	}
 
 	fmt.Println(string(data))
 
-	obj, err := objx.FromJSON(string(data))
-	if err != nil {
-		return nil, err
-	}
+	// obj, err := objx.FromJSON(string(data))
+	// if err != nil {
+	// 	return nil, err
+	// }
 
-	if int(obj.Get("code").Float64()) != 200 {
-		return nil, fmt.Errorf(string(data))
-	}
+	// if int(obj.Get("code").Float64()) != 200 {
+	// 	return nil, fmt.Errorf(string(data))
+	// }
 
-	m := obj.Get("profile").Data().(map[string]interface{})
+	// m := obj.Get("profile").Data().(map[string]interface{})
 
-	temp := m["userId"].(float64)
-	profile := &types.Profile{
-		UserID:    int(temp),
-		Signature: m["signature"].(string),
-		NickName:  m["nickname"].(string),
-		AvatarURL: m["avatarUrl"].(string),
-	}
-
-	return profile, nil
+	// temp := m["userId"].(float64)
+	// profile := &types.Profile{
+	// 	UserID:    int(temp),
+	// 	Signature: m["signature"].(string),
+	// 	NickName:  m["nickname"].(string),
+	// 	AvatarURL: m["avatarUrl"].(string),
+	// }
+    
+    m := gin.H{
+        "data": string(data),
+    }
+    misc.SimpleResponse(ctx, m)
+	return  nil
 }
 
 func (c *Console) post(action string, p *types.BaseParams) ([]byte, error) {
@@ -141,6 +145,7 @@ func (c *Console) post(action string, p *types.BaseParams) ([]byte, error) {
 	default:
 		reader = rspn.Body
 	}
+    
 
 	return ioutil.ReadAll(reader)
 

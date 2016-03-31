@@ -50,8 +50,8 @@ export class LoginComponent {
             account.password.trim()).
             then(retVal => {
                 console.log(retVal);
-                if (retVal.result === "fail") {
-                    this._dlg.alert(retVal.faildesc);
+                if (retVal.code !== "200") {
+                    this._dlg.alert(retVal.code);
                     return;
                 }
                 
