@@ -24,5 +24,23 @@ export interface Profile {
     userId: number;
     nickname: string;
     signature: string;
-    avatarUrl: string
+    avatarUrl: string;
 }
+
+export interface Action{
+    typ: string;
+    payload: any; 
+}
+
+export interface ActionHandler {
+    (t: Action): void ;
+}
+
+export interface EventHandler {
+    (): void ;
+}
+
+
+export type DispatchToken = string;
+export type EventType = string;
+export type StoreToken= string;

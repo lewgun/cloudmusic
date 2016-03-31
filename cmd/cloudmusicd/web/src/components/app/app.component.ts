@@ -1,9 +1,7 @@
 //https://dzone.com/articles/completing-the-angular-2-quick-start-in-vs-code-1
 import {Component, OnInit} from 'angular2/core';
 
-import {CloudMusicService} from "../../services/cloud-music/cloud-music.service"
-
-import {account} from './user'
+import {FluxBoot} from "../../services/flux/flux-boot"
 
 import {
     RouteConfig,
@@ -25,10 +23,10 @@ import {DashboardComponent} from '../dashboard/dashboard.component';
     templateUrl: 'app/app.component.html',
     styleUrls: ['app/app.component.css'],
     directives: [LoginComponent, DashboardComponent, ROUTER_DIRECTIVES],
-    providers: [ROUTER_PROVIDERS, CloudMusicService]
+    providers: [ROUTER_PROVIDERS, FluxBoot]
 })
 export class AppComponent implements OnInit {
-    constructor() {
+    constructor( private _: FluxBoot) {
 
     }
 

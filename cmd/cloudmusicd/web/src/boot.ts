@@ -8,6 +8,10 @@ import {MyUrlResolver } from './services/url-resolver/url-resolver.service';
 import {AppComponent} from './components/app/app.component';
 import {HttpService} from './services/http/http.service';
 import {CryptoService} from './services/crypto/crypto.service';
+
+import {ActionCreator, Dispatcher, Store, Cache} from './services/flux/flux';
+
+
 //import {RawHeaders} from './types/types'
 
 bootstrap(AppComponent,
@@ -15,7 +19,15 @@ bootstrap(AppComponent,
         HTTP_PROVIDERS,
         ROUTER_PROVIDERS,
         HttpService,
-        CryptoService,
+        CryptoService, ,
+
+        //flux
+        ActionCreator,
+        Dispatcher,
+        Cache,
+        Store,
+
+
         provide(UrlResolver, { useClass: MyUrlResolver })
         // provide(RequestOptions, {
         //     useFactory: () => {
