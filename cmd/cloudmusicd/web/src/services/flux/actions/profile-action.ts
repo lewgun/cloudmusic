@@ -1,13 +1,14 @@
 
 import {Injectable, OnInit, Inject } from 'angular2/core';
-import {Dispatcher} from "./dispatcher";
-import {Profile_Read} from "./consts";
+
+import {Dispatcher} from "../dispatcher/dispatcher";
+import {Profile_Read} from "../constants/constants";
 
 @Injectable()
-export class ActionCreator {
+export class ProfileActionCreator {
     constructor(
-        @Inject(Dispatcher)  private _dispatcher: Dispatcher
-    ) {}
+        @Inject(Dispatcher) private _dispatcher: Dispatcher
+    ) { }
 
     SaveProfile(profile: any) {
         this._dispatcher.Dispatch(

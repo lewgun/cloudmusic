@@ -11,3 +11,8 @@
 4. 假设有一个来自view更新操作,它将数据通过action creator封装成action,然后通过dispatcher分发到相应的store(即store可以有多个,每个store只关注自己感兴趣的action),store在完成数据更新后,广播更新操作, 相应的view接受到更新通知,然后**主动**从store 拉取数据及更新view.
 
 5. 因为上面的第3步,所以在flux下实现了一个flux-boot的服务,此服务在app中注册,以达到启动顺序正确。
+
+6. ps:
+    1. http://victorsavkin.com/post/99998937651/building-angular-apps-using-flux-architecture
+    2. http://facebook.github.io/flux/docs/overview.html#content
+    3. https://github.com/facebook/flux

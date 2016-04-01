@@ -1,18 +1,18 @@
 
-import {Injectable} from 'angular2/core';
+import {Injectable, Inject} from 'angular2/core';
 
-import { Action, ActionHandler, DispatchToken  }  from '../../types/types';
+import { Action, ActionHandler   }  from '../../../types/types';
 
+import {PubSubService, PubSubToken} from '../../pubsub/pubsub.service'
+
+export type DispatchToken = PubSubToken;
 
 @Injectable()
 export class Dispatcher {
-
-    static Prefix = "ID_";
-
-    private _lastID = 1;
-    private _handlers = new Map<DispatchToken, ActionHandler>();
-
+    private _pubsub: PubSubService
     constructor() {
+        this._pubsub = new PubSubService();
+        console.log(this._pubsub, "DIspatcher");
     }
 
     /**
@@ -20,8 +20,7 @@ export class Dispatcher {
     * a token that can be used with `waitFor()`.
     */
     public Register(callback: ActionHandler): DispatchToken {
-        let id = Dispatcher.Prefix + this._lastID++;
-        this._handlers.set(id, callback);
+        let id = this._pubsub.Stream.subscribe(callback);
         return id;
     }
 
@@ -29,7 +28,7 @@ export class Dispatcher {
     * Removes a callback based on its token.
     */
     public UnRegister(id: DispatchToken): void {
-        this._handlers.delete(id);
+        id.unsubscribe();
     }
 
     /**
@@ -37,11 +36,7 @@ export class Dispatcher {
     */
     public Dispatch(action: Action): void {
         try {
-
-            this._handlers.forEach((handler: ActionHandler, key: DispatchToken, m: Map<DispatchToken, ActionHandler>) => {
-                handler(action);
-
-            });
+            this._pubsub.Stream.emit(action);
         }
         finally { }
     }

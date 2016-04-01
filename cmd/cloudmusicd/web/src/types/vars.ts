@@ -41,6 +41,4 @@ export interface EventHandler {
 }
 
 
-export type DispatchToken = string;
 export type EventType = string;
-export type StoreToken= string;

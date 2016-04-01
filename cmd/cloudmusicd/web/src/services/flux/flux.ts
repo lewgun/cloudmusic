@@ -1,5 +1,6 @@
-export * from "./action";
-export * from "./consts";
-export * from "./dispatcher";
-export * from "./store";
-export * from "./cache";
+export * from "./actions/profile-action";
+export * from "./constants/constants";
+export * from "./dispatcher/dispatcher";
+export * from "./stores/profile-store";
+export * from "./stores/cache";
+

@@ -28,10 +28,12 @@ export const TopList: TopListPair[] = [
 
 export const DefaultTime: number = 10;
 
-export const LoginByID = "id"
-export const LoginByMobile = "cellphone"
+export const LoginByID = "id";
+export const LoginByMobile = "cellphone";
 
 
-export const LoginUrl = "./do/console/login"
+export const LoginUrl = "./do/console/login";
 
-export const BaseUrlPath = "src/components"
+export const BaseUrlPath = "src/components";
+
+export const ChangeEvent = "ChangeEvent";

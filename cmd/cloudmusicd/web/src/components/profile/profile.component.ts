@@ -1,9 +1,7 @@
 import {Component, OnInit, OnDestroy}  from 'angular2/core';
 import {RouteParams, Router} from 'angular2/router';
 
-import { Store, Profile_Read } from '../../services/flux/flux';
-import { StoreToken  }  from '../../types/types';
-
+import { ProfileStore, StoreToken } from '../../services/flux/flux';
 
 @Component({
     templateUrl:"profile/profile.component.html",
@@ -23,9 +21,9 @@ export class ProfileComponent implements OnInit {
     constructor(
         private _router: Router,
         private _routeParams: RouteParams,
-        private _store: Store) {
+        private _store: ProfileStore) {
             
-        this._handlerToken = this._store.Bind(Profile_Read, ()=>this.onProfile());
+        this._handlerToken = this._store.Bind(()=>this.onProfile());
             
         // this.nickname = _routeParams.get('nickname');
         // this.signature = _routeParams.get('signature');

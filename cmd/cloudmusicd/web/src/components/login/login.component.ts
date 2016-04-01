@@ -12,7 +12,7 @@ import {Router}  from 'angular2/router';
 import { ValidationService} from '../../services/validation/validation.service';
 import { DialogService} from '../../services/dialog/dialog.service';
 import { CloudMusicService} from '../../services/cloud-music/cloud-music.service';
-import { ActionCreator} from '../../services/flux/flux';
+import { ProfileActionCreator} from '../../services/flux/flux';
 
 import { Profile }  from '../../types/types';
 
@@ -35,7 +35,7 @@ export class LoginComponent {
         private _cloudMusic: CloudMusicService,
         private _fb: FormBuilder,
         private _dlg: DialogService,
-        private _action: ActionCreator) {
+        private _action: ProfileActionCreator) {
         this.myForm = _fb.group({
             'username': ["", Validators.required],
             'password': ["", Validators.compose([Validators.required, ValidationService.passwordValidator])]
