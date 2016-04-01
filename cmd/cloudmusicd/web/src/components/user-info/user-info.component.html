@@ -8,7 +8,7 @@
                 <span class="lv">7</span>
                 <span class="gender" [style.background-position]="position('gender')"></span>
 
-                <button  class="signin" (click)="handleDailyTask()" [disabled]="isDailyTaskDone" >签到</button>
+                <button  class="signin" (click)="handleDailyTask()" [disabled]="!isDailyTaskDone" >签到</button>
 
         </div>
         <ul>

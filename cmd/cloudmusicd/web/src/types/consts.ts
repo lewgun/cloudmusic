@@ -31,10 +31,14 @@ export const DefaultTime: number = 10;
 export const LoginByID = "id";
 export const LoginByMobile = "cellphone";
 
-
+//登录
 export const LoginUrl = "./do/console/login";
+
+//签到
 export const DailyTaskUrl = "./do/console/daily_task";
 
+//用户歌单
+export const PlayListUrl = "./do/console/play_list";
 
 export const BaseUrlPath = "src/components";
 

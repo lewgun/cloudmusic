@@ -28,7 +28,7 @@ export class UserInfoComponent implements OnInit {
 
     private _bgPosition = {};
 
-    isDailyTaskDone: boolean = true;
+    isDailyTaskDone: boolean = false;
 
     constructor(
         private _router: Router,
@@ -45,7 +45,9 @@ export class UserInfoComponent implements OnInit {
         this.userInfo = this._store.UserInfo();
         //console.log(this.userInfo);
 
-        this.handleDailyTask();
+        // this.handleDailyTask();
+
+
 
     }
 
@@ -55,15 +57,15 @@ export class UserInfoComponent implements OnInit {
     }
 
     onDailyTask() {
-        if (!this._store.DailyTask() ) {
+        if (!this._store.DailyTask()) {
             this.isDailyTaskDone = false;
             return;
         }
         this.isDailyTaskDone = true;
-    
-    
-        console.log("onDailyTask", this.isDailyTaskDone);    
-        
+
+
+        console.log("onDailyTask", this.isDailyTaskDone);
+
         // {point: 2, code: 200}
         //{code: -2, msg: "重复签到"}
         console.log(this.isDailyTaskDone);
@@ -72,7 +74,22 @@ export class UserInfoComponent implements OnInit {
     // 'http://music.163.com/weapi/point/dailyTask';
     handleDailyTask() {
 
-        this._cloudMusic.SignIn().
+        // this._cloudMusic.SignIn().
+        //     then(retVal => {
+
+        //         if (retVal.code !== 200) {
+        //             this._dlg.alert(retVal.code);
+        //             return;
+        //         }
+
+        //         this._action.SaveDailyTask(true);
+
+        //     },
+        //     rejectVal => {
+        //         console.log(rejectVal);
+        //     });
+
+        this._cloudMusic.Playlist(3087853).
             then(retVal => {
 
                 if (retVal.code !== 200) {
@@ -80,7 +97,7 @@ export class UserInfoComponent implements OnInit {
                     return;
                 }
 
-                this._action.SaveDailyTask(true);
+                console.log("playlist: ", retVal);
 
             },
             rejectVal => {

@@ -9,25 +9,32 @@ import (
 	"net/http/cookiejar"
 	"net/url"
 	"strings"
+	//  "strconv"
 
 	"github.com/lewgun/cloudmusic/cmd/cloudmusicd/pkg/dispatcher"
 	"github.com/lewgun/cloudmusic/pkg/misc"
 	"github.com/lewgun/cloudmusic/pkg/types"
 
 	"github.com/gin-gonic/gin"
-//	"github.com/stretchr/objx"
+	//	"github.com/stretchr/objx"
 )
 
 const (
 	musicAPIBase  = "http://music.163.com/"
 	webLoginURL   = "https://music.163.com/weapi/login?csrf_token="
 	phoneLoginURL = "https://music.163.com/weapi/login/cellphone/?csrf_token="
-    dailyTaskURL  = "http://music.163.com/weapi/point/dailyTask"
+	dailyTaskURL  = "http://music.163.com/weapi/point/dailyTask/"
+	playlistURL   = "http://music.163.com/api/user/playlist/"
 )
 
 const (
 	byID     = "id"
 	byMobile = "cellphone"
+)
+
+const (
+	HTTP_POST = "POST"
+	HTTP_GET  = "GET"
 )
 
 //Console is everything for exchange with netease cloud music
@@ -68,7 +75,6 @@ func init() {
 	dispatcher.Register(c)
 }
 
-
 //Login admin login
 func (c *Console) Login(ctx *gin.Context) error {
 	params := &types.LoginReq{}
@@ -84,21 +90,20 @@ func (c *Console) Login(ctx *gin.Context) error {
 		action = phoneLoginURL
 
 	default:
-		return  fmt.Errorf("unkonwn login method")
+		return fmt.Errorf("unkonwn login method")
 
 	}
 
 	data, err := c.post(action, &params.BaseParams)
 	if err != nil {
-		return  err
+		return err
 	}
 
-    
-    m := gin.H{
-        "data": string(data),
-    }
-    misc.SimpleResponse(ctx, m)
-	return  nil
+	m := gin.H{
+		"data": string(data),
+	}
+	misc.SimpleResponse(ctx, m)
+	return nil
 }
 
 //DailyTask daily task sign in
@@ -108,46 +113,88 @@ func (c *Console) DailyTask(ctx *gin.Context) error {
 
 	data, err := c.post(dailyTaskURL, params)
 	if err != nil {
-		return  err
+		return err
 	}
-    
-    m := gin.H{
-        "data": string(data),
-    }
-    misc.SimpleResponse(ctx, m)
-	return  nil
+
+	m := gin.H{
+		"data": string(data),
+	}
+	misc.SimpleResponse(ctx, m)
+	return nil
 }
 
+//PlayList get the player's playlist
+func (c *Console) PlayList(ctx *gin.Context) error {
+	// uid, _ :=     strconv.Atoi(ctx.Query("uid"))
+	// offset, _ :=     strconv.Atoi(ctx.Query("offset"))
+	// limit, _ :=     strconv.Atoi(ctx.Query("limit"))
 
+	uid := ctx.Query("uid")
+	offset := ctx.Query("offset")
+	limit := ctx.Query("limit")
+
+	v := url.Values{}
+	v.Set("uid", uid)
+	v.Set("offset", offset)
+	v.Set("limit", limit)
+
+	fmt.Println(uid, offset, limit, v.Encode())
+
+	data, err := c.httpHelper(playlistURL, HTTP_GET, v)
+
+	if err != nil {
+		return err
+	}
+
+	m := gin.H{
+		"data": string(data),
+	}
+	misc.SimpleResponse(ctx, m)
+	return nil
+}
+
+func (c *Console) httpHelper(action, method string, v url.Values) ([]byte, error) {
+
+	var req *http.Request
+
+	if method == HTTP_GET {
+		req, _ = http.NewRequest(
+			method,
+			action,
+			nil)
+		req.URL.RawQuery = v.Encode()
+
+	} else {
+		req, _ = http.NewRequest(
+			method,
+			action,
+			strings.NewReader(v.Encode()))
+	}
+
+	req.Header = c.header
+	rspn, _ := c.client.Do(req)
+
+	defer rspn.Body.Close()
+
+	var rc io.ReadCloser
+	switch rspn.Header.Get("Content-Encoding") {
+	case "gzip":
+		rc, _ = gzip.NewReader(rspn.Body)
+		defer rc.Close()
+
+	default:
+		rc = rspn.Body
+	}
+
+	return ioutil.ReadAll(rc)
+}
 func (c *Console) post(action string, p *types.BaseParams) ([]byte, error) {
 
 	v := url.Values{}
 	v.Set("params", p.Params)
 	v.Set("encSecKey", p.EncSecKey)
 
-	req, _ := http.NewRequest(
-		"POST",
-		action,
-		strings.NewReader(v.Encode()))
-
-	req.Header = c.header
-
-	rspn, _ := c.client.Do(req)
-
-	defer rspn.Body.Close()
-
-	var reader io.ReadCloser
-	switch rspn.Header.Get("Content-Encoding") {
-	case "gzip":
-		reader, _ = gzip.NewReader(rspn.Body)
-		defer reader.Close()
-
-	default:
-		reader = rspn.Body
-	}
-    
-
-	return ioutil.ReadAll(reader)
+	return c.httpHelper(action, HTTP_POST, v)
 
 }
 

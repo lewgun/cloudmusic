@@ -26,14 +26,14 @@ func runCmd(cmd *exec.Cmd) error {
 }
 
 //Tsc
-func (b Build) Tsc(ctx *gin.Context)  error {
+func (b Build) Tsc(ctx *gin.Context) error {
 
 	err := runCmd(exec.Command("npm", "run", "tsc"))
 	if err != nil {
-		return  err
+		return err
 	}
 
-    ctx.Writer.WriteString( "npm run tsc is finished")
+	ctx.Writer.WriteString("npm run tsc is finished")
 	return nil
 }
 
@@ -42,22 +42,22 @@ func (b Build) Browserify(ctx *gin.Context) error {
 
 	err := runCmd(exec.Command("npm", "run", "browserify"))
 	if err != nil {
-		return  err
+		return err
 	}
 
-    ctx.Writer.WriteString("npm run browserify is finished")
-	return  nil
+	ctx.Writer.WriteString("npm run browserify is finished")
+	return nil
 }
 
 //Uglify
-func (b Build) Uglify(ctx *gin.Context)  error {
+func (b Build) Uglify(ctx *gin.Context) error {
 
 	err := runCmd(exec.Command("npm", "run", "uglify"))
 	if err != nil {
-		return  err
+		return err
 	}
-    ctx.Writer.WriteString("npm run uglify is finished")
-	return  nil
+	ctx.Writer.WriteString("npm run uglify is finished")
+	return nil
 }
 
 //All
@@ -70,7 +70,7 @@ func (b Build) All(ctx *gin.Context) error {
 	fmt.Println("npm run tsc finished")
 	err = runCmd(exec.Command("npm", "run", "browserify"))
 	if err != nil {
-		return  err
+		return err
 	}
 
 	fmt.Println("npm run browserify finished")
@@ -81,16 +81,16 @@ func (b Build) All(ctx *gin.Context) error {
 	}
 	fmt.Println("npm run  uglify finished")
 
-    ctx.Writer.WriteString("npm run all is finished")
-	return  nil
+	ctx.Writer.WriteString("npm run all is finished")
+	return nil
 }
 
 //Command show all supported commands
 func (b Build) Command(ctx *gin.Context) error {
-    
-    ctx.Writer.WriteString("npm run tsc/uglify/browserify/all")
-	return  nil
-    
+
+	ctx.Writer.WriteString("npm run tsc/uglify/browserify/all")
+	return nil
+
 }
 
 func init() {

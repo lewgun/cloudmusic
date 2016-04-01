@@ -7,11 +7,13 @@ import {IsCellPhone} from '../utils/utils.service'
 import {
     LoginByMobile,
     LoginByID,
+    
     LoginUrl,
     DailyTaskUrl,
+    PlayListUrl,
+    
     PhoneLoginParams,
     WebLoginParams,
-    Profile
 }  from '../../types/types';
 
 
@@ -29,7 +31,7 @@ export class CloudMusicService implements OnInit {
     ngOnInit() { }
 
 
-    private _phoneLogin(username: string, password: string): Promise<Profile> {
+    private _phoneLogin(username: string, password: string): Promise<any> {
         let params: PhoneLoginParams = {
             'phone': username,
             'password': this._crypto.MD5(password),
@@ -73,6 +75,17 @@ export class CloudMusicService implements OnInit {
 
         let data = this._crypto.aesRsaEncrypt(JSON.stringify(params));
         return this._http.Post(DailyTaskUrl, data);
+    }
+    
+    Playlist(uid:number, offset: number = 0, limit: number = 100): Promise<any> {
+
+        let params = {
+            uid: uid,
+            offset: offset,
+            limit: limit
+        };
+
+        return this._http.Get(PlayListUrl, params);
     }
 
 
