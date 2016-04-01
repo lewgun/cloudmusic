@@ -25,7 +25,6 @@
 }
 .info .header {
     height: 45px;
-    display: display;
     border-bottom: 1px lightgray solid;
     line-height: 45px;
     font-weight: bold;
@@ -66,4 +65,13 @@ li:last-child {
     padding-left: 5px;
     font-size: 0.8em;
     height: 27px;
+}
+
+.header span.gender {
+  position: relative;
+  left: 0px;
+  top: 9px;
+  background:  url("./resources/images/icon.png") no-repeat scroll;
+  width: 27px;
+  height: 27px;
 }
