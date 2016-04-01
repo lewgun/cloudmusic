@@ -1,10 +1,16 @@
 <div class="profile">
     <div class="box">
         <img [src]=userInfo.profile.avatarUrl>
+        <button  (click)="handleDailyTask()" >签到</button>
     </div>
     <div class="info">
         <div class="header">
-            <h2><span class="nickname">{{userInfo.profile.nickname}}</span><span class="lv">7</span><span class="gender" [style.background-position]="position('gender')"></span></h2>
+            <h2>
+                <span class="nickname">{{userInfo.profile.nickname}}</span>
+                <span class="lv">7</span>
+                <span class="gender" [style.background-position]="position('gender')"></span>
+
+             </h2>
         </div>
         <ul>
             <li><strong>0</strong>动态</li>

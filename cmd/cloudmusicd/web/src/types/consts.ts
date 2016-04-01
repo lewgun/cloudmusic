@@ -33,6 +33,8 @@ export const LoginByMobile = "cellphone";
 
 
 export const LoginUrl = "./do/console/login";
+export const DailyTaskUrl = "./do/console/daily_task";
+
 
 export const BaseUrlPath = "src/components";
 

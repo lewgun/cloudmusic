@@ -88,12 +88,11 @@ export class CryptoService {
 
     }
 
-    aesRsaEncrypt(plain: string): RequestParams {
+    aesRsaEncrypt(plain: string): any {
         let secKey = this.createSecretKey(16);
         return {
             params: aesEncrypt(aesEncrypt(plain, nonce), secKey),
-            encSecKey: rsaEncrypt(secKey, pubKey, modulus),
-            by: ""
+            encSecKey: rsaEncrypt(secKey, pubKey, modulus)
         }
     }
 

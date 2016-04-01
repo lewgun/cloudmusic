@@ -11,7 +11,13 @@ import {
 
 import { Cache} from './cache'
 import {Dispatcher, DispatchToken} from "../dispatcher/dispatcher";
-import {UserInfo_Read, UserInfoKey} from "../constants/constants";
+import {
+    UserInfo_Read,
+    UserInfoKey,
+
+    DailyTask_Read,
+    DailyTaskKey
+} from "../constants/constants";
 
 export type StoreToken = PubSubToken;
 
@@ -50,6 +56,13 @@ export class UserInfoStore implements OnDestroy {
                 }
                 break;
 
+            case DailyTask_Read:
+                {
+                    this._cache.Set(DailyTaskKey, action.payload);
+                    this.emitChange();
+                }
+                break;
+
             default:
                 break;
         }
@@ -77,5 +90,9 @@ export class UserInfoStore implements OnDestroy {
 
     public UserInfo(): any {
         return this._cache.Get(UserInfoKey);
+    }
+
+    public DailyTask(): any {
+        return this._cache.Get(DailyTaskKey);
     }
 }

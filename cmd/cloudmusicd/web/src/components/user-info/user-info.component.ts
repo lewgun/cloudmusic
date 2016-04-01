@@ -6,11 +6,15 @@
 import {Component, OnInit, OnDestroy}  from 'angular2/core';
 import {RouteParams, Router} from 'angular2/router';
 
-import { UserInfoStore, StoreToken } from '../../services/flux/flux';
+import { CloudMusicService} from '../../services/cloud-music/cloud-music.service';
+import { DialogService} from '../../services/dialog/dialog.service';
+
+import { UserInfoStore, StoreToken, UserInfoActionCreator } from '../../services/flux/flux';
 
 @Component({
     templateUrl: "user-info/user-info.component.html",
-    styleUrls: ["user-info/user-info.component.css"]
+    styleUrls: ["user-info/user-info.component.css"],
+    providers: [DialogService, CloudMusicService]
 
 })
 
@@ -18,35 +22,78 @@ export class UserInfoComponent implements OnInit {
 
     userInfo: any;
 
-    private _handlerToken: StoreToken;
+    private _userInfoToken: StoreToken;
+
+    private _dailyTaskToken: StoreToken;
+
     private _bgPosition = {};
+
+    isDailyTaskDone: any;
 
     constructor(
         private _router: Router,
         private _routeParams: RouteParams,
-        private _store: UserInfoStore) {
+        private _store: UserInfoStore,
+        private _dlg: DialogService,
+        private _action: UserInfoActionCreator,
+        private _cloudMusic: CloudMusicService) {
 
-        //this._handlerToken = this._store.Bind(() => this.onProfile());
+        //this._handlerToken = this._store.Bind(() => this.onUserInfo());
+
+        this._dailyTaskToken = this._store.Bind(() => this.onDailyTask());
 
         this.userInfo = this._store.UserInfo();
-        console.log(this.userInfo);
+        //console.log(this.userInfo);
+
+        this.isDailyTaskDone = this._store.DailyTask();
+
+        console.log(this.isDailyTaskDone);
 
 
     }
 
-    onProfile() {
-        //console.log(this._store.Profile());
+
+    onUserInfo() {
+        //console.log(this._store.UserInfo());
+    }
+
+    onDailyTask() {
+        this.isDailyTaskDone = this._store.DailyTask();
+
+      // {point: 2, code: 200}
+        console.log(this.isDailyTaskDone);
+    }
+
+    // 'http://music.163.com/weapi/point/dailyTask';
+    handleDailyTask() {
+
+        this._cloudMusic.SignIn().
+            then(retVal => {
+
+                if (retVal.code !== 200) {
+                    this._dlg.alert(retVal.code);
+                    return;
+                }
+
+                this._action.SaveDailyTask(true);
+
+            },
+            rejectVal => {
+                console.log(rejectVal);
+            });
+
     }
 
     ngOnInit() {
-        this._bgPosition["gender"] = (): string => this.genderPostion();
+        this._bgPosition["gender"] = (): string => this._genderPostion();
 
     }
     ngOnDestory() {
         //this._store.Unbind(this._handlerToken ) ;
+        this._store.Unbind(this._dailyTaskToken);
     }
 
-    genderPostion(): string {
+    private _genderPostion(): string {
 
         if (this.userInfo.profile.gender === 1) {  //male
             return "-39px -57px";

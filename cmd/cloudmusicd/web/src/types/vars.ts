@@ -16,7 +16,6 @@ export interface PhoneLoginParams {
 
 //RequestParams
 export interface RequestParams {
-    by: string;
     params: string;
     encSecKey: string;
 }

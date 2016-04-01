@@ -22,6 +22,7 @@ const (
 	musicAPIBase  = "http://music.163.com/"
 	webLoginURL   = "https://music.163.com/weapi/login?csrf_token="
 	phoneLoginURL = "https://music.163.com/weapi/login/cellphone/?csrf_token="
+    dailyTaskURL  = "http://music.163.com/weapi/point/dailyTask"
 )
 
 const (
@@ -67,6 +68,7 @@ func init() {
 	dispatcher.Register(c)
 }
 
+
 //Login admin login
 func (c *Console) Login(ctx *gin.Context) error {
 	params := &types.LoginReq{}
@@ -91,26 +93,6 @@ func (c *Console) Login(ctx *gin.Context) error {
 		return  err
 	}
 
-	fmt.Println(string(data))
-
-	// obj, err := objx.FromJSON(string(data))
-	// if err != nil {
-	// 	return nil, err
-	// }
-
-	// if int(obj.Get("code").Float64()) != 200 {
-	// 	return nil, fmt.Errorf(string(data))
-	// }
-
-	// m := obj.Get("profile").Data().(map[string]interface{})
-
-	// temp := m["userId"].(float64)
-	// profile := &types.Profile{
-	// 	UserID:    int(temp),
-	// 	Signature: m["signature"].(string),
-	// 	NickName:  m["nickname"].(string),
-	// 	AvatarURL: m["avatarUrl"].(string),
-	// }
     
     m := gin.H{
         "data": string(data),
@@ -118,6 +100,24 @@ func (c *Console) Login(ctx *gin.Context) error {
     misc.SimpleResponse(ctx, m)
 	return  nil
 }
+
+//DailyTask daily task sign in
+func (c *Console) DailyTask(ctx *gin.Context) error {
+	params := &types.BaseParams{}
+	ctx.BindJSON(params)
+
+	data, err := c.post(dailyTaskURL, params)
+	if err != nil {
+		return  err
+	}
+    
+    m := gin.H{
+        "data": string(data),
+    }
+    misc.SimpleResponse(ctx, m)
+	return  nil
+}
+
 
 func (c *Console) post(action string, p *types.BaseParams) ([]byte, error) {
 

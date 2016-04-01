@@ -8,6 +8,7 @@ import {
     LoginByMobile,
     LoginByID,
     LoginUrl,
+    DailyTaskUrl,
     PhoneLoginParams,
     WebLoginParams,
     Profile
@@ -64,6 +65,15 @@ export class CloudMusicService implements OnInit {
         return this._webLogin(username, password);
     }
 
+    SignIn(): Promise<any> {
+
+        let params = {
+            type: 1
+        };
+
+        let data = this._crypto.aesRsaEncrypt(JSON.stringify(params));
+        return this._http.Post(DailyTaskUrl, data);
+    }
 
 
 }
