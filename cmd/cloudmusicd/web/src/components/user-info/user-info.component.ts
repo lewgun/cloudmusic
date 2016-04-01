@@ -28,7 +28,7 @@ export class UserInfoComponent implements OnInit {
 
     private _bgPosition = {};
 
-    isDailyTaskDone: any;
+    isDailyTaskDone: boolean = true;
 
     constructor(
         private _router: Router,
@@ -45,10 +45,7 @@ export class UserInfoComponent implements OnInit {
         this.userInfo = this._store.UserInfo();
         //console.log(this.userInfo);
 
-        this.isDailyTaskDone = this._store.DailyTask();
-
-        console.log(this.isDailyTaskDone);
-
+        this.handleDailyTask();
 
     }
 
@@ -58,9 +55,17 @@ export class UserInfoComponent implements OnInit {
     }
 
     onDailyTask() {
-        this.isDailyTaskDone = this._store.DailyTask();
-
-      // {point: 2, code: 200}
+        if (!this._store.DailyTask() ) {
+            this.isDailyTaskDone = false;
+            return;
+        }
+        this.isDailyTaskDone = true;
+    
+    
+        console.log("onDailyTask", this.isDailyTaskDone);    
+        
+        // {point: 2, code: 200}
+        //{code: -2, msg: "重复签到"}
         console.log(this.isDailyTaskDone);
     }
 

@@ -47,6 +47,9 @@ export class LoginComponent {
 
     login(account: { username: string, password: string }) {
 
+        // this._router.navigate(['/Dashboard/UserInfo']);
+        // return;
+        
         this._cloudMusic.Login(
             account.username.trim(),
             account.password.trim()).

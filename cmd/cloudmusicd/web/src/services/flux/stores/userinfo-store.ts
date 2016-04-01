@@ -58,7 +58,7 @@ export class UserInfoStore implements OnDestroy {
 
             case DailyTask_Read:
                 {
-                    this._cache.Set(DailyTaskKey, action.payload);
+                    this._cache.InsertOrUpdate(DailyTaskKey, action.payload);
                     this.emitChange();
                 }
                 break;

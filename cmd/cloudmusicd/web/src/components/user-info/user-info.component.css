@@ -75,3 +75,10 @@ li:last-child {
   width: 27px;
   height: 27px;
 }
+
+button.signin {
+    margin-top: 3.5px;
+    margin-right: 5px;
+    margin-left: 35px;
+    float: right;
+}
