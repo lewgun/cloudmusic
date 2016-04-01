@@ -29,7 +29,7 @@ export class ProfileStore implements OnDestroy {
 
         this._cache = new Cache();
         this._pubsub = new PubSubService();
-        console.log(this._pubsub, "ProfileStore");
+
         this._handlerID = this._dispatcher.Register((action: Action) => this.actionHandler(action));
 
     }

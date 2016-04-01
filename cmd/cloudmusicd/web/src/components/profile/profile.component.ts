@@ -4,9 +4,9 @@ import {RouteParams, Router} from 'angular2/router';
 import { ProfileStore, StoreToken } from '../../services/flux/flux';
 
 @Component({
-    templateUrl:"profile/profile.component.html",
+    templateUrl: "profile/profile.component.html",
     styleUrls: ["profile/profile.component.css"]
-    
+
 })
 
 export class ProfileComponent implements OnInit {
@@ -15,29 +15,26 @@ export class ProfileComponent implements OnInit {
     private nickname: string;
     private signature: string;
     private avatarUrl: string;
-    
+
     private _handlerToken: StoreToken;
 
     constructor(
         private _router: Router,
         private _routeParams: RouteParams,
         private _store: ProfileStore) {
-            
-        this._handlerToken = this._store.Bind(()=>this.onProfile());
-            
-        // this.nickname = _routeParams.get('nickname');
-        // this.signature = _routeParams.get('signature');
-        // this.avatarUrl = _routeParams.get('avatarUrl'); 
+
+        //this._handlerToken = this._store.Bind(() => this.onProfile());
+        
+        console.log(this._store.Profile());
 
     }
-    
-    onProfile() {
 
-        console.log(this._store.Profile());
+    onProfile() {
+        //console.log(this._store.Profile());
     }
 
     ngOnInit() { }
     ngOnDestory() {
-        this._store.Unbind(this._handlerToken ) ;
+        //this._store.Unbind(this._handlerToken ) ;
     }
 }

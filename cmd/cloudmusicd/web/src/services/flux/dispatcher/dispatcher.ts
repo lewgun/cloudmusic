@@ -12,7 +12,6 @@ export class Dispatcher {
     private _pubsub: PubSubService
     constructor() {
         this._pubsub = new PubSubService();
-        console.log(this._pubsub, "DIspatcher");
     }
 
     /**

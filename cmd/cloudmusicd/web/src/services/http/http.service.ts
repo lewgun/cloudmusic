@@ -48,7 +48,7 @@ export class HttpService implements OnInit {
                      */
                     let data = JSON.parse(jsonData.data);
                     if (data.code !== 200) {
-                        reject(data.code);
+                        reject(data);
                         return;
                     }
 

@@ -47,34 +47,27 @@ export class LoginComponent {
 
     login(account: { username: string, password: string }) {
 
-        // this._cloudMusic.Login(
-        //     account.username.trim(),
-        //     account.password.trim()).
-        //     then(retVal => {
-        //         console.log(retVal);
-        //         if (retVal.code !== 200) {
-        //             this._dlg.alert(retVal.code);
-        //             return;
-        //         }
-                
-        //         this._router.navigate(['/Dashboard/Profile']);
-        //         this._action.SaveProfile(retVal);
-                
-        //         // let profile = <Profile>(retVal.data);
+        this._cloudMusic.Login(
+            account.username.trim(),
+            account.password.trim()).
+            then(retVal => {
 
-        //         // // Like <a [routerLink]="['Profile']">Heroes</a>
-        //         // //note route to other branch!!!!!!!!!Í 
-        //         // this._router.navigate(['/Dashboard/Profile', profile]);
-        //     });
-                 this._action.SaveProfile({"key": "hello flux"});
-                 
-                 setInterval(()=>{
-                                  this._action.SaveProfile({"key": "hello flux" + Math.random()});
-                 }, 2000);
+                if (retVal.code !== 200) {
+                    this._dlg.alert(retVal.code);
+                    return;
+                }
 
-         this._router.navigate(['/Dashboard/Profile']);
+                this._action.SaveProfile(retVal);
 
-     
+                // Like <a [routerLink]="['Profile']">Heroes</a>
+                //note route to other branch!!!!!!!!!Í 
+                this._router.navigate(['/Dashboard/Profile']);
+
+            },
+            rejectVal => {
+                console.log(rejectVal);
+            });
+
     }
 
     onSubmit(values: any): void {
