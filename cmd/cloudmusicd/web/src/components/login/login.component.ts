@@ -12,9 +12,9 @@ import {Router}  from 'angular2/router';
 import { ValidationService} from '../../services/validation/validation.service';
 import { DialogService} from '../../services/dialog/dialog.service';
 import { CloudMusicService} from '../../services/cloud-music/cloud-music.service';
-import { ProfileActionCreator} from '../../services/flux/flux';
+import { UserInfoActionCreator} from '../../services/flux/flux';
 
-import { Profile }  from '../../types/types';
+//import { Profile }  from '../../types/types';
 
 import { ControlMessageComponent} from '../control-message/control-message.component';
 
@@ -35,7 +35,7 @@ export class LoginComponent {
         private _cloudMusic: CloudMusicService,
         private _fb: FormBuilder,
         private _dlg: DialogService,
-        private _action: ProfileActionCreator) {
+        private _action: UserInfoActionCreator) {
         this.myForm = _fb.group({
             'username': ["", Validators.required],
             'password': ["", Validators.compose([Validators.required, ValidationService.passwordValidator])]
@@ -61,7 +61,7 @@ export class LoginComponent {
 
                 // Like <a [routerLink]="['Profile']">Heroes</a>
                 //note route to other branch!!!!!!!!!Í 
-                this._router.navigate(['/Dashboard/Profile']);
+                this._router.navigate(['/Dashboard/UserInfo']);
 
             },
             rejectVal => {

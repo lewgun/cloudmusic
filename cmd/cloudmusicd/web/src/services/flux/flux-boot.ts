@@ -1,15 +1,15 @@
 
 import {Injectable, Inject} from 'angular2/core';
 
-import {ProfileActionCreator}  from "./actions/profile-action";
+import {UserInfoActionCreator}  from "./actions/userinfo-action";
 import {Dispatcher}  from "./dispatcher/dispatcher";
-import {ProfileStore } from "./stores/profile-store";
+import {UserInfoStore } from "./stores/userinfo-store";
 
 @Injectable()
 export class FluxBoot {
     constructor(
         @Inject(Dispatcher) private _dipatcher: Dispatcher,
-        @Inject(ProfileStore) private _store: ProfileStore,
-        @Inject(ProfileActionCreator) private _ac: ProfileActionCreator
+        @Inject(UserInfoStore) private _store: UserInfoStore,
+        @Inject(UserInfoActionCreator) private _ac: UserInfoActionCreator
     ) { }
 }

@@ -2,10 +2,10 @@
 import {Injectable, OnInit, Inject } from 'angular2/core';
 
 import {Dispatcher} from "../dispatcher/dispatcher";
-import {Profile_Read} from "../constants/constants";
+import {UserInfo_Read} from "../constants/constants";
 
 @Injectable()
-export class ProfileActionCreator {
+export class UserInfoActionCreator {
     constructor(
         @Inject(Dispatcher) private _dispatcher: Dispatcher
     ) { }
@@ -13,7 +13,7 @@ export class ProfileActionCreator {
     SaveProfile(profile: any) {
         this._dispatcher.Dispatch(
             {
-                typ: Profile_Read,
+                typ: UserInfo_Read,
                 payload: profile
             });
     }

@@ -1,10 +1,10 @@
 <div class="profile">
     <div class="box">
-        <img [src]=avatarUrl>
+        <img [src]=userInfo.profile.avatarUrl>
     </div>
     <div class="info">
         <div class="header">
-            <h2><span class="nickname">{{nickname}}</span><span class="lv">7</span><span class="gender">男</span></h2>
+            <h2><span class="nickname">{{userInfo.profile.nickname}}</span><span class="lv">7</span><span class="gender">男</span></h2>
         </div>
         <ul>
             <li><strong>0</strong>动态</li>
@@ -12,7 +12,7 @@
             <li><strong>0</strong>粉丝</li>
         </ul>
         <div class="signature">
-            个人介绍: {{signature}}
+            个人介绍: {{userInfo.profile.signature}}
         </div>
         <div class="location">
             所在地区: {{signature}}

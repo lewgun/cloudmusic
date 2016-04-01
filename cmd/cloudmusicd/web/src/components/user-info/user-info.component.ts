@@ -1,31 +1,29 @@
 import {Component, OnInit, OnDestroy}  from 'angular2/core';
 import {RouteParams, Router} from 'angular2/router';
 
-import { ProfileStore, StoreToken } from '../../services/flux/flux';
+import { UserInfoStore, StoreToken } from '../../services/flux/flux';
 
 @Component({
-    templateUrl: "profile/profile.component.html",
-    styleUrls: ["profile/profile.component.css"]
+    templateUrl: "user-info/user-info.component.html",
+    styleUrls: ["user-info/user-info.component.css"]
 
 })
 
-export class ProfileComponent implements OnInit {
+export class UserInfoComponent implements OnInit {
 
-    private userId: number;
-    private nickname: string;
-    private signature: string;
-    private avatarUrl: string;
+    userInfo: Object; 
 
     private _handlerToken: StoreToken;
 
     constructor(
         private _router: Router,
         private _routeParams: RouteParams,
-        private _store: ProfileStore) {
+        private _store: UserInfoStore) {
 
         //this._handlerToken = this._store.Bind(() => this.onProfile());
         
-        console.log(this._store.Profile());
+        this.userInfo = this._store.UserInfo();
+
 
     }
 

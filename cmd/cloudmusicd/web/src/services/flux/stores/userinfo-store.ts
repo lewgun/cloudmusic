@@ -11,13 +11,13 @@ import {
 
 import { Cache} from './cache'
 import {Dispatcher, DispatchToken} from "../dispatcher/dispatcher";
-import {Profile_Read} from "../constants/constants";
+import {UserInfo_Read, UserInfoKey} from "../constants/constants";
 
 export type StoreToken = PubSubToken;
 
 
 @Injectable()
-export class ProfileStore implements OnDestroy {
+export class UserInfoStore implements OnDestroy {
 
 
     private _handlerID: DispatchToken;
@@ -43,9 +43,9 @@ export class ProfileStore implements OnDestroy {
     actionHandler(action: Action): void {
 
         switch (action.typ) {
-            case Profile_Read:
+            case UserInfo_Read:
                 {
-                    this._cache.Set(Profile_Read, action.payload);
+                    this._cache.Set(UserInfoKey, action.payload);
                     this.emitChange();
                 }
                 break;
@@ -75,7 +75,7 @@ export class ProfileStore implements OnDestroy {
 
     }
 
-    public Profile(): any {
-        return this._cache.Get(Profile_Read);
+    public UserInfo(): any {
+        return this._cache.Get(UserInfoKey);
     }
 }

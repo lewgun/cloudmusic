@@ -2,7 +2,7 @@ import {Component}     from 'angular2/core';
 import {RouteConfig, ROUTER_DIRECTIVES} from 'angular2/router';
 
 
-import {ProfileComponent} from '../profile/profile.component'
+import {UserInfoComponent} from '../user-info/user-info.component'
 
 @Component({
     directives: [ROUTER_DIRECTIVES],
@@ -10,8 +10,8 @@ import {ProfileComponent} from '../profile/profile.component'
 
 })
 @RouteConfig([
-    { path: '/', name: 'Profile', component: ProfileComponent, useAsDefault: true },
-    { path: '/profile', name: 'Profile', component: ProfileComponent }
+    { path: '/', name: 'UserInfo', component: UserInfoComponent, useAsDefault: true },
+    { path: '/userinfo', name: 'UserInfo', component: UserInfoComponent }
 ])
 export class DashboardComponent {
 
