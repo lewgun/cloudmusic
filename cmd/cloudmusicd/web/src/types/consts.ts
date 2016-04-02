@@ -40,6 +40,10 @@ export const DailyTaskUrl = "./do/console/daily_task";
 //用户歌单
 export const PlayListUrl = "./do/console/play_list";
 
+//歌单详情
+export const PlayListDetailUrl = "./do/console/play_list_detail";
+
+
 export const BaseUrlPath = "src/components";
 
 export const ChangeEvent = "ChangeEvent";

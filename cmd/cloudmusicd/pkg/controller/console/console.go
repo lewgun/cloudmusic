@@ -9,7 +9,6 @@ import (
 	"net/http/cookiejar"
 	"net/url"
 	"strings"
-	//  "strconv"
 
 	"github.com/lewgun/cloudmusic/cmd/cloudmusicd/pkg/dispatcher"
 	"github.com/lewgun/cloudmusic/pkg/misc"
@@ -24,7 +23,13 @@ const (
 	webLoginURL   = "https://music.163.com/weapi/login?csrf_token="
 	phoneLoginURL = "https://music.163.com/weapi/login/cellphone/?csrf_token="
 	dailyTaskURL  = "http://music.163.com/weapi/point/dailyTask/"
-	playlistURL   = "http://music.163.com/api/user/playlist/"
+	
+    // playlistURL   = "http://music.163.com/api/user/playlist/"
+    	//playlistDetailURL   = "http://music.163.com/api/playlist/detail" 
+        
+    playlistURL   = "http://music.163.com/weapi/user/playlist?csrf_token"
+    playlistDetailURL = "http://music.163.com/weapi/v3/playlist/detail?csrf_token="
+    
 )
 
 const (
@@ -123,25 +128,35 @@ func (c *Console) DailyTask(ctx *gin.Context) error {
 	return nil
 }
 
+// //PlayList get the player's playlist
+// func (c *Console) PlayList(ctx *gin.Context) error {
+
+// 	v := url.Values{}
+// 	v.Set("uid", ctx.Query("uid"))
+// 	v.Set("offset", ctx.Query("offset"))
+// 	v.Set("limit", ctx.Query("limit"))
+
+
+// 	data, err := c.httpHelper(playlistURL, HTTP_GET, v)
+
+// 	if err != nil {
+// 		return err
+// 	}
+
+// 	m := gin.H{
+// 		"data": string(data),
+// 	}
+// 	misc.SimpleResponse(ctx, m)
+// 	return nil
+// }
+
 //PlayList get the player's playlist
 func (c *Console) PlayList(ctx *gin.Context) error {
-	// uid, _ :=     strconv.Atoi(ctx.Query("uid"))
-	// offset, _ :=     strconv.Atoi(ctx.Query("offset"))
-	// limit, _ :=     strconv.Atoi(ctx.Query("limit"))
 
-	uid := ctx.Query("uid")
-	offset := ctx.Query("offset")
-	limit := ctx.Query("limit")
+	params := &types.BaseParams{}
+	ctx.BindJSON(params)
 
-	v := url.Values{}
-	v.Set("uid", uid)
-	v.Set("offset", offset)
-	v.Set("limit", limit)
-
-	fmt.Println(uid, offset, limit, v.Encode())
-
-	data, err := c.httpHelper(playlistURL, HTTP_GET, v)
-
+	data, err := c.post(playlistURL, params)
 	if err != nil {
 		return err
 	}
@@ -152,6 +167,49 @@ func (c *Console) PlayList(ctx *gin.Context) error {
 	misc.SimpleResponse(ctx, m)
 	return nil
 }
+
+
+// //PlayListDetail get the playlist's detail
+// func (c *Console) PlayListDetail(ctx *gin.Context) error {
+// //func (c *Console) PlayList(ctx *gin.Context) error {
+
+// 	v := url.Values{}
+// 	//v.Set("id", ctx.Query("id"))
+//     	v.Set("id", "3965559")
+
+
+// 	data, err := c.httpHelper(playlistDetailURL, HTTP_GET, v)
+
+// 	if err != nil {
+// 		return err
+// 	}
+
+// 	m := gin.H{
+// 		"data": string(data),
+// 	}
+// 	misc.SimpleResponse(ctx, m)
+// 	return nil
+// }
+
+//PlayListDetail get the playlist's detail
+func (c *Console) PlayListDetail(ctx *gin.Context) error {
+
+	params := &types.BaseParams{}
+	ctx.BindJSON(params)
+
+	data, err := c.post(playlistDetailURL, params)
+	if err != nil {
+		return err
+	}
+
+	m := gin.H{
+		"data": string(data),
+	}
+	misc.SimpleResponse(ctx, m)
+	return nil
+    
+}
+
 
 func (c *Console) httpHelper(action, method string, v url.Values) ([]byte, error) {
 

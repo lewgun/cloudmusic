@@ -47,8 +47,6 @@ export class UserInfoComponent implements OnInit {
 
         // this.handleDailyTask();
 
-
-
     }
 
 
@@ -71,23 +69,28 @@ export class UserInfoComponent implements OnInit {
         console.log(this.isDailyTaskDone);
     }
 
-    // 'http://music.163.com/weapi/point/dailyTask';
+    // http://music.163.com/weapi/point/dailyTask
     handleDailyTask() {
 
-        // this._cloudMusic.SignIn().
-        //     then(retVal => {
+        this._cloudMusic.SignIn().
+            then(retVal => {
 
-        //         if (retVal.code !== 200) {
-        //             this._dlg.alert(retVal.code);
-        //             return;
-        //         }
+                if (retVal.code !== 200) {
+                    this._dlg.alert(retVal.code);
+                    return;
+                }
 
-        //         this._action.SaveDailyTask(true);
+                this._action.SaveDailyTask(true);
 
-        //     },
-        //     rejectVal => {
-        //         console.log(rejectVal);
-        //     });
+            },
+            rejectVal => {
+                console.log(rejectVal);
+            });
+
+    }
+    
+    // http://music.163.com/weapi/user/playlist?csrf_token"
+    handlePlaylist() {
 
         this._cloudMusic.Playlist(3087853).
             then(retVal => {
@@ -105,7 +108,28 @@ export class UserInfoComponent implements OnInit {
             });
 
     }
+    
+    // http://music.163.com/weapi/v3/playlist/detail?csrf_token=
+    handlePlaylistDetail() {
 
+        this._cloudMusic.PlaylistDetail(3965559).
+            then(retVal => {
+
+                if (retVal.code !== 200) {
+                    this._dlg.alert(retVal.code);
+                    return;
+                }
+
+                console.log("playlist detail: ", retVal);
+
+            },
+            rejectVal => {
+                console.log(rejectVal);
+            });
+
+    }
+    
+    
     ngOnInit() {
         this._bgPosition["gender"] = (): string => this._genderPostion();
 
