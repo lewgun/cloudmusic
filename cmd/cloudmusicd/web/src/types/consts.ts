@@ -43,6 +43,9 @@ export const PlayListUrl = "./do/console/play_list";
 //歌单详情
 export const PlayListDetailUrl = "./do/console/play_list_detail";
 
+//歌曲rul
+export const SongUrl = "./do/console/song_url";
+
 
 export const BaseUrlPath = "src/components";
 

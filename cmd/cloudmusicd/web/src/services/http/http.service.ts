@@ -24,6 +24,7 @@ export class HttpService implements OnInit {
 
         let jsonData = rawData.json();
 
+        console.log("_promiseHelper", jsonData);
         /*
         {
             result: "fail",

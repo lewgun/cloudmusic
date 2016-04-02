@@ -129,6 +129,25 @@ export class UserInfoComponent implements OnInit {
 
     }
     
+    handleSongUrl() {
+
+        this._cloudMusic.SongUrl(31473269).
+            then(retVal => {
+
+                if (retVal.code !== 200) {
+                    this._dlg.alert(retVal.code);
+                    return;
+                }
+
+                console.log("song url: ", retVal);
+
+            },
+            rejectVal => {
+                console.log(rejectVal);
+            });
+
+    }
+    
     
     ngOnInit() {
         this._bgPosition["gender"] = (): string => this._genderPostion();

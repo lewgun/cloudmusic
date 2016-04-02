@@ -12,6 +12,7 @@ import {
     DailyTaskUrl,
     PlayListUrl,
     PlayListDetailUrl,
+    SongUrl,
     
     PhoneLoginParams,
     WebLoginParams,
@@ -102,6 +103,18 @@ export class CloudMusicService implements OnInit {
         return this._http.Post(PlayListDetailUrl, data);
         
        // return this._http.Get(PlayListUrl, params);
+    }
+    
+    SongUrl(id:number, br : number = 320000): Promise<any> {
+
+        let params = {
+            ids: [id],
+            br: br
+        };
+        
+        let data = this._crypto.aesRsaEncrypt(JSON.stringify(params));
+        return this._http.Post(SongUrl, data);
+        
     }
     
 

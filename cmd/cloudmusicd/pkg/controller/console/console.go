@@ -29,6 +29,7 @@ const (
         
     playlistURL   = "http://music.163.com/weapi/user/playlist?csrf_token"
     playlistDetailURL = "http://music.163.com/weapi/v3/playlist/detail?csrf_token="
+    songURL = "http://music.163.com/weapi/song/enhance/player/url?csrf_token="
     
 )
 
@@ -210,6 +211,27 @@ func (c *Console) PlayListDetail(ctx *gin.Context) error {
     
 }
 
+//SongUrl get the song's url
+func (c *Console) SongUrl(ctx *gin.Context) error {
+
+	params := &types.BaseParams{}
+	ctx.BindJSON(params)
+
+	data, err := c.post(songURL, params)
+	if err != nil {
+		return err
+	}
+    
+    fmt.Println(string(data))
+
+	m := gin.H{
+		"data": string(data),
+	}
+	misc.SimpleResponse(ctx, m)
+	return nil
+    
+}
+
 
 func (c *Console) httpHelper(action, method string, v url.Values) ([]byte, error) {
 
@@ -255,6 +277,8 @@ func (c *Console) post(action string, p *types.BaseParams) ([]byte, error) {
 	return c.httpHelper(action, HTTP_POST, v)
 
 }
+
+
 
 // logout endpoint
 func Logout(ctx *gin.Context) {
