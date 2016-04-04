@@ -7,9 +7,23 @@ import {Component, OnInit, OnDestroy}  from 'angular2/core';
 import {RouteParams, Router} from 'angular2/router';
 
 import { CloudMusicService} from '../../services/cloud-music/cloud-music.service';
+
+
 import { DialogService} from '../../services/dialog/dialog.service';
 
-import { UserInfoStore, StoreToken, UserInfoActionCreator } from '../../services/flux/flux';
+import {
+    StoreToken,
+
+    UserInfoStore,
+    PlayListStore,
+
+    UserInfoActionCreator,
+    PlayListActionCreator
+
+} from '../../services/flux/flux';
+
+
+const PlayList = "playlist"
 
 @Component({
     templateUrl: "user-info/user-info.component.html",
@@ -17,14 +31,21 @@ import { UserInfoStore, StoreToken, UserInfoActionCreator } from '../../services
     providers: [DialogService, CloudMusicService]
 
 })
-
 export class UserInfoComponent implements OnInit {
 
     userInfo: any;
+    playlist: any;
+    playlistDetail: any[];
 
+    curSongUrl: string;
+
+
+    //tokens
     private _userInfoToken: StoreToken;
-
     private _dailyTaskToken: StoreToken;
+
+    private _playlistToken: StoreToken;
+    private _playlistDetailToken: StoreToken;
 
     private _bgPosition = {};
 
@@ -33,20 +54,65 @@ export class UserInfoComponent implements OnInit {
     constructor(
         private _router: Router,
         private _routeParams: RouteParams,
-        private _store: UserInfoStore,
+        private _userInfoStore: UserInfoStore,
+        private _playlistStore: PlayListStore,
+
+        private _userInfoAction: UserInfoActionCreator,
+        private _playlistAction: PlayListActionCreator,
+
         private _dlg: DialogService,
-        private _action: UserInfoActionCreator,
         private _cloudMusic: CloudMusicService) {
 
         //this._handlerToken = this._store.Bind(() => this.onUserInfo());
 
-        this._dailyTaskToken = this._store.Bind(() => this.onDailyTask());
+        this._dailyTaskToken = this._userInfoStore.Bind(() => this.onDailyTask());
+        this._playlistToken = this._playlistStore.Bind(() => this.onPlayList());
+        this._playlistDetailToken = this._playlistStore.Bind(() => this.onPlayListDetail());
 
-        this.userInfo = this._store.UserInfo();
-        //console.log(this.userInfo);
+        this.userInfo = this._userInfoStore.UserInfo();
+        console.log(this.userInfo);
+
+        _cloudMusic.RegisterDigger(
+            PlayList,
+            (tracks: any[]): any[] => this.playlistDigger(tracks));
 
         // this.handleDailyTask();
 
+    }
+
+    playlistDigger(tracks: any[]): any[] {
+        console.log("call playlistDigger ", tracks);
+
+        let retVal = [];
+        for (let song of tracks) {
+            let item: any = {};
+
+            item.song = {};
+            item.song.id = song.id;
+
+            item.song.name = song.name;
+            item.song.alias = song.alia ? song.alia[0] : null;
+            item.song.duration = song.dt;
+            item.song.mv = song.mv;
+
+            item.album = {};
+            item.album.name = song.al.name;
+            item.album.id = song.al.id;
+
+            item.singers = [];
+
+            //歌手可能有多个
+            for (let s of song.ar) {
+                item.singers.push({
+                    name: s.name,
+                    id: s.id
+                });
+            }
+            retVal.push(item);
+        }
+
+        //console.log(retVal);
+        return retVal;
     }
 
 
@@ -54,8 +120,28 @@ export class UserInfoComponent implements OnInit {
         //console.log(this._store.UserInfo());
     }
 
+    onPlayList() {
+
+        this.playlist = this._playlistStore.PlayList();
+    }
+
+
+    onPlayListDetail() {
+        let temp = this._playlistStore.PlayListDetail();
+        if (!temp) {
+            return;
+        }
+
+        this.playlistDetail = this._cloudMusic.Dig(
+            PlayList,
+            temp.playlist.tracks);
+
+        console.log(this.playlistDetail);
+    }
+
+
     onDailyTask() {
-        if (!this._store.DailyTask()) {
+        if (!this._userInfoStore.DailyTask()) {
             this.isDailyTaskDone = false;
             return;
         }
@@ -80,7 +166,7 @@ export class UserInfoComponent implements OnInit {
                     return;
                 }
 
-                this._action.SaveDailyTask(true);
+                this._userInfoAction.SaveDailyTask(true);
 
             },
             rejectVal => {
@@ -88,11 +174,11 @@ export class UserInfoComponent implements OnInit {
             });
 
     }
-    
+
     // http://music.163.com/weapi/user/playlist?csrf_token"
-    handlePlaylist() {
+    handlePlaylist(uid: number) {
 
-        this._cloudMusic.Playlist(3087853).
+        this._cloudMusic.Playlist(uid).
             then(retVal => {
 
                 if (retVal.code !== 200) {
@@ -100,7 +186,10 @@ export class UserInfoComponent implements OnInit {
                     return;
                 }
 
-                console.log("playlist: ", retVal);
+
+                this._playlistAction.SavePlayList(retVal);
+
+                //  console.log("playlist: ", retVal);
 
             },
             rejectVal => {
@@ -108,11 +197,11 @@ export class UserInfoComponent implements OnInit {
             });
 
     }
-    
+
     // http://music.163.com/weapi/v3/playlist/detail?csrf_token=
-    handlePlaylistDetail() {
+    handlePlaylistDetail(pid: number) {
 
-        this._cloudMusic.PlaylistDetail(3965559).
+        this._cloudMusic.PlaylistDetail(pid).
             then(retVal => {
 
                 if (retVal.code !== 200) {
@@ -120,7 +209,10 @@ export class UserInfoComponent implements OnInit {
                     return;
                 }
 
-                console.log("playlist detail: ", retVal);
+
+                this._playlistAction.SavePlayListDetail(retVal);
+
+                //   console.log("playlist detail: ", retVal);
 
             },
             rejectVal => {
@@ -128,10 +220,10 @@ export class UserInfoComponent implements OnInit {
             });
 
     }
-    
-    handleSongUrl() {
 
-        this._cloudMusic.SongUrl(31473269).
+    handleSongUrl(sid: number) {
+
+        this._cloudMusic.SongUrl(sid).
             then(retVal => {
 
                 if (retVal.code !== 200) {
@@ -140,6 +232,7 @@ export class UserInfoComponent implements OnInit {
                 }
 
                 console.log("song url: ", retVal);
+                this.curSongUrl = retVal.data[0].url;
 
             },
             rejectVal => {
@@ -147,15 +240,17 @@ export class UserInfoComponent implements OnInit {
             });
 
     }
-    
-    
+
+
     ngOnInit() {
         this._bgPosition["gender"] = (): string => this._genderPostion();
 
     }
     ngOnDestory() {
         //this._store.Unbind(this._handlerToken ) ;
-        this._store.Unbind(this._dailyTaskToken);
+        this._userInfoStore.Unbind(this._dailyTaskToken);
+        this._userInfoStore.Unbind(this._playlistToken);
+        this._userInfoStore.Unbind(this._playlistDetailToken);
     }
 
     private _genderPostion(): string {
