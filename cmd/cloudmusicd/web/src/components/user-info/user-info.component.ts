@@ -88,7 +88,8 @@ export class UserInfoComponent implements OnInit {
             let item: any = {};
 
             item.song = {};
-            item.song.id = song.id;
+            item.song.id =  song.id;
+            item.song.canPlay = song.a ? true: false; //不能播放的song.a为null
 
             item.song.name = song.name;
             item.song.alias = song.alia ? song.alia[0] : null;

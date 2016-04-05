@@ -82,3 +82,77 @@ button.signin {
     margin-left: 35px;
     float: right;
 }
+
+
+table {
+    min-width: 640px;
+    border: 1px solid lightgray;
+
+}
+
+tr.header {
+    height: 36px;
+    border-top: 2px solid rgb(194,13,13);
+}
+
+tr {
+    height: 30px;
+    line-height: 30px;
+    
+}
+
+tr th {
+    font-size: 0.8em;
+}
+
+tr.header th {
+    background: transparent url("./resources/images/table.png") 0px 0px scroll repeat-x;
+    border-right: 1px solid lightgray;
+}
+tr.header .title {
+
+      width: 120px;
+      height: 36px;
+}
+
+th.index {
+    width: 78px;
+}
+th.title {
+    width: 240px;
+    cursor: pointer;
+}
+th.duration {
+    width: 112px;
+}
+th.singer {
+    width: 90px;
+}
+
+th.album {
+    width: 120px;
+}
+
+
+th span.play {
+      display: inline-block;
+      margin-left: 10px;
+      background: transparent url("./resources/images/table.png") 0px -126px scroll no-repeat;
+      width: 20px;
+      height: 20px;
+      position: relative;
+      top: 5px;
+      cursor: pointer;
+}
+
+th span.play.disabled {
+    background-position-y: -102px; 
+}
+
+tr:nth-child(even) {
+    background-color: rgb(247, 247, 247) /*!important*/;
+}
+
+tr .disabled {
+    color: rgb(187,187,187);
+}
