@@ -10,6 +10,7 @@ import { CloudMusicService} from '../../services/cloud-music/cloud-music.service
 import { DialogService} from '../../services/dialog/dialog.service';
 
 import { DurationFormatPipe} from '../../pipes/duration-format/duration-format.pipe';
+import { TextFormatPipe} from '../../pipes/text-format/text-format.pipe';
 
 import {
     StoreToken,
@@ -29,7 +30,7 @@ const PlayList = "playlist"
     templateUrl: "user-info/user-info.component.html",
     styleUrls: ["user-info/user-info.component.css"],
     providers: [DialogService, CloudMusicService],
-    pipes: [DurationFormatPipe]
+    pipes: [DurationFormatPipe,TextFormatPipe ]
 
 })
 export class UserInfoComponent implements OnInit {
@@ -242,6 +243,34 @@ export class UserInfoComponent implements OnInit {
             });
 
     }
+    
+    songName(song: any, sep: string): string {
+          
+      let ret: string = song.name;
+      if (song.alias) {
+          ret += sep;
+          ret += "(";
+          ret += song.alias;
+          ret += ")";
+      }
+      return ret;
+    }
+    
+     singerName(singers: any, sep: string): string {
+          
+      let ret: string = "";
+      
+      for (let s of singers) {
+          ret += s.name;
+          ret += sep;
+      }
+
+
+      return ret.substr(0, ret.length-1);
+
+    }
+
+
 
 
     ngOnInit() {

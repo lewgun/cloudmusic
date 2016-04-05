@@ -92,6 +92,7 @@ table {
 
 tr.header {
     height: 36px;
+    line-height: 36px;
     border-top: 2px solid rgb(194,13,13);
 }
 

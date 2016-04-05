@@ -11,7 +11,6 @@
             <button class="signin" (click)="handleDailyTask()" [disabled]="isDailyTaskDone">签到</button>
             <button class="signin" (click)="handlePlaylist(userInfo.profile.userId)">我的歌单</button>
             <button class="signin" (click)="handlePlaylistDetail(playlist.playlist[0].id)">歌单详情</button>
-            <button class="signin" >歌曲地址</button>
 
         </div>
         <ul>
@@ -44,11 +43,11 @@
             </tr>
             
             <tr *ngFor="#s of playlistDetail; #i=index"  [class.disabled]="!s.song.canPlay" >
-                <th class="index"><span>{{i+1}}</span><span class="play"  [class.disabled]="!s.song.canPlay" (click)="handleSongUrl()"></span></th>
-                <th class="title"><a (click)="handleSongUrl(s.song.id)">{{s.song.name}}<span *ngIf="s.song.alias">-({{s.song.alias}})</span></a></th>
+                <th class="index"><span>{{i+1}}</span><span class="play"  [class.disabled]="!s.song.canPlay" (click)="handleSongUrl(s.song.id)"></span></th>
+                <th class="title"><a (click)="handleSongUrl(s.song.id)">{{ songName(s.song, "-") | textFormat:13}}</a></th>
                 <th class="duration">{{s.song.duration | durationFormat }}</th>
-                <th class="singer">{{s.singers[0].name}}</th>
-                <th class="album">{{s.album.name}}</th>
+                <th class="singer">{{singerName(s.singers, "/") | textFormat:4}}</th>
+                <th class="album">{{s.album.name |  textFormat:8}}</th>
             </tr>
 
         </table>
