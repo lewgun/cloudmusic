@@ -43,7 +43,10 @@
             </tr>
             
             <tr *ngFor="#s of playlistDetail; #i=index"  [class.disabled]="!s.song.canPlay" >
-                <th class="index"><span>{{i+1}}</span><span class="play"  [class.disabled]="!s.song.canPlay" (click)="handleSongUrl(s.song.id)"></span></th>
+                <th class="index">
+                    <span>{{i+1}}</span><span class="play"  [class.disabled]="!s.song.canPlay" [class.current]="s.song.id===curSongId"  (click)="handleSongUrl(s.song.id)"></span>
+                </th>
+                
                 <th class="title"><a (click)="handleSongUrl(s.song.id)">{{ songName(s.song, "-") | textFormat:13}}</a></th>
                 <th class="duration">{{s.song.duration | durationFormat }}</th>
                 <th class="singer">{{singerName(s.singers, "/") | textFormat:4}}</th>

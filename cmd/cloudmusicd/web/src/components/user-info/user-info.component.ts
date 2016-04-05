@@ -40,6 +40,7 @@ export class UserInfoComponent implements OnInit {
     playlistDetail: any[];
 
     curSongUrl: string;
+    curSongId: number = -1;
 
 
     //tokens
@@ -226,6 +227,7 @@ export class UserInfoComponent implements OnInit {
 
     handleSongUrl(sid: number) {
 
+        this.curSongId = sid;
         this._cloudMusic.SongUrl(sid).
             then(retVal => {
 
