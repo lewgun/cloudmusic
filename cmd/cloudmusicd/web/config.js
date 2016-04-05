@@ -3,6 +3,7 @@ let mapping = {
     'rxjs': 'node_modules/rxjs',
     "big-integer": "node_modules/big-integer/BigInteger",
     "crypto-browserify": "node_modules/crypto-browserify/index",
+    "howler": "node_modules/howler/howler"
 }
 
 System.config({
