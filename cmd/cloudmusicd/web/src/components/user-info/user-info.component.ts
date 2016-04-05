@@ -33,7 +33,7 @@ const PlayList = "playlist"
     pipes: [DurationFormatPipe,TextFormatPipe ]
 
 })
-export class UserInfoComponent implements OnInit {
+export class UserInfoComponent implements OnInit, OnDestroy {
 
     userInfo: any;
     playlist: any;
@@ -279,11 +279,12 @@ export class UserInfoComponent implements OnInit {
         this._bgPosition["gender"] = (): string => this._genderPostion();
 
     }
-    ngOnDestory() {
+    ngOnDestroy():any {
         //this._store.Unbind(this._handlerToken ) ;
         this._userInfoStore.Unbind(this._dailyTaskToken);
         this._userInfoStore.Unbind(this._playlistToken);
         this._userInfoStore.Unbind(this._playlistDetailToken);
+        return null;
     }
 
     private _genderPostion(): string {
