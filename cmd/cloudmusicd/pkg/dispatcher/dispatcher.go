@@ -93,14 +93,14 @@ func (d *dispatcher) call(ctx *gin.Context) {
 		misc.SimpleResponse(ctx, retVal[0])
 		return
 	}
-    
-    if methodName == "Build.All" {
-        ctx.Redirect(302, "/")
-    }
+
+	if methodName == "Build.All" {
+		ctx.Redirect(302, "/")
+	}
 
 }
 
-func (d *dispatcher) Command(ctx *gin.Context)  error {
+func (d *dispatcher) Command(ctx *gin.Context) error {
 
 	var commands []string
 
@@ -108,8 +108,8 @@ func (d *dispatcher) Command(ctx *gin.Context)  error {
 		commands = append(commands, c)
 	}
 
-	ctx.Writer.WriteString( strings.Join(commands, "/"))
-    return  nil
+	ctx.Writer.WriteString(strings.Join(commands, "/"))
+	return nil
 }
 
 var _dispatcher *dispatcher

@@ -10,7 +10,16 @@ import {HttpService} from './services/http/http.service';
 import {CryptoService} from './services/crypto/crypto.service';
 import {PubSubService} from './services/pubsub/pubsub.service';
 
-import {UserInfoActionCreator, Dispatcher, UserInfoStore, Cache} from './services/flux/flux';
+import {
+    Dispatcher,
+    Cache,
+
+    UserInfoActionCreator,
+    PlayListActionCreator,
+
+    UserInfoStore,
+    PlayListStore
+} from './services/flux/flux';
 
 
 //import {RawHeaders} from './types/types'
@@ -23,9 +32,13 @@ bootstrap(AppComponent,
         CryptoService,
 
         //flux
-        UserInfoActionCreator,
         Dispatcher,
+
+        UserInfoActionCreator,
+        PlayListActionCreator,
+
         UserInfoStore,
+        PlayListStore,
 
 
         provide(UrlResolver, { useClass: MyUrlResolver })

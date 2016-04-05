@@ -1,9 +1,7 @@
 import {Injectable, Inject, OnDestroy} from 'angular2/core';
 
-import {PubSubService } from '../../pubsub/pubsub.service'
-
+import {PubSubService} from '../../pubsub/pubsub.service'
 import { StoreToken} from './store'
-
 
 import {
     ChangeEvent,
@@ -14,17 +12,18 @@ import {
 import { Cache} from './cache'
 import {Dispatcher, DispatchToken} from "../dispatcher/dispatcher";
 import {
-    UserInfo_Read,
-    UserInfoKey,
 
-    DailyTask_Read,
-    DailyTaskKey,
+    PlayList_Read,
+    PlayListKey,
+    
+    PlayListDetail_Read,
+    PlayListDetailKey
 
 } from "../constants/constants";
 
 
 @Injectable()
-export class UserInfoStore implements OnDestroy {
+export class PlayListStore implements OnDestroy {
 
 
     private _handlerID: DispatchToken;
@@ -50,16 +49,17 @@ export class UserInfoStore implements OnDestroy {
     actionHandler(action: Action): void {
 
         switch (action.typ) {
-            case UserInfo_Read:
+
+            case PlayList_Read:
                 {
-                    this._cache.Set(UserInfoKey, action.payload);
+                    this._cache.InsertOrUpdate(PlayListKey, action.payload);
                     this.emitChange();
                 }
                 break;
 
-            case DailyTask_Read:
+            case PlayListDetail_Read:
                 {
-                    this._cache.InsertOrUpdate(DailyTaskKey, action.payload);
+                    this._cache.InsertOrUpdate(PlayListDetailKey, action.payload);
                     this.emitChange();
                 }
                 break;
@@ -89,11 +89,11 @@ export class UserInfoStore implements OnDestroy {
 
     }
 
-    public UserInfo(): any {
-        return this._cache.Get(UserInfoKey);
+    public PlayList(): any {
+        return this._cache.Get(PlayListKey);
     }
 
-    public DailyTask(): any {
-        return this._cache.Get(DailyTaskKey);
+    public PlayListDetail(): any {
+        return this._cache.Get(PlayListDetailKey);
     }
 }

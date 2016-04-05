@@ -1,16 +1,18 @@
 <div class="profile">
     <div class="box">
         <img [src]=userInfo.profile.avatarUrl>
-        <button  (click)="handleDailyTask()" >签到</button>
     </div>
     <div class="info">
         <div class="header">
-            <h2>
-                <span class="nickname">{{userInfo.profile.nickname}}</span>
-                <span class="lv">7</span>
-                <span class="gender" [style.background-position]="position('gender')"></span>
+            <span class="nickname">{{userInfo.profile.nickname}}</span>
+            <span class="lv">7</span>
+            <span class="gender" [style.background-position]="position('gender')"></span>
 
-             </h2>
+            <button class="signin" (click)="handleDailyTask()" [disabled]="isDailyTaskDone">签到</button>
+            <button class="signin" (click)="handlePlaylist(userInfo.profile.userId)">我的歌单</button>
+            <button class="signin" (click)="handlePlaylistDetail(playlist.playlist[0].id)">歌单详情</button>
+            <button class="signin" (click)="handleSongUrl()">歌曲地址</button>
+
         </div>
         <ul>
             <li><strong>0</strong>动态</li>
@@ -26,5 +28,31 @@
         <div class="sns">
             社交网络: {{signature}}
         </div>
+    </div>
+
+    <div class="playlist" *ngIf="playlistDetail">
+        <table>
+            <thead>
+                我的播放列表
+            </thead>
+            <tr>
+                <th>歌曲标题</th>
+                <th>时长</th>
+                <th>歌手</th>
+                <th>专辑</th>
+            </tr>
+            
+            <tr *ngFor="#s of playlistDetail" >
+                <th><a (click)="handleSongUrl(s.song.id)">{{s.song.name}}<span *ngIf="s.song.alias">({{s.song.alias}})</span></a></th>
+                <th>{{s.song.duration}}</th>
+                <th>{{s.singers[0].name}}</th>
+                <th>{{s.album.name}}</th>
+            </tr>
+
+        </table>
+    </div>
+    <div class="player">
+        <h2> 当前音乐</h2>
+        <audio src="{{curSongUrl}}" controls="controls" loop="loop" autoplay="autoplay"></audio>
     </div>
 </div>

@@ -7,19 +7,30 @@ import {IsCellPhone} from '../utils/utils.service'
 import {
     LoginByMobile,
     LoginByID,
+    
     LoginUrl,
     DailyTaskUrl,
+    PlayListUrl,
+    PlayListDetailUrl,
+    SongUrl,
+    
     PhoneLoginParams,
     WebLoginParams,
-    Profile
 }  from '../../types/types';
 
+
+export interface Digger {
+    (raw: Array<Object>): Array<Object>;
+}
 
 //https://github.com/darknessomi/musicbox/blob/master/NEMbox/api.py
 //https://github.com/kittencup/angular2-ama-cn/issues/61
 @Injectable()
 export class CloudMusicService implements OnInit {
 
+  private  _diggers = new Map<string, Digger>();
+ 
+ 
     constructor(
         @Inject(CryptoService) private _crypto: CryptoService,
         @Inject(HttpService) private _http: HttpService) {
@@ -29,7 +40,7 @@ export class CloudMusicService implements OnInit {
     ngOnInit() { }
 
 
-    private _phoneLogin(username: string, password: string): Promise<Profile> {
+    private _phoneLogin(username: string, password: string): Promise<any> {
         let params: PhoneLoginParams = {
             'phone': username,
             'password': this._crypto.MD5(password),
@@ -74,6 +85,56 @@ export class CloudMusicService implements OnInit {
         let data = this._crypto.aesRsaEncrypt(JSON.stringify(params));
         return this._http.Post(DailyTaskUrl, data);
     }
+    
+    Playlist(uid:number, offset: number = 0, limit: number = 100): Promise<any> {
 
+        let params = {
+            uid: uid,
+            offset: offset,
+            limit: limit
+        };
+
+        let data = this._crypto.aesRsaEncrypt(JSON.stringify(params));
+        return this._http.Post(PlayListUrl, data);
+        
+       // return this._http.Get(PlayListUrl, params);
+    }
+
+    PlaylistDetail(id:number): Promise<any> {
+
+        let params = {
+            id: id
+        };
+
+        let data = this._crypto.aesRsaEncrypt(JSON.stringify(params));
+        return this._http.Post(PlayListDetailUrl, data);
+        
+       // return this._http.Get(PlayListUrl, params);
+    }
+    
+    SongUrl(id:number, br : number = 320000): Promise<any> {
+
+        let params = {
+            ids: [id],
+            br: br
+        };
+        
+        let data = this._crypto.aesRsaEncrypt(JSON.stringify(params));
+        return this._http.Post(SongUrl, data);
+        
+    }
+    
+    RegisterDigger(typ: string, digger: Digger): Error {
+        
+        if (this._diggers.has(typ)) {
+            return new Error( "digger: " + typ + " is existed");
+        }
+        
+        this._diggers.set(typ, digger);
+    }
+    
+    public Dig(typ: string, rawData: Array<Object>): Array<Object> {
+        return this._diggers.get(typ)(rawData);
+    }
 
 }
