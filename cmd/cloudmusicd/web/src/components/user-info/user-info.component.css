@@ -147,6 +147,7 @@ th span.play {
 
 th span.play.disabled {
     background-position-y: -102px; 
+    cursor: default;
 }
 
 tr:nth-child(even) {

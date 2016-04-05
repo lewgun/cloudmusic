@@ -7,9 +7,9 @@ import {Component, OnInit, OnDestroy}  from 'angular2/core';
 import {RouteParams, Router} from 'angular2/router';
 
 import { CloudMusicService} from '../../services/cloud-music/cloud-music.service';
-
-
 import { DialogService} from '../../services/dialog/dialog.service';
+
+import { DurationFormatPipe} from '../../pipes/duration-format/duration-format.pipe';
 
 import {
     StoreToken,
@@ -28,7 +28,8 @@ const PlayList = "playlist"
 @Component({
     templateUrl: "user-info/user-info.component.html",
     styleUrls: ["user-info/user-info.component.css"],
-    providers: [DialogService, CloudMusicService]
+    providers: [DialogService, CloudMusicService],
+    pipes: [DurationFormatPipe]
 
 })
 export class UserInfoComponent implements OnInit {
