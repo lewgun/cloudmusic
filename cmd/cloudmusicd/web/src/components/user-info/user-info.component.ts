@@ -46,6 +46,7 @@ export class UserInfoComponent implements OnInit {
         //console.log(this.userInfo);
 
         this.isDailyTaskDone = this._store.DailyTask();
+        
 
         console.log(this.isDailyTaskDone);
 
@@ -75,7 +76,7 @@ export class UserInfoComponent implements OnInit {
                     return;
                 }
 
-                this._action.SaveDailyTask(true);
+                this._action.SaveDailyTask(retVal);
 
             },
             rejectVal => {

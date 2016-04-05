@@ -14,7 +14,6 @@ import { DialogService} from '../../services/dialog/dialog.service';
 import { CloudMusicService} from '../../services/cloud-music/cloud-music.service';
 import { UserInfoActionCreator} from '../../services/flux/flux';
 
-//import { Profile }  from '../../types/types';
 
 import { ControlMessageComponent} from '../control-message/control-message.component';
 
