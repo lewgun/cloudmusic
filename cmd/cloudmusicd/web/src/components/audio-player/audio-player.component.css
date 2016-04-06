@@ -24,6 +24,11 @@
 }
 
 
+.dashboard .buttons {
+    width: 163px;
+    float: left;
+}
+
 .dashboard .buttons a  {
     cursor: pointer;
     display: block;
@@ -62,6 +67,29 @@
 }
 .dashboard .buttons a.next:hover {
     background-position: -110px -130px;
+}
+
+.dashboard .cover {
+    float: left;
+    width: 34px;
+    height: 34px;
+    margin-top:9px;
+    position: relative;
+}
+
+.cover .mask {
+     background: transparent url("./resources/images/playbar.png") 0px -80px scroll no-repeat;
+     position: absolute;
+     left: 0px;
+     top: 0px;
+     width: 34px;
+     height: 34px;
+}
+
+.cover img {
+    position: absolute;
+    left: 0px;
+    top: 0px;
 }
 
 .locker {

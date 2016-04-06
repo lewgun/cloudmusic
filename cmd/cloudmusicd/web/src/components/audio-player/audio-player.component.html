@@ -8,6 +8,27 @@
                 <a class="play" title="播放/暂停(p)"></a>
                 <a class="next" title="下一首(ctrl+←)"></a>
             </div>
+            <div class="cover">
+                <img src ="http://p4.music.126.net/fN4A0PrYP_EFifceawjOqw==/667403558072206.jpg?param=34y34">
+                <a href="..." class="mask" (click)="handleSong()"> </a>
+            </div>
+            <div class="play">
+                <div class="header">
+                       <a class="title"></a>
+                       <a class="singer"></a>
+                       <a class="playlist"></a>        
+                </div>
+                <div class="progress">
+                    <div class="bar">
+                        <div class="ready"></div>
+                        <div class="current"></div>
+                    </div>
+                    <span class="duration">
+                        <em> {{current}}</em>
+                        / {{totalTime}}
+                    </span>
+                </div>    
+            </div>
         </div>
     </div>
 
