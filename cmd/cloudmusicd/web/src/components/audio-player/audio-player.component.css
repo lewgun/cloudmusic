@@ -92,6 +92,38 @@
     top: 0px;
 }
 
+
+.dashboard .info {
+    float: left;
+    width: 570px;
+    height: 37px;
+    
+}
+
+.info .header {
+    margin-top: 12px;
+    color: white;
+    font-size: 0.8em;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.info .header a:hover {
+    text-decoration: underline;
+}
+
+.header a.title {
+    color: #e8e8e8;
+}
+.header a.singer {
+    color: #9b9b9b;
+}
+
+.info .header .playlist {
+        background: transparent url("./resources/images/playbar.png") -130px -103px scroll no-repeat; 
+}
+
+
 .locker {
     float:right;
     width:67px;
