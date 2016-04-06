@@ -1,0 +1,33 @@
+
+.player {
+    height: 63px;
+    min-width: 980px;
+}
+
+
+
+.bg {
+    padding-top: 10px;
+    height: 53px;
+    margin-right: 67px;      
+    background: transparent url("./resources/images/playbar.png") 0px 14px scroll repeat-x;
+
+    
+}
+
+.dashboard {
+    width: 980px;
+    height: 47px;
+    margin: 0px auto; 
+    margin-right: 67px;
+
+}
+.locker {
+    float:right;
+    width:67px;
+    height:63px;
+    
+    background: transparent url("./resources/images/playbar.png") 0px -380px scroll no-repeat;
+    
+}
+

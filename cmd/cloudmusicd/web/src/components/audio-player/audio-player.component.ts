@@ -1,6 +1,6 @@
 import {Component, OnInit, OnDestroy}  from 'angular2/core';
 
-import {Howl } from 'howler';
+//import {Howl } from 'howler';
 
 
 @Component({
@@ -19,21 +19,21 @@ export class AudioPlayerComponent implements OnInit, OnDestroy {
      }
     ngOnInit() {
 
-        console.log("audio player init");
-        this.sound = new Howl({
-            urls: ['http://182.140.218.41/m10.music.126.net/20160406110346/af7a19aca2d5f521af872fd4ca2eeb35/ymusic/f795/d478/6f0b/73343b0a737658da7ce5174911044175.mp3'],
-            autoplay: true,
-            loop: true,
-            volume: 0.5,
-            onend: function() {
-                console.log('audio player Finished!');
-            }
-        });
+        // console.log("audio player init");
+        // this.sound = new Howl({
+        //     urls: ['http://182.140.218.41/m10.music.126.net/20160406110346/af7a19aca2d5f521af872fd4ca2eeb35/ymusic/f795/d478/6f0b/73343b0a737658da7ce5174911044175.mp3'],
+        //     autoplay: true,
+        //     loop: true,
+        //     volume: 0.5,
+        //     onend: function() {
+        //         console.log('audio player Finished!');
+        //     }
+        // });
 
     }
     
     handlePlay() {
-        this.sound.play();
+      //  this.sound.play();
     }
     ngOnDestroy(): any {
         return null;
