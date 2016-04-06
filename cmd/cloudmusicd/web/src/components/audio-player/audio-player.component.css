@@ -19,9 +19,51 @@
     width: 980px;
     height: 47px;
     margin: 0px auto; 
-    margin-right: 67px;
+    margin-top:6px;
 
 }
+
+
+.dashboard .buttons a  {
+    cursor: pointer;
+    display: block;
+    float: left;
+    margin-right: 8px;
+    margin-top: 12px;
+    width: 28px;
+    height: 28px;
+    background: transparent url("./resources/images/playbar.png") 0px 0px scroll no-repeat;
+}
+.dashboard .buttons .prev {  
+    background-position: 0px -130px;
+}
+
+.dashboard .buttons a.prev:hover {  
+    background-position: -30px -130px;
+}
+
+
+.dashboard .buttons .play {
+    width: 36px;
+    height: 36px;
+    margin-top:8px;
+    background-position:  0px -204px;
+}
+
+.dashboard .buttons .pause {
+    width: 36px;
+    height: 36px;
+    margin-top:8px;
+    background-position:  -40px -164px;
+}
+
+.dashboard .buttons .next {
+    background-position: -80px -130px;
+}
+.dashboard .buttons a.next:hover {
+    background-position: -110px -130px;
+}
+
 .locker {
     float:right;
     width:67px;
