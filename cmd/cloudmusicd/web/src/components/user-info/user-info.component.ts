@@ -2,7 +2,7 @@
 
 //http://juristr.com/blog/2016/01/learning-ng2-dynamic-styles/
 //https://coryrylan.com/blog/css-encapsulation-with-angular-2-components
-
+//http://www.07net01.com/program/34417.html css footer
 import {Component, OnInit, OnDestroy}  from 'angular2/core';
 import {RouteParams, Router} from 'angular2/router';
 

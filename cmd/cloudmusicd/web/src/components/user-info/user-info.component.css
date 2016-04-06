@@ -162,3 +162,16 @@ tr:nth-child(even) {
 tr .disabled {
     color: rgb(187,187,187);
 }
+
+
+.wrap_content
+{
+    min-height: 100%;
+    margin-bottom: 63px; 
+}
+
+
+.footer {
+    height: 63px;
+    margin: -63px auto 0;
+}

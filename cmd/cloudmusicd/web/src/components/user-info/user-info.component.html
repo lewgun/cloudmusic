@@ -1,67 +1,71 @@
-<div class="profile">
-    <div class="box">
-        <img [src]=userInfo.profile.avatarUrl>
+<div class="wrap_content">
+    <div class="profile">
+        <div class="box">
+            <img [src]=userInfo.profile.avatarUrl>
+        </div>
+        <div class="info">
+            <div class="header">
+                <span class="nickname">{{userInfo.profile.nickname}}</span>
+                <span class="lv">7</span>
+                <span class="gender" [style.background-position]="position('gender')"></span>
+
+                <button class="signin" (click)="handleDailyTask()" [disabled]="isDailyTaskDone">签到</button>
+                <button class="signin" (click)="handlePlaylist(userInfo.profile.userId)">我的歌单</button>
+                <button class="signin" (click)="handlePlaylistDetail(playlist.playlist[0].id)">歌单详情</button>
+
+            </div>
+            <ul>
+                <li><strong>0</strong>动态</li>
+                <li><strong>13</strong>关注</li>
+                <li><strong>0</strong>粉丝</li>
+            </ul>
+            <div class="signature">
+                个人介绍: {{userInfo.profile.signature}}
+            </div>
+            <div class="location">
+                所在地区: {{signature}}
+            </div>
+            <div class="sns">
+                社交网络: {{signature}}
+            </div>
+        </div>
+
+        <div class="playlist" *ngIf="playlistDetail">
+            <table>
+                <thead>
+                    我的播放列表
+                </thead>
+                <tr class="header">
+                    <th class="index"></th>
+                    <th class="title">歌曲标题</th>
+                    <th class="duration">时长</th>
+                    <th class="singer">歌手</th>
+                    <th class="album">专辑</th>
+                </tr>
+
+                <tr *ngFor="#s of playlistDetail; #i=index" [class.disabled]="!s.song.canPlay">
+                    <th class="index">
+                        <span>{{i+1}}</span><span class="play" [class.disabled]="!s.song.canPlay" [class.current]="s.song.id===curSongId"
+                        (click)="handleSongUrl(s.song.id)"></span>
+                    </th>
+
+                    <th class="title"><a (click)="handleSongUrl(s.song.id)">{{ songName(s.song, "-") | textFormat:13}}</a></th>
+                    <th class="duration">{{s.song.duration | durationFormat }}</th>
+                    <th class="singer">{{singerName(s.singers, "/") | textFormat:4}}</th>
+                    <th class="album">{{s.album.name | textFormat:8}}</th>
+                </tr>
+
+            </table>
+        </div>
+
     </div>
-    <div class="info">
-        <div class="header">
-            <span class="nickname">{{userInfo.profile.nickname}}</span>
-            <span class="lv">7</span>
-            <span class="gender" [style.background-position]="position('gender')"></span>
 
-            <button class="signin" (click)="handleDailyTask()" [disabled]="isDailyTaskDone">签到</button>
-            <button class="signin" (click)="handlePlaylist(userInfo.profile.userId)">我的歌单</button>
-            <button class="signin" (click)="handlePlaylistDetail(playlist.playlist[0].id)">歌单详情</button>
-
-        </div>
-        <ul>
-            <li><strong>0</strong>动态</li>
-            <li><strong>13</strong>关注</li>
-            <li><strong>0</strong>粉丝</li>
-        </ul>
-        <div class="signature">
-            个人介绍: {{userInfo.profile.signature}}
-        </div>
-        <div class="location">
-            所在地区: {{signature}}
-        </div>
-        <div class="sns">
-            社交网络: {{signature}}
-        </div>
-    </div>
-
-    <div class="playlist" *ngIf="playlistDetail">
-        <table>
-            <thead>
-                我的播放列表
-            </thead>
-            <tr class="header">
-                <th class="index"></th>
-                <th class="title">歌曲标题</th>
-                <th class="duration">时长</th>
-                <th class="singer">歌手</th>
-                <th class="album">专辑</th>
-            </tr>
-
-            <tr *ngFor="#s of playlistDetail; #i=index" [class.disabled]="!s.song.canPlay">
-                <th class="index">
-                    <span>{{i+1}}</span><span class="play" [class.disabled]="!s.song.canPlay" [class.current]="s.song.id===curSongId"
-                    (click)="handleSongUrl(s.song.id)"></span>
-                </th>
-
-                <th class="title"><a (click)="handleSongUrl(s.song.id)">{{ songName(s.song, "-") | textFormat:13}}</a></th>
-                <th class="duration">{{s.song.duration | durationFormat }}</th>
-                <th class="singer">{{singerName(s.singers, "/") | textFormat:4}}</th>
-                <th class="album">{{s.album.name | textFormat:8}}</th>
-            </tr>
-
-        </table>
-    </div>
-
-</div>
-
-<!--<div class="player">
+    <!--<div class="player">
         <h2> 当前音乐</h2>
         <audio src="{{curSongUrl}}" controls="controls" loop="loop" autoplay="autoplay"></audio>
 </div>-->
+</div>
 
-<audio-player></audio-player>
+<div class="footer">
+    <audio-player></audio-player>
+</div>
