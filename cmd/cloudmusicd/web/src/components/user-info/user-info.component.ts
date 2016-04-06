@@ -23,6 +23,8 @@ import {
 
 } from '../../services/flux/flux';
 
+import {AudioPlayerComponent} from '../audio-player/audio-player.component'
+
 
 const PlayList = "playlist"
 
@@ -30,7 +32,8 @@ const PlayList = "playlist"
     templateUrl: "user-info/user-info.component.html",
     styleUrls: ["user-info/user-info.component.css"],
     providers: [DialogService, CloudMusicService],
-    pipes: [DurationFormatPipe,TextFormatPipe ]
+    pipes: [DurationFormatPipe,TextFormatPipe ],
+    directives: [ AudioPlayerComponent]
 
 })
 export class UserInfoComponent implements OnInit, OnDestroy {
