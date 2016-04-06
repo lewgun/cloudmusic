@@ -102,12 +102,19 @@
 
 .info .header {
     margin-top: 12px;
-    color: white;
     font-size: 0.8em;
     margin-left: 10px;
+    height: 17px;
     cursor: pointer;
 }
 
+.info .header a {
+    display: block;
+    margin-right: 5px;
+    height: 17px;
+    float: left;
+    line-height: 17px;
+}
 .info .header a:hover {
     text-decoration: underline;
 }
@@ -119,10 +126,24 @@
     color: #9b9b9b;
 }
 
-.info .header .playlist {
-        background: transparent url("./resources/images/playbar.png") -130px -103px scroll no-repeat; 
+.header a.mv {
+    width: 19px;
+    height: 17px;
+    background: transparent url("./resources/images/playbar.png") 0px -57px scroll no-repeat; 
+
+}
+.header a.mv:hover {
+    background-position: -20px -57px;
 }
 
+ .header a.playlist {
+    background: transparent url("./resources/images/playbar.png") -110px -103px scroll no-repeat; 
+    width: 14px;
+    height: 14px;
+}
+.header a.playlist:hover {
+    background-position: -130px -103px;
+}
 
 .locker {
     float:right;
