@@ -19,8 +19,6 @@ import {
 }  from 'angular2/core';
 
 
-
-
 import {WidthDirective} from '../../directives/width/width.directive'
 
 
@@ -34,11 +32,11 @@ import {WidthDirective} from '../../directives/width/width.directive'
 })
 export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
 
-    @ViewChild('realAudio') _elemRef: ElementRef;
+    @ViewChild('audio') _elemRef: ElementRef;
     @ViewChild('readyBar') _readyBar: HTMLDivElement;
     @ViewChild('currentBar') _curBar: HTMLDivElement;
     @ViewChild('indexBar') _indexBar: HTMLDivElement;
-    @ViewChild('bar') _bar: HTMLDivElement;
+    @ViewChild('bar') _bar: ElementRef;
 
     public readyWidth: number = 5;
     public curWidth: number = 50;
@@ -64,7 +62,8 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
     ngAfterViewInit() {
         this._audio = this._elemRef.nativeElement;
         this._audio.removeAttribute('controls');
-        this._totalWidth = this._bar.offsetWidth;
+        this._totalWidth = this._bar.nativeElement.offsetWidth;
+        console.log("total width: ", this._totalWidth);
 
     }
 
@@ -121,6 +120,7 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
 
     private _trackingProgress() {
         let f = () => {
+            console.log("ffffffff");
             this._updatePlayProgress();
             this._progressInteval = setTimeout(f, 50);
         }
@@ -134,7 +134,9 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
     private _updatePlayProgress() {
-        this.curWidth = this._audio.currentTime / this._audio.duration * this._totalWidth;
+        this.curWidth = Math.random() * this._totalWidth;
+        console.log("cur widht: ", this.curWidth);
+        // this.curWidth = this._audio.currentTime / this._audio.duration * this._totalWidth;
     }
 
 }
