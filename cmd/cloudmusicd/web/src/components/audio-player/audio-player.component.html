@@ -1,13 +1,24 @@
 <div class="player">
+    
+    <audio #realAudio
+        (loadedmetadata)="onLoadMetaData()"
+        (timeupdate)="onProgressUpdated()"
+        (play)="onPlay()"
+        (pause)="onPause()"
+        (ended)="onEnded()"
+    >
+        <source *ngFor="#src of sources" [src]="src.url" [type]="src.typ"]
+    </audio>
+    
     <div class="sub">
          <a class="locker lock" title="锁定"></a>
     </div>
     <div class="main">
         <div class="dashboard">
             <div class="buttons">
-                <a class="prev" title="上一首(ctrl+←)"></a>
-                <a class="play" title="播放/暂停(p)"></a>
-                <a class="next" title="下一首(ctrl+←)"></a>
+                <a class="prev" title="上一首(ctrl+←)" (click)="handlePrev()"  (keydown.p)="handlePrev($event)"></a>
+                <a class="play" title="播放/暂停(p)" (click)="handlePnP()" (keydown.space)="handlePnP($event)"></a>
+                <a class="next" title="下一首(ctrl+←)" (click)="handleNext()" (keydown.n)="handleNext($event)"></a>
             </div> <!-- end of <div class="buttons"> -->
                 
             <div class="cover">
@@ -25,9 +36,9 @@
                     
                 <div class="progress">
                     <div class="bar">
-                        <div class="ready"></div>
-                        <div class="current"></div>
-                        <div class="index"></div>
+                        <div class="ready" #readyBar></div>
+                        <div class="current" #currentBar></div>
+                        <div class="index" #indexBar></div>
                     </div>
                     <div class="duration">
                         <span class="current">03:03</span>/ <span class="total">05:05</span>
