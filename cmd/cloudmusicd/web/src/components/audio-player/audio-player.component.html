@@ -35,9 +35,9 @@
                 </div> <!-- end of <div class="header"> -->
                     
                 <div class="progress">
-                    <div class="bar">
-                        <div class="ready" #readyBar></div>
-                        <div class="current" #currentBar></div>
+                    <div class="bar" #bar >
+                        <div class="ready" [width]="readyWidth" #readyBar></div>
+                        <div class="current" [width]="curWidth" #currentBar></div>
                         <div class="index" #indexBar></div>
                     </div>
                     <div class="duration">

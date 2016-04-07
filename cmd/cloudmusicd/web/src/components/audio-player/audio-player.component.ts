@@ -14,29 +14,41 @@ import {
     OnInit,
     OnDestroy,
     ViewChild,
-    AfterContentInit,
+    AfterViewInit,
     ElementRef
 }  from 'angular2/core';
+
+
+
+
+import {WidthDirective} from '../../directives/width/width.directive'
 
 
 @Component({
     templateUrl: "audio-player/audio-player.component.html",
     styleUrls: ["audio-player/audio-player.component.css"],
     selector: "audio-player",
-    directives: [],
+    directives: [WidthDirective],
     pipes: []
 
 })
-export class AudioPlayerComponent implements OnInit, OnDestroy {
+export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
 
     @ViewChild('realAudio') _elemRef: ElementRef;
-    @ViewChild('readyBar')  _readyBar: HTMLDivElement;
+    @ViewChild('readyBar') _readyBar: HTMLDivElement;
     @ViewChild('currentBar') _curBar: HTMLDivElement;
     @ViewChild('indexBar') _indexBar: HTMLDivElement;
+    @ViewChild('bar') _bar: HTMLDivElement;
+
+    public readyWidth: number = 5;
+    public curWidth: number = 50;
+
+    private _totalWidth = 0;
 
     private _audio: HTMLAudioElement;
-
     //private _audio: any;
+
+    private _progressInteval: any;
 
     constructor() {
         console.log("AudioPlayerComponent init");
@@ -52,6 +64,7 @@ export class AudioPlayerComponent implements OnInit, OnDestroy {
     ngAfterViewInit() {
         this._audio = this._elemRef.nativeElement;
         this._audio.removeAttribute('controls');
+        this._totalWidth = this._bar.offsetWidth;
 
     }
 
@@ -72,13 +85,13 @@ export class AudioPlayerComponent implements OnInit, OnDestroy {
 
     onPlay() {
         //todo update css
-
+        console.log("onPlay");
         this._trackingProgress();
     }
 
     onPause() {
         //todo update css
-        
+        console.log("onPause");
         this._stopTrackingProgress();
     }
 
@@ -94,6 +107,7 @@ export class AudioPlayerComponent implements OnInit, OnDestroy {
 
     //播放/暂停
     handlePnP() {
+        console.log("handlePnP");
         if (this._audio.paused || this._audio.ended) {
             if (this._audio.ended) {
                 this._audio.currentTime = 0;
@@ -106,23 +120,21 @@ export class AudioPlayerComponent implements OnInit, OnDestroy {
     }
 
     private _trackingProgress() {
-        /*
-                     (function progressTrack() { 
-              videoPlayer._updatePlayProgress(); 
-              playProgressInterval = setTimeout(progressTrack, 50); 
-          })(); 
-          
-         */
+        let f = () => {
+            this._updatePlayProgress();
+            this._progressInteval = setTimeout(f, 50);
+        }
+
     }
-    
-    
+
+
     private _stopTrackingProgress() {
-       // clearTimeout( playProgressInterval ); 
+        clearTimeout(this._progressInteval);
     }
-    
-    
-    private _updatePlayProgress (){ 
-		//playProgressBar.style.width = ( (video.currentTime / video.duration) * (progressHolder.offsetWidth) ) + "px"; 
-	}
+
+
+    private _updatePlayProgress() {
+        this.curWidth = this._audio.currentTime / this._audio.duration * this._totalWidth;
+    }
 
 }
