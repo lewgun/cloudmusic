@@ -4,9 +4,45 @@
     min-width: 980px;
 }
 
+.player .sub {
+    float:right;
+    width:67px;
+    height:63px;
+    position: relative;
+    
+    background: transparent url("./resources/images/playbar.png") 0px -380px scroll no-repeat;
+    
+}
+
+.sub .locker {
+    position: absolute;
+    display: block;
+    cursor: pointer;
+    width: 18px;
+    height: 18px;
+    left: 18px;
+    top: 5px;
+    background: transparent url("./resources/images/playbar.png") -100px -380px scroll no-repeat;
+}
+
+.locker.unlock {
+    background-position: -80px -380px;
+}
+
+.locker.unlock:hover {
+        background-position: -80px -400px;
+}
+
+.locker.lock {
+        background-position: -100px -380px;
+}
+
+.locker.lock:hover {
+        background-position: -100px -400px;
+}
 
 
-.bg {
+.player .main {
     padding-top: 10px;
     height: 53px;
     margin-right: 67px;      
@@ -15,7 +51,7 @@
     
 }
 
-.dashboard {
+.main .dashboard {
     width: 980px;
     height: 47px;
     margin: 0px auto; 
@@ -308,14 +344,5 @@
 
 .controls .playlist:hover {
     background-position: -42px -98px;
-}
-
-.locker {
-    float:right;
-    width:67px;
-    height:63px;
-    
-    background: transparent url("./resources/images/playbar.png") 0px -380px scroll no-repeat;
-    
 }
 
