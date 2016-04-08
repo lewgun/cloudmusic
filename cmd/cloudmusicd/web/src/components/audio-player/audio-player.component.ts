@@ -18,8 +18,32 @@ import {
     ElementRef
 }  from 'angular2/core';
 
+import {
+    StoreToken,
+
+    //stores
+    PlayStore,
+
+    //acitons
+    PlayActionCreator,
+
+    //events
+    CurrentPlaylist_Read,
+    CurrentSong_Read,
+
+} from '../../services/flux/flux';
+
+import { DialogService} from '../../services/dialog/dialog.service';
+
+import { CloudMusicService} from '../../services/cloud-music/cloud-music.service';
+
+
+import { EventType }from '../../types/types';
+
+import { DurationFormatPipe} from '../../pipes/duration-format/duration-format.pipe';
 
 import {WidthDirective} from '../../directives/width/width.directive'
+import {DurationDirective} from '../../directives/duration/duration.directive'
 
 export interface Source {
     Url: string;
@@ -31,8 +55,9 @@ export interface Source {
     templateUrl: "audio-player/audio-player.component.html",
     styleUrls: ["audio-player/audio-player.component.css"],
     selector: "audio-player",
-    directives: [WidthDirective],
-    pipes: []
+    directives: [WidthDirective, DurationDirective],
+    pipes: [DurationFormatPipe],
+    providers: [CloudMusicService]
 
 })
 export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
@@ -41,44 +66,89 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('indexBar') _indexBar: HTMLDivElement;
     @ViewChild('bar') _bar: ElementRef;
 
-    public readyWidth: number = 5;
-    public curWidth: number = 50;
+    public readyWidth: number = 0;
+    public curWidth: number = 0;
     public isPlaying: boolean = true;
-    
+    public curSongUrl: string ="http://m10.music.126.net/20160408225623/0131389907329d84146b3ce219047f0d/ymusic/3424/96ce/ed78/34127f909ea7ebf5b3a9b0c96f98f00e.mp3";
+
     public curAudio: Source[]
-    
-    public sources = [{
-        Url: "http://m10.music.126.net/20160408144744/6fbbcf325630ac98c2f7f8465ae8ce7b/ymusic/22ea/c1d3/18a9/4d94874b5ca9edf618857961ebd5f601.mp3",
-        Type: "audio/mpeg"
-    }]
+
+    private _curSongToken: StoreToken;
+    private _curPlaylistToken: StoreToken;
+
+    private _curSongId = -1;
+    private _curPlaylistId = -1;
 
     private _totalWidth = 0;
 
-    private _audio: HTMLAudioElement;
+    private audio: HTMLAudioElement;
     //private _audio: any;
 
     private _progressInteval: any;
 
-    constructor() {
+    constructor(
+        private _playStore: PlayStore,
+        private _playAction: PlayActionCreator,
+        private _cloudMusic: CloudMusicService,
+        private _dlg: DialogService
+    ) {
         console.log("AudioPlayerComponent init");
     }
     ngOnInit() {
 
         // old style
         //this._audio = document.getElementById("audio");
-        //this._audio.controls = false;
-        //this._audio.removeAttribute("controls");
+        this._curSongToken = this._playStore.Bind((evt: EventType) => this.onCurSong(evt));
+        this._curPlaylistToken = this._playStore.Bind((evt: EventType) => this.onCurPlaylist(evt));
+
     }
 
     ngAfterViewInit() {
-        this._audio = this._audioRef.nativeElement;
-        this._audio.removeAttribute('controls');
+        this.audio = this._audioRef.nativeElement;
+       // this._audio.removeAttribute('controls');
         this._totalWidth = this._bar.nativeElement.offsetWidth;
     }
 
 
     ngOnDestroy(): any {
+        this._playStore.Unbind(this._curSongToken);
+        this._playStore.Unbind(this._curPlaylistToken);
+
         return null;
+    }
+
+    public onCurSong(evt: EventType) {
+
+        if (evt != CurrentSong_Read) {
+            return;
+        }
+
+        this._curSongId = this._playStore.CurrentSong();
+
+        this._cloudMusic.SongUrl(this._curSongId).
+            then(retVal => {
+
+                if (retVal.code !== 200) {
+                    this._dlg.alert(retVal.code);
+                    return;
+                }
+
+                this.curSongUrl = retVal.data[0].url;
+
+
+            },
+            rejectVal => {
+                console.log(rejectVal);
+            });
+
+    }
+
+    public onCurPlaylist(evt: EventType) {
+        if (evt != CurrentPlaylist_Read) {
+            return;
+        }
+
+        this._curPlaylistId = this._playStore.CurrentPlaylist();
     }
 
     /*This event fires when the browser has finishe loading the meta data for the video */
@@ -91,11 +161,12 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public onEnded() {
-        this._audio.currentTime = 0;
-        this._audio.pause();
+        this.audio.currentTime = 0;
+        this.audio.pause();
     }
 
     public onPlay() {
+        console.log("onPlay callback");
         this.isPlaying = true;
         this._trackingProgress();
     }
@@ -118,15 +189,15 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
     //播放/暂停
     public handlePnP() {
         console.log("handlePnP");
-        if (this._audio.paused || this._audio.ended) {
-            if (this._audio.ended) {
-                this._audio.currentTime = 0;
+        if (this.audio.paused || this.audio.ended) {
+            if (this.audio.ended) {
+                this.audio.currentTime = 0;
             }
-            this._audio.play();
+            this.audio.play();
             return;
         }
 
-        this._audio.pause();
+        this.audio.pause();
     }
 
     private _trackingProgress() {
@@ -145,7 +216,8 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
     private _updatePlayProgress() {
-        this.curWidth = this._audio.currentTime / this._audio.duration * this._totalWidth;
+        this.curWidth = this.audio.currentTime / this.audio.duration * this._totalWidth;
+       // console.log(this.curWidth, this.audio.currentTime, this.audio.duration);
     }
 
 }

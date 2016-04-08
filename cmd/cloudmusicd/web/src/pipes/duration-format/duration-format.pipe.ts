@@ -6,6 +6,7 @@ import {Pipe, PipeTransform} from 'angular2/core';
 export class DurationFormatPipe implements PipeTransform {
   transform(duration: number, args: any[] = []) : string {
       
+      console.log("durationFormat: ", duration);
       const base = 60 * 1000;
       let min = "" + Math.floor( duration / base );
       

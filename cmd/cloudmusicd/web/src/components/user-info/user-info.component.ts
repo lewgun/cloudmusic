@@ -64,7 +64,7 @@ export class UserInfoComponent implements OnInit, OnDestroy {
 
 
     //tokens
-    private _userInfoToken: StoreToken;
+   // private _userInfoToken: StoreToken;
     private _dailyTaskToken: StoreToken;
 
     private _playlistToken: StoreToken;
@@ -82,6 +82,7 @@ export class UserInfoComponent implements OnInit, OnDestroy {
         private _routeParams: RouteParams,
 
         private _userInfoStore: UserInfoStore,
+        
         private _playlistStore: PlayListStore,
         private _playStore: PlayStore,
 
@@ -92,7 +93,7 @@ export class UserInfoComponent implements OnInit, OnDestroy {
         private _dlg: DialogService,
         private _cloudMusic: CloudMusicService) {
 
-        //this._handlerToken = this._store.Bind(() => this.onUserInfo());
+        //this._userInfoStore = this._store.Bind(() => this.onUserInfo());
 
         this._dailyTaskToken = this._userInfoStore.Bind((evt: EventType) => this.onDailyTask(evt));
         this._playlistToken = this._playlistStore.Bind((evt: EventType) => this.onPlayList(evt));
@@ -112,7 +113,15 @@ export class UserInfoComponent implements OnInit, OnDestroy {
 
     }
 
-    playlistDigger(tracks: any[]): any[] {
+    private _genderPostion(): string {
+
+        if (this.userInfo.profile.gender === 1) {  //male
+            return "-39px -57px";
+        }
+        return "-39px -27px";
+    }
+
+    public playlistDigger(tracks: any[]): any[] {
 
         let retVal = [];
         for (let song of tracks) {
@@ -148,11 +157,11 @@ export class UserInfoComponent implements OnInit, OnDestroy {
     }
 
 
-    onUserInfo(evt: EventType) {
+    public onUserInfo(evt: EventType) {
         //console.log(this._store.UserInfo());
     }
 
-    onPlayList(evt: EventType) {
+    public onPlayList(evt: EventType) {
 
         if (evt != PlayList_Read) {
             return;
@@ -162,27 +171,35 @@ export class UserInfoComponent implements OnInit, OnDestroy {
 
     }
 
-    onCurSong(evt: EventType) {
+    public onCurSong(evt: EventType) {
+
+        if (evt != CurrentSong_Read) {
+            return;
+        }
 
         this.curSongId = this._playStore.CurrentSong();
     }
 
-    onCurPlaylist(evt: EventType) {
+    public onCurPlaylist(evt: EventType) {
+        if (evt != CurrentPlaylist_Read) {
+            return;
+        }
+
         this.curPlaylistId = this._playStore.CurrentPlaylist();
     }
 
 
-    onPlayListDetail(evt: EventType) {
+    public onPlayListDetail(evt: EventType) {
         if (evt != PlayListDetail_Read) {
             return;
         }
 
         this.playlistDetail = this._playlistStore.PlayListDetail();
- 
+
     }
 
 
-    onDailyTask(evt: EventType) {
+    public onDailyTask(evt: EventType) {
         if (!this._userInfoStore.DailyTask()) {
             this.isDailyTaskDone = false;
             return;
@@ -198,7 +215,7 @@ export class UserInfoComponent implements OnInit, OnDestroy {
     }
 
     // http://music.163.com/weapi/point/dailyTask
-    handleDailyTask(evt: EventType) {
+    public handleDailyTask(evt: EventType) {
 
         this._cloudMusic.SignIn().
             then(retVal => {
@@ -219,7 +236,7 @@ export class UserInfoComponent implements OnInit, OnDestroy {
 
     // http://music.163.com/weapi/user/playlist?csrf_token"
     //我的歌单
-    handleMyPlaylist(uid: number) {
+    public handleMyPlaylist(uid: number) {
 
         this._cloudMusic.Playlist(uid).
             then(retVal => {
@@ -240,7 +257,7 @@ export class UserInfoComponent implements OnInit, OnDestroy {
 
     // http://music.163.com/weapi/v3/playlist/detail?csrf_token=
     //歌单详情
-    handleMyPlaylistDetail(pid: number) {
+    public handleMyPlaylistDetail(pid: number) {
         this._cloudMusic.PlaylistDetail(pid).
             then(retVal => {
 
@@ -263,29 +280,13 @@ export class UserInfoComponent implements OnInit, OnDestroy {
 
     }
 
-    handlePlaySong(sid: number) {
+    public handlePlaySong(sid: number) {
 
         this._playAction.SaveCurrentSong(sid);
-        // this._cloudMusic.SongUrl(sid).
-        //     then(retVal => {
-
-        //         if (retVal.code !== 200) {
-        //             this._dlg.alert(retVal.code);
-        //             return;
-        //         }
-
-        //         console.log("song url: ", retVal);
-        //         this.curSongUrl = retVal.data[0].url;
-
-
-        //     },
-        //     rejectVal => {
-        //         console.log(rejectVal);
-        //     });
 
     }
 
-    songName(song: any, sep: string): string {
+    public songName(song: any, sep: string): string {
 
         let ret: string = song.name;
         if (song.alias) {
@@ -297,7 +298,7 @@ export class UserInfoComponent implements OnInit, OnDestroy {
         return ret;
     }
 
-    singerName(singers: any, sep: string): string {
+    public singerName(singers: any, sep: string): string {
 
         let ret: string = "";
 
@@ -312,29 +313,26 @@ export class UserInfoComponent implements OnInit, OnDestroy {
     }
 
 
-
-
     ngOnInit() {
         this._bgPosition["gender"] = (): string => this._genderPostion();
 
     }
     ngOnDestroy(): any {
-        //this._store.Unbind(this._handlerToken ) ;
+        //this._userInfoStore.Unbind(this._handlerToken ) ;
         this._userInfoStore.Unbind(this._dailyTaskToken);
-        this._userInfoStore.Unbind(this._playlistToken);
-        this._userInfoStore.Unbind(this._playlistDetailToken);
+        
+        this._playlistStore.Unbind(this._playlistToken);
+        this._playlistStore.Unbind(this._playlistDetailToken);
+        
+        this._playStore.Unbind(this._curSongToken);
+        this._playStore.Unbind(this._curPlaylistToken);
+        
         return null;
     }
 
-    private _genderPostion(): string {
 
-        if (this.userInfo.profile.gender === 1) {  //male
-            return "-39px -57px";
-        }
-        return "-39px -27px";
-    }
 
-    position(kind: string): string {
+    public position(kind: string): string {
         return this._bgPosition[kind]();
     }
 }

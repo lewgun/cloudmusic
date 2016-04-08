@@ -7,7 +7,7 @@
         (pause)="onPause()"
         (ended)="onEnded()"
     >
-        <source *ngFor="#src of sources" [src]="src.Url" [type]="src.Type">
+        <source [src]="curSongUrl" type="audio/mpeg">
     </audio>
     
     <div class="sub">
@@ -41,7 +41,7 @@
                         <div class="index" [style.left]="curWidth" ></div>
                     </div>
                     <div class="duration">
-                        <span class="current">03:03</span>/ <span class="total">05:05</span>
+                        <span class="current" >{{audio.currentTime | durationFormat}}</span>/ <span class="total" [duration]="audio.duration"></span>
                     </div>
                 </div> <!-- end of <div class="progress">-->
                     
