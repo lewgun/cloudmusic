@@ -6,11 +6,19 @@ import {Pipe, PipeTransform} from 'angular2/core';
 export class DurationFormatPipe implements PipeTransform {
   transform(duration: number, args: any[] = []) : string {
       
-      console.log("durationFormat: ", duration);
-      const base = 60 * 1000;
+      console.log("duration: ", duration);
+      let unit = 1000;
+      
+      let base = 60 * unit;
+      if (args.length >= 1) {
+          if (args[0] ==="s") {  //已经是秒了
+              base /= unit;
+              unit = 1;
+          }
+      }
       let min = "" + Math.floor( duration / base );
       
-      let sec = "" + Math.floor( (duration -  base * (+min) ) / 1000);
+      let sec = "" + Math.floor( (duration -  base * (+min) ) / unit);
       
       if ( min.length < 2) {
           min = "0" + min;

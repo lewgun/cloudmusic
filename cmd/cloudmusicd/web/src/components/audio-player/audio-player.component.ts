@@ -46,7 +46,6 @@ import { EventType }from '../../types/types';
 import { DurationFormatPipe} from '../../pipes/duration-format/duration-format.pipe';
 
 import {WidthDirective} from '../../directives/width/width.directive'
-import {DurationDirective} from '../../directives/duration/duration.directive'
 
 export interface Source {
     Url: string;
@@ -58,7 +57,7 @@ export interface Source {
     templateUrl: "audio-player/audio-player.component.html",
     styleUrls: ["audio-player/audio-player.component.css"],
     selector: "audio-player",
-    directives: [WidthDirective, DurationDirective],
+    directives: [WidthDirective],
     pipes: [DurationFormatPipe],
     providers: [CloudMusicService]
 
@@ -72,7 +71,8 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
     public readyWidth: number = 0;
     public curWidth: number = 0;
     public isPlaying: boolean = true;
-    public curSongUrl: string ="http://m10.music.126.net/20160408232356/6d9a23f9344d021a6340cc8a828b435a/ymusic/3424/96ce/ed78/34127f909ea7ebf5b3a9b0c96f98f00e.mp3";
+    // public curSongUrl: string ="http://m10.music.126.net/20160408235708/fc3ebcf3a5296cf9e6faeaac6be045fa/ymusic/3424/96ce/ed78/34127f909ea7ebf5b3a9b0c96f98f00e.mp3";
+    public curSongUrl: string;
 
     public curAudio: Source[]
 
@@ -91,7 +91,7 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
 
     constructor(
         private _cdr: ChangeDetectorRef,
-        
+
         private _playStore: PlayStore,
         private _playAction: PlayActionCreator,
         private _cloudMusic: CloudMusicService,
@@ -110,7 +110,7 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
 
     ngAfterViewInit() {
         this.audio = this._audioRef.nativeElement;
-       // this._audio.removeAttribute('controls');
+        // this._audio.removeAttribute('controls');
         this._totalWidth = this._bar.nativeElement.offsetWidth;
     }
 
@@ -139,6 +139,7 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
                 }
 
                 this.curSongUrl = retVal.data[0].url;
+                this._cdr.detectChanges();
 
 
             },
@@ -222,8 +223,10 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
 
     private _updatePlayProgress() {
         this.curWidth = this.audio.currentTime / this.audio.duration * this._totalWidth;
-       // console.log(this.curWidth, this.audio.currentTime, this.audio.duration);
-       this._cdr.detectChanges();
+        // console.log(this.curWidth, this.audio.currentTime, this.audio.duration);
+
+        // fix: EXCEPTION: Expression has changed after it was check
+        this._cdr.detectChanges();
     }
 
 }
