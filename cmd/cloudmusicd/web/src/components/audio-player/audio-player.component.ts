@@ -21,6 +21,11 @@ import {
 
 import {WidthDirective} from '../../directives/width/width.directive'
 
+export interface Source {
+    Url: string;
+    Type: string;
+}
+
 
 @Component({
     templateUrl: "audio-player/audio-player.component.html",
@@ -33,14 +38,19 @@ import {WidthDirective} from '../../directives/width/width.directive'
 export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
 
     @ViewChild('audio') _audioRef: ElementRef;
-    @ViewChild('readyBar') _readyBar: HTMLDivElement;
-    @ViewChild('currentBar') _curBar: HTMLDivElement;
     @ViewChild('indexBar') _indexBar: HTMLDivElement;
     @ViewChild('bar') _bar: ElementRef;
 
     public readyWidth: number = 5;
     public curWidth: number = 50;
-    public isPlaying: boolean = false;
+    public isPlaying: boolean = true;
+    
+    public curAudio: Source[]
+    
+    public sources = [{
+        Url: "http://m10.music.126.net/20160408144744/6fbbcf325630ac98c2f7f8465ae8ce7b/ymusic/22ea/c1d3/18a9/4d94874b5ca9edf618857961ebd5f601.mp3",
+        Type: "audio/mpeg"
+    }]
 
     private _totalWidth = 0;
 
@@ -64,7 +74,6 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
         this._audio = this._audioRef.nativeElement;
         this._audio.removeAttribute('controls');
         this._totalWidth = this._bar.nativeElement.offsetWidth;
-
     }
 
 
@@ -87,16 +96,12 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public onPlay() {
-        //todo update css
-        console.log("onPlay");
         this.isPlaying = true;
         this._trackingProgress();
     }
 
     public onPause() {
         this.isPlaying = false;
-        //todo update css
-        console.log("onPause");
         this._stopTrackingProgress();
     }
 
@@ -140,9 +145,7 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
     private _updatePlayProgress() {
-        this.curWidth = Math.random() * this._totalWidth;
-        console.log("cur widht: ", this.curWidth);
-        // this.curWidth = this._audio.currentTime / this._audio.duration * this._totalWidth;
+        this.curWidth = this._audio.currentTime / this._audio.duration * this._totalWidth;
     }
 
 }

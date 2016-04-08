@@ -7,7 +7,7 @@
         (pause)="onPause()"
         (ended)="onEnded()"
     >
-        <source *ngFor="#src of sources" [src]="src.url" [type]="src.typ"]
+        <source *ngFor="#src of sources" [src]="src.Url" [type]="src.Type">
     </audio>
     
     <div class="sub">
@@ -16,13 +16,10 @@
     <div class="main">
         <div class="dashboard">
             <div class="buttons">
-                <a class="prev" title="上一首(ctrl+←)" (click)="handlePrev()"  (keydown.p)="handlePrev($event)"></a>
-                <!--<a class="play" title="播放/暂停(p)" (click)="handlePnP()" (keydown.space)="handlePnP($event)"></a>-->
-                <a [class.play]="isPlaying" [class.pause]="!isPlaying" title="播放/暂停(p)" (click)="handlePnP()" (keydown.enter)="handlePnP($event)"></a>
-                <a class="next" title="下一首(ctrl+←)" (click)="handleNext()" (keydown.n)="handleNext($event)"></a>
+                <a class="prev" title="上一首(ctrl+←)" (click)="handlePrev()"  (keyup.p)="handlePrev($event)"></a>
+                <a [ngClass]="{'play': isPlaying, 'pause': !isPlaying }" title="播放/暂停(p)" (click)="handlePnP()" (keyup.space)="handlePnP($event)"></a>
+                <a class="next" title="下一首(ctrl+←)" (click)="handleNext()" (keyup.n)="handleNext($event)"></a>
             </div> <!-- end of <div class="buttons"> -->
-                
-                [class.my-class]="isClassVisible"
                 
             <div class="cover">
                 <img src ="http://p4.music.126.net/fN4A0PrYP_EFifceawjOqw==/667403558072206.jpg?param=34y34">
@@ -40,8 +37,8 @@
                 <div class="progress">
                     <div class="bar" #bar >
                         <!--<div class="ready" [width]="readyWidth" #readyBar></div>-->
-                        <div class="current" [width]="curWidth" #currentBar></div>
-                        <div class="index" #indexBar></div>
+                        <div class="current" [width]="curWidth"></div>
+                        <div class="index" [style.left]="curWidth" ></div>
                     </div>
                     <div class="duration">
                         <span class="current">03:03</span>/ <span class="total">05:05</span>

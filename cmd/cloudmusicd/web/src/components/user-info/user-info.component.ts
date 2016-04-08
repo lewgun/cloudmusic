@@ -32,8 +32,8 @@ const PlayList = "playlist"
     templateUrl: "user-info/user-info.component.html",
     styleUrls: ["user-info/user-info.component.css"],
     providers: [DialogService, CloudMusicService],
-    pipes: [DurationFormatPipe,TextFormatPipe ],
-    directives: [ AudioPlayerComponent]
+    pipes: [DurationFormatPipe, TextFormatPipe],
+    directives: [AudioPlayerComponent]
 
 })
 export class UserInfoComponent implements OnInit, OnDestroy {
@@ -77,7 +77,7 @@ export class UserInfoComponent implements OnInit, OnDestroy {
 
         this.userInfo = this._userInfoStore.UserInfo();
         console.log(this.userInfo);
-        
+
         _cloudMusic.RegisterDigger(
             PlayList,
             (tracks: any[]): any[] => this.playlistDigger(tracks));
@@ -94,8 +94,8 @@ export class UserInfoComponent implements OnInit, OnDestroy {
             let item: any = {};
 
             item.song = {};
-            item.song.id =  song.id;
-            item.song.canPlay = song.a ? true: false; //不能播放的song.a为null
+            item.song.id = song.id;
+            item.song.canPlay = song.a ? true : false; //不能播放的song.a为null
 
             item.song.name = song.name;
             item.song.alias = song.alia ? song.alia[0] : null;
@@ -139,9 +139,7 @@ export class UserInfoComponent implements OnInit, OnDestroy {
             return;
         }
 
-        this.playlistDetail = this._cloudMusic.Dig(
-            PlayList,
-            temp.playlist.tracks);
+        this.playlistDetail = temp;
 
         console.log(this.playlistDetail);
     }
@@ -183,6 +181,7 @@ export class UserInfoComponent implements OnInit, OnDestroy {
     }
 
     // http://music.163.com/weapi/user/playlist?csrf_token"
+    //我的歌单
     handlePlaylist(uid: number) {
 
         this._cloudMusic.Playlist(uid).
@@ -206,6 +205,7 @@ export class UserInfoComponent implements OnInit, OnDestroy {
     }
 
     // http://music.163.com/weapi/v3/playlist/detail?csrf_token=
+    //歌单详情
     handlePlaylistDetail(pid: number) {
 
         this._cloudMusic.PlaylistDetail(pid).
@@ -216,10 +216,13 @@ export class UserInfoComponent implements OnInit, OnDestroy {
                     return;
                 }
 
+                let temp = this._cloudMusic.Dig(
+                    PlayList,
+                    retVal.playlist.tracks);
 
-                this._playlistAction.SavePlayListDetail(retVal);
+                this._playlistAction.SavePlayListDetail(temp);
 
-                //   console.log("playlist detail: ", retVal);
+                console.log("playlist detail: ", temp);
 
             },
             rejectVal => {
@@ -248,30 +251,30 @@ export class UserInfoComponent implements OnInit, OnDestroy {
             });
 
     }
-    
+
     songName(song: any, sep: string): string {
-          
-      let ret: string = song.name;
-      if (song.alias) {
-          ret += sep;
-          ret += "(";
-          ret += song.alias;
-          ret += ")";
-      }
-      return ret;
+
+        let ret: string = song.name;
+        if (song.alias) {
+            ret += sep;
+            ret += "(";
+            ret += song.alias;
+            ret += ")";
+        }
+        return ret;
     }
-    
-     singerName(singers: any, sep: string): string {
-          
-      let ret: string = "";
-      
-      for (let s of singers) {
-          ret += s.name;
-          ret += sep;
-      }
+
+    singerName(singers: any, sep: string): string {
+
+        let ret: string = "";
+
+        for (let s of singers) {
+            ret += s.name;
+            ret += sep;
+        }
 
 
-      return ret.substr(0, ret.length-1);
+        return ret.substr(0, ret.length - 1);
 
     }
 
@@ -282,7 +285,7 @@ export class UserInfoComponent implements OnInit, OnDestroy {
         this._bgPosition["gender"] = (): string => this._genderPostion();
 
     }
-    ngOnDestroy():any {
+    ngOnDestroy(): any {
         //this._store.Unbind(this._handlerToken ) ;
         this._userInfoStore.Unbind(this._dailyTaskToken);
         this._userInfoStore.Unbind(this._playlistToken);
