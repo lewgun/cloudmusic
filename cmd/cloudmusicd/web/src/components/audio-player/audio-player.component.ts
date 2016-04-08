@@ -9,13 +9,16 @@
 //https://msdn.microsoft.com/zh-cn/library/hh924823(v=vs.85).aspx
 //http://www.inserthtml.com/2013/03/custom-html5-video-player/
 
+//http://stackoverflow.com/questions/34364880/expression-has-changed-after-it-was-checked
+
 import {
     Component,
     OnInit,
     OnDestroy,
     ViewChild,
     AfterViewInit,
-    ElementRef
+    ElementRef,
+    ChangeDetectorRef
 }  from 'angular2/core';
 
 import {
@@ -69,7 +72,7 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
     public readyWidth: number = 0;
     public curWidth: number = 0;
     public isPlaying: boolean = true;
-    public curSongUrl: string ="http://m10.music.126.net/20160408225623/0131389907329d84146b3ce219047f0d/ymusic/3424/96ce/ed78/34127f909ea7ebf5b3a9b0c96f98f00e.mp3";
+    public curSongUrl: string ="http://m10.music.126.net/20160408232356/6d9a23f9344d021a6340cc8a828b435a/ymusic/3424/96ce/ed78/34127f909ea7ebf5b3a9b0c96f98f00e.mp3";
 
     public curAudio: Source[]
 
@@ -87,6 +90,8 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
     private _progressInteval: any;
 
     constructor(
+        private _cdr: ChangeDetectorRef,
+        
         private _playStore: PlayStore,
         private _playAction: PlayActionCreator,
         private _cloudMusic: CloudMusicService,
@@ -218,6 +223,7 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
     private _updatePlayProgress() {
         this.curWidth = this.audio.currentTime / this.audio.duration * this._totalWidth;
        // console.log(this.curWidth, this.audio.currentTime, this.audio.duration);
+       this._cdr.detectChanges();
     }
 
 }

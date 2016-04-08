@@ -41,7 +41,7 @@
                         <div class="index" [style.left]="curWidth" ></div>
                     </div>
                     <div class="duration">
-                        <span class="current" >{{audio.currentTime | durationFormat}}</span>/ <span class="total" [duration]="audio.duration"></span>
+                        <span class="current" [duration]="audio.currentTime" ></span>/ <span class="total" [duration]="audio.duration" ></span>
                     </div>
                 </div> <!-- end of <div class="progress">-->
                     
