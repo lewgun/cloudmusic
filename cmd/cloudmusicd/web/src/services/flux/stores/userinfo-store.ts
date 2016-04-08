@@ -1,18 +1,7 @@
-import {Injectable, Inject, OnDestroy} from 'angular2/core';
 
-import {PubSubService } from '../../pubsub/pubsub.service'
+import {Injectable, Inject} from 'angular2/core';
 
-import { StoreToken} from './store'
-
-
-import {
-    ChangeEvent,
-    Action,
-    EventHandler,
-}  from '../../../types/types';
-
-import { Cache} from './cache'
-import {Dispatcher, DispatchToken} from "../dispatcher/dispatcher";
+import {Dispatcher} from "../dispatcher/dispatcher";
 import {
     UserInfo_Read,
     UserInfoKey,
@@ -22,29 +11,20 @@ import {
 
 } from "../constants/constants";
 
+import {BaseStore} from './base-store';
+
+import {
+    Action,
+    EventHandler,
+}  from '../../../types/types';
+
 
 @Injectable()
-export class UserInfoStore implements OnDestroy {
-
-
-    private _handlerID: DispatchToken;
-    private _pubsub: PubSubService;
-    private _cache: Cache;
-
-    constructor(
-        @Inject(Dispatcher) private _dispatcher: Dispatcher) {
-
-        this._cache = new Cache();
-        this._pubsub = new PubSubService();
-
-        this._handlerID = this._dispatcher.Register((action: Action) => this.actionHandler(action));
-
+export class UserInfoStore extends BaseStore {
+    constructor( @Inject(Dispatcher) private $: Dispatcher) {
+        super($);
     }
 
-    ngOnDestroy(): any {
-        this._dispatcher.UnRegister(this._handlerID);
-        return null;
-    }
 
     //因为store既负责数据的保存又负责通知,所以当action过多,则会变得复杂,所以要按功能分成多个store，而不把store当成ORM.
     actionHandler(action: Action): void {
@@ -52,15 +32,15 @@ export class UserInfoStore implements OnDestroy {
         switch (action.typ) {
             case UserInfo_Read:
                 {
-                    this._cache.Set(UserInfoKey, action.payload);
-                    this.emitChange();
+                    this.cache.Set(UserInfoKey, action.payload);
+                    this.emitChange(action.typ);
                 }
                 break;
 
             case DailyTask_Read:
                 {
-                    this._cache.InsertOrUpdate(DailyTaskKey, action.payload);
-                    this.emitChange();
+                    this.cache.InsertOrUpdate(DailyTaskKey, action.payload);
+                    this.emitChange(action.typ);
                 }
                 break;
 
@@ -71,29 +51,11 @@ export class UserInfoStore implements OnDestroy {
     }
 
 
-    public Bind(handler: EventHandler): StoreToken {
-
-        return this._pubsub.Stream.subscribe(handler);
-
-    }
-    public Unbind(token: StoreToken): void {
-        token.unsubscribe();
-    }
-
-    public emitChange() {
-        try {
-            this._pubsub.Stream.emit(ChangeEvent);
-        }
-        finally { }
-
-
-    }
-
     public UserInfo(): any {
-        return this._cache.Get(UserInfoKey);
+        return this.cache.Get(UserInfoKey);
     }
 
     public DailyTask(): any {
-        return this._cache.Get(DailyTaskKey);
+        return this.cache.Get(DailyTaskKey);
     }
 }

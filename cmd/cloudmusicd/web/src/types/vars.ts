@@ -1,3 +1,8 @@
+
+
+export type EventType = string;
+
+
 export interface TopListPair {
     [index: number]: string;
     length: number;
@@ -31,8 +36,5 @@ export interface ActionHandler {
 }
 
 export interface EventHandler {
-    (): void ;
+    (evt: EventType): void ;
 }
-
-
-export type EventType = string;

@@ -10,8 +10,8 @@
                 <span class="gender" [style.background-position]="position('gender')"></span>
 
                 <button class="signin" (click)="handleDailyTask()" [disabled]="isDailyTaskDone">签到</button>
-                <button class="signin" (click)="handlePlaylist(userInfo.profile.userId)">我的歌单</button>
-                <button class="signin" (click)="handlePlaylistDetail(playlist.playlist[0].id)">歌单详情</button>
+                <button class="signin" (click)="handleMyPlaylist(userInfo.profile.userId)">我的歌单</button>
+                <button class="signin" (click)="handleMyPlaylistDetail(playlist.playlist[0].id)">歌单详情</button>
 
             </div>
             <ul>
@@ -46,10 +46,10 @@
                 <tr *ngFor="#s of playlistDetail; #i=index" [class.disabled]="!s.song.canPlay">
                     <th class="index">
                         <span>{{i+1}}</span><span class="play" [class.disabled]="!s.song.canPlay" [class.current]="s.song.id===curSongId"
-                        (click)="handleSongUrl(s.song.id)"></span>
+                        (click)="handlePlaySong(s.song.id)"></span>
                     </th>
 
-                    <th class="title"><a (click)="handleSongUrl(s.song.id)">{{ songName(s.song, "-") | textFormat:13}}</a></th>
+                    <th class="title"><a (click)="handlePlaySong(s.song.id)">{{ songName(s.song, "-") | textFormat:13}}</a></th>
                     <th class="duration">{{s.song.duration | durationFormat }}</th>
                     <th class="singer">{{singerName(s.singers, "/") | textFormat:4}}</th>
                     <th class="album">{{s.album.name | textFormat:8}}</th>

@@ -23,7 +23,8 @@ export class PlayListActionCreator {
                 typ: PlayListDetail_Read,
                 payload: detail
             });
+
     }
-    
+
 }
 

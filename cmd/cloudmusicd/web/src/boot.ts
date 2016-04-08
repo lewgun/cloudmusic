@@ -16,9 +16,11 @@ import {
 
     UserInfoActionCreator,
     PlayListActionCreator,
+    PlayActionCreator,
 
     UserInfoStore,
-    PlayListStore
+    PlayListStore,
+    PlayStore
 } from './services/flux/flux';
 
 
@@ -36,10 +38,11 @@ bootstrap(AppComponent,
 
         UserInfoActionCreator,
         PlayListActionCreator,
+        PlayActionCreator,
 
         UserInfoStore,
         PlayListStore,
-
+        PlayStore,
 
         provide(UrlResolver, { useClass: MyUrlResolver })
         // provide(RequestOptions, {

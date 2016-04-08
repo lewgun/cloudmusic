@@ -5,10 +5,12 @@ export * from "./stores/cache";
 
 export * from "./actions/playlist-action";
 export * from "./actions/userinfo-action";
+export * from "./actions/play-action";
 
 
-export * from "./stores/store";
+export * from "./stores/base-store";
 
 export * from "./stores/playlist-store";
 export * from "./stores/userinfo-store";
+export * from "./stores/play-store";
 
