@@ -32,7 +32,7 @@ import {WidthDirective} from '../../directives/width/width.directive'
 })
 export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
 
-    @ViewChild('audio') _elemRef: ElementRef;
+    @ViewChild('audio') _audioRef: ElementRef;
     @ViewChild('readyBar') _readyBar: HTMLDivElement;
     @ViewChild('currentBar') _curBar: HTMLDivElement;
     @ViewChild('indexBar') _indexBar: HTMLDivElement;
@@ -40,6 +40,7 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
 
     public readyWidth: number = 5;
     public curWidth: number = 50;
+    public isPlaying: boolean = false;
 
     private _totalWidth = 0;
 
@@ -60,10 +61,9 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     ngAfterViewInit() {
-        this._audio = this._elemRef.nativeElement;
+        this._audio = this._audioRef.nativeElement;
         this._audio.removeAttribute('controls');
         this._totalWidth = this._bar.nativeElement.offsetWidth;
-        console.log("total width: ", this._totalWidth);
 
     }
 
@@ -73,39 +73,45 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     /*This event fires when the browser has finishe loading the meta data for the video */
-    onLoadMetaData() {
+    public onLoadMetaData() {
 
     }
 
-    onEnded() {
+    public onProgressUpdated() {
+
+    }
+
+    public onEnded() {
         this._audio.currentTime = 0;
         this._audio.pause();
     }
 
-    onPlay() {
+    public onPlay() {
         //todo update css
         console.log("onPlay");
+        this.isPlaying = true;
         this._trackingProgress();
     }
 
-    onPause() {
+    public onPause() {
+        this.isPlaying = false;
         //todo update css
         console.log("onPause");
         this._stopTrackingProgress();
     }
 
     //上一首
-    handlePrev() {
+    public handlePrev() {
 
     }
 
     //下一首
-    handleNext() {
+    public handleNext() {
 
     }
 
     //播放/暂停
-    handlePnP() {
+    public handlePnP() {
         console.log("handlePnP");
         if (this._audio.paused || this._audio.ended) {
             if (this._audio.ended) {
@@ -120,10 +126,10 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
 
     private _trackingProgress() {
         let f = () => {
-            console.log("ffffffff");
             this._updatePlayProgress();
             this._progressInteval = setTimeout(f, 50);
         }
+        f();
 
     }
 

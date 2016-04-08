@@ -1,6 +1,6 @@
 <div class="player">
     
-    <audio #realAudio
+    <audio #audio
         (loadedmetadata)="onLoadMetaData()"
         (timeupdate)="onProgressUpdated()"
         (play)="onPlay()"
@@ -17,9 +17,12 @@
         <div class="dashboard">
             <div class="buttons">
                 <a class="prev" title="上一首(ctrl+←)" (click)="handlePrev()"  (keydown.p)="handlePrev($event)"></a>
-                <a class="play" title="播放/暂停(p)" (click)="handlePnP()" (keydown.space)="handlePnP($event)"></a>
+                <!--<a class="play" title="播放/暂停(p)" (click)="handlePnP()" (keydown.space)="handlePnP($event)"></a>-->
+                <a [class.play]="isPlaying" [class.pause]="!isPlaying" title="播放/暂停(p)" (click)="handlePnP()" (keydown.enter)="handlePnP($event)"></a>
                 <a class="next" title="下一首(ctrl+←)" (click)="handleNext()" (keydown.n)="handleNext($event)"></a>
             </div> <!-- end of <div class="buttons"> -->
+                
+                [class.my-class]="isClassVisible"
                 
             <div class="cover">
                 <img src ="http://p4.music.126.net/fN4A0PrYP_EFifceawjOqw==/667403558072206.jpg?param=34y34">
