@@ -10,6 +10,7 @@
 //http://www.inserthtml.com/2013/03/custom-html5-video-player/
 
 //http://stackoverflow.com/questions/34364880/expression-has-changed-after-it-was-checked
+//http://stackoverflow.com/questions/33472297/how-to-translate-html-string-to-real-html-element-by-ng-for-in-angular-2
 
 import {
     Component,
@@ -47,12 +48,6 @@ import { DurationFormatPipe} from '../../pipes/duration-format/duration-format.p
 
 import {WidthDirective} from '../../directives/width/width.directive'
 
-export interface Source {
-    Url: string;
-    Type: string;
-}
-
-
 @Component({
     templateUrl: "audio-player/audio-player.component.html",
     styleUrls: ["audio-player/audio-player.component.css"],
@@ -68,13 +63,11 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('indexBar') _indexBar: HTMLDivElement;
     @ViewChild('bar') _bar: ElementRef;
 
+    @ViewChild('src') _srcRef: ElementRef;
+
     public readyWidth: number = 0;
     public curWidth: number = 0;
     public isPlaying: boolean = true;
-    // public curSongUrl: string ="http://m10.music.126.net/20160408235708/fc3ebcf3a5296cf9e6faeaac6be045fa/ymusic/3424/96ce/ed78/34127f909ea7ebf5b3a9b0c96f98f00e.mp3";
-    public curSongUrl: string;
-
-    public curAudio: Source[]
 
     private _curSongToken: StoreToken;
     private _curPlaylistToken: StoreToken;
@@ -85,6 +78,8 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
     private _totalWidth = 0;
 
     private audio: HTMLAudioElement;
+    private source: HTMLSourceElement;
+
     //private _audio: any;
 
     private _progressInteval: any;
@@ -105,11 +100,15 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
         //this._audio = document.getElementById("audio");
         this._curSongToken = this._playStore.Bind((evt: EventType) => this.onCurSong(evt));
         this._curPlaylistToken = this._playStore.Bind((evt: EventType) => this.onCurPlaylist(evt));
+ 
 
     }
 
     ngAfterViewInit() {
         this.audio = this._audioRef.nativeElement;
+
+        this.source = this._srcRef.nativeElement;
+
         // this._audio.removeAttribute('controls');
         this._totalWidth = this._bar.nativeElement.offsetWidth;
     }
@@ -138,8 +137,10 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
                     return;
                 }
 
-                this.curSongUrl = retVal.data[0].url;
-                this._cdr.detectChanges();
+                this.source.src = retVal.data[0].url;
+
+                this.audio.load();
+                this.audio.play();
 
 
             },
@@ -172,7 +173,6 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public onPlay() {
-        console.log("onPlay callback");
         this.isPlaying = true;
         this._trackingProgress();
     }
@@ -194,7 +194,6 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
 
     //播放/暂停
     public handlePnP() {
-        console.log("handlePnP");
         if (this.audio.paused || this.audio.ended) {
             if (this.audio.ended) {
                 this.audio.currentTime = 0;
@@ -223,8 +222,7 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
 
     private _updatePlayProgress() {
         this.curWidth = this.audio.currentTime / this.audio.duration * this._totalWidth;
-        // console.log(this.curWidth, this.audio.currentTime, this.audio.duration);
-
+ 
         // fix: EXCEPTION: Expression has changed after it was check
         this._cdr.detectChanges();
     }
