@@ -325,17 +325,31 @@
         
 }
 
-.controls .mode.loop {
+.controls .mode {
         background: transparent url("./resources/images/playbar.png") -2px -344px scroll no-repeat;
         width: 25px;
         height: 25px;
         
 }
 
-.controls .mode.loop:hover {
-    background-position: -32px -344px;
-        
+.controls .mode.inorder:hover {
+    background-position: -32px -344px;    
 }
+.controls .mode.random {
+    background-position: -66px -248px;      
+}
+.controls .mode.random:hover {
+    background-position: -93px -248px;      
+}
+
+.controls .mode.single {
+    background-position: -66px -344px;      
+}
+.controls .mode.single:hover {
+    background-position: -93px -344px;      
+}
+
+
 
 .controls .playlist {
      width: 59px;

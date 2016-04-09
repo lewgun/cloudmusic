@@ -53,7 +53,8 @@ import {WidthDirective} from '../../directives/width/width.directive'
 export enum Mode {
     Single, //单曲
     InOrder, //顺序
-    Random
+    Random,  //随机
+    ModeCount
 }
 export enum Direction {
     Next,  //向后
@@ -80,11 +81,13 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
     public bufferedWidth: number = 0;
     public curWidth: number = 0;
     public isPlaying: boolean = true;
+    public curSong :any;
+    public curPlayMode : Mode = Mode.Random;
 
     private _curSongToken: StoreToken;
     private _curPlaylistToken: StoreToken;
 
-    private curSong :any;
+
 
     //当前插放列表
     private _curPlaylist: any[];
@@ -206,12 +209,20 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
 
     //上一首
     public handlePrev() {
-        this._playFollowUp( {dir: Direction.Prev});
+        this._playFollowUp( {mode: this.curPlayMode, dir: Direction.Prev});
     }
 
     //下一首
     public handleNext() {
-        this._playFollowUp();
+        this._playFollowUp({mode: this.curPlayMode});
+    }
+    
+    //切换播放模式
+    public handlePlayMode() {
+        this.curPlayMode += 1;
+        this.curPlayMode %= Mode.ModeCount;
+        
+        
     }
 
     //播放/暂停

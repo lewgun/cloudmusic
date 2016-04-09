@@ -60,8 +60,13 @@
             <!-- end of <div class="operation"> -->
 
             <div class="controls">
-                <a class="volume" title="音量收藏"></a>
-                <a class="mode loop" title="循环"></a>
+                <a class="volume" title="音量"></a>
+                <a class="mode "
+                 [ngClass]="{'inorder': curPlayMode === 1,
+                             'single': curPlayMode === 0,
+                             'random': curPlayMode === 2 }"
+                 title="循环"
+                 (click)="handlePlayMode()"></a>
                 <a class="playlist" title="播放列表"></a>
 
             </div>
