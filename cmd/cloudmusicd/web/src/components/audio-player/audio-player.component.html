@@ -1,68 +1,77 @@
 <div class="player">
-    
-    <audio #audio
-        (loadedmetadata)="onLoadMetaData()"
-        (timeupdate)="onProgressUpdated()"
-        (play)="onPlay()"
-        (pause)="onPause()"
-        (ended)="onEnded()"
-    >
+
+    <audio #audio (loadedmetadata)="onLoadMetaData()" (timeupdate)="onProgressUpdated()" (play)="onPlay()" (pause)="onPause()"
+    (ended)="onEnded()">
         <!--<source #src type="audio/mpeg">-->
-        
-        <source  #src type="audio/mpeg">
+
+        <source #src type="audio/mpeg">
     </audio>
-    
+
     <div class="sub">
-         <a class="locker lock" title="锁定"></a>
+        <a class="locker lock" title="锁定"></a>
     </div>
     <div class="main">
         <div class="dashboard">
             <div class="buttons">
-                <a class="prev" title="上一首(ctrl+←)" (click)="handlePrev()"  (keyup.p)="handlePrev($event)"></a>
+                <a class="prev" title="上一首(ctrl+←)" (click)="handlePrev()" (keyup.p)="handlePrev($event)"></a>
                 <a [ngClass]="{'play': isPlaying, 'pause': !isPlaying }" title="播放/暂停(p)" (click)="handlePnP()" (keyup.space)="handlePnP($event)"></a>
                 <a class="next" title="下一首(ctrl+←)" (click)="handleNext()" (keyup.n)="handleNext($event)"></a>
-            </div> <!-- end of <div class="buttons"> -->
-                
-            <div class="cover">
-                <img src ="http://p4.music.126.net/fN4A0PrYP_EFifceawjOqw==/667403558072206.jpg?param=34y34">
-                <a href="..." class="mask" (click)="handleSong()"> </a>
-            </div> <!--end of <div class="cover">-->
-                
-            <div class="info">
-                <div class="header">
-                       <a class="title">下过雨后</a>
-                       <a class="mv"></a>
-                       <a class="singer">洪佩一</a>
-                       <a class="playlist" title="来自歌单"></a>        
-                </div> <!-- end of <div class="header"> -->
-                    
-                <div class="progress">
-                    <div class="bar" #bar >
-                        <!--<div class="ready" [width]="readyWidth" #readyBar></div>-->
-                        <div class="current" [width]="curWidth"></div>
-                        <div class="index" [style.left]="curWidth" ></div>
+            </div>
+            <!-- end of <div class="buttons"> -->
+
+            <!--<div class="guard" *ngIf="curSong">-->
+                <div class="cover">
+                    <img *ngIf="curSong" [src]="curSong.album.cover + '?param=34y34'">
+                    <a class="mask" (click)="handleSong()"> </a>
+                </div>
+                <!--end of <div class="cover">-->
+
+                <div class="info">
+                    <div class="header">
+                        <a class="title" *ngIf="curSong" >{{curSong.song.name}}</a>
+                        <a class="mv" *ngIf="curSong && curSong.song.mv"></a>
+                        <a class="singer" *ngIf="curSong">{{curSong.singers[0].name}}</a>
+                        <a class="playlist" title="来自歌单"></a>
                     </div>
-                    <div class="duration">
-                        <span class="current" >{{audio.currentTime | durationFormat:"s"}}</span>/ <span class="total" >{{audio.duration | durationFormat:"s"}}</span>
+                    <!-- end of <div class="header"> -->
+
+                    <div class="progress">
+                        <div class="bar" #bar>
+                            <div class="buffered" [width]="bufferedWidth" ></div>
+                            <div class="current" [width]="curWidth"></div>
+                            <div class="index" [style.left]="curWidth"></div>
+                        </div>
+                        <div class="duration">
+                            <span class="current">{{audio.currentTime | durationFormat:"s"}}</span>/ <span class="total">{{audio.duration | durationFormat:"s"}}</span>
+                        </div>
                     </div>
-                </div> <!-- end of <div class="progress">-->
-                    
-            </div> <!-- end of <div class="info"> -->
-            
+                    <!-- end of <div class="progress">-->
+
+                </div>
+                <!-- end of <div class="info"> -->
+
+            <!--</div>-->
+            <!-- end  of   <div  class="guard" *ngIf="curSong">     -->
+
             <div class="operation">
                 <a class="like" title="收藏"></a>
                 <a class="share" title="分享"></a>
-            </div> <!-- end of <div class="operation"> -->
-            
-            <div class = "controls">
+            </div>
+            <!-- end of <div class="operation"> -->
+
+            <div class="controls">
                 <a class="volume" title="音量收藏"></a>
                 <a class="mode loop" title="循环"></a>
                 <a class="playlist" title="播放列表"></a>
 
-            </div> <!-- end of <div class = "controls"> -->
-                   
-        </div> <!-- end of <div class="dashboard"> -->
-            
-    </div> <!-- end of <div class="bg"> -->
+            </div>
+            <!-- end of <div class = "controls"> -->
 
-</div> <!-- end of <div class="player"> -->
+        </div>
+        <!-- end of <div class="dashboard"> -->
+
+    </div>
+    <!-- end of <div class="bg"> -->
+
+</div>
+<!-- end of <div class="player"> -->

@@ -194,7 +194,7 @@
      border-radius: 4px;
 }
 
-.bar .ready {
+.bar .buffered {
     position: absolute;
     background: transparent url("./resources/images/progressbar.png") 0px -30px scroll no-repeat; 
     height: 9px;

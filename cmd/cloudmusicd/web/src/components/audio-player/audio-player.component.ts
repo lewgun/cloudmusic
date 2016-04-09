@@ -11,6 +11,7 @@
 
 //http://stackoverflow.com/questions/34364880/expression-has-changed-after-it-was-checked
 //http://stackoverflow.com/questions/33472297/how-to-translate-html-string-to-real-html-element-by-ng-for-in-angular-2
+//http://dengo.org/archives/1048
 
 import {
     Component,
@@ -71,20 +72,19 @@ export enum Direction {
 export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
 
     @ViewChild('audio') _audioRef: ElementRef;
-    @ViewChild('indexBar') _indexBar: HTMLDivElement;
     @ViewChild('bar') _bar: ElementRef;
+    
 
     @ViewChild('src') _srcRef: ElementRef;
 
-    public readyWidth: number = 0;
+    public bufferedWidth: number = 0;
     public curWidth: number = 0;
     public isPlaying: boolean = true;
 
     private _curSongToken: StoreToken;
     private _curPlaylistToken: StoreToken;
 
-    private _curSongId = -1;
-    private _curPlaylistId = -1;
+    private curSong :any;
 
     //当前插放列表
     private _curPlaylist: any[];
@@ -144,9 +144,13 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
             return;
         }
 
-        this._curSongId = this._playStore.CurrentSong();
+        let sid = this._playStore.CurrentSong();
+        this.curSong = this._songWithId(sid);
+        if (!this.curSong) {
+            return;
+        }
 
-        this._cloudMusic.SongUrl(this._curSongId).
+        this._cloudMusic.SongUrl(this.curSong.song.id).
             then(retVal => {
 
                 if (retVal.code !== 200) {
@@ -172,7 +176,6 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
             return;
         }
 
-        this._curPlaylistId = this._playStore.CurrentPlaylist();
         this._curPlaylist = this._playlistStore.PlayListDetail();
     }
 
@@ -243,7 +246,7 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
              dir : Direction.Next}
         ) {
 
-        let songId = this._followUpSongId(this._curSongId, params.mode, params.dir);
+        let songId = this._followUpSongId(this.curSong.song.id, params.mode, params.dir);
         
         this._playAction.SaveCurrentSong(songId);
         
@@ -292,6 +295,17 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
         return this._followUpSongId(this._curPlaylist[index].song.id, mode, dir);
 
     }
+    
+    private _songWithId(sid: number ):any {
+        
+          for (let s of this._curPlaylist) {
+            if (s.song.id === sid) {
+              return s;
+            }
+        }
+        return null;
+
+    }
 
     private _stopTrackingProgress() {
         clearTimeout(this._progressInteval);
@@ -301,6 +315,11 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
     private _updatePlayProgress() {
         this.curWidth = this.audio.currentTime / this.audio.duration * this._totalWidth;
 
+
+        let index = this.audio.buffered.length;
+	    if (index > 0 && this.audio.buffered != undefined) {
+                this.bufferedWidth = this.audio.buffered.end(index - 1) / this.audio.duration * this._totalWidth;
+        }
         // fix: EXCEPTION: Expression has changed after it was check
         this._cdr.detectChanges();
     }

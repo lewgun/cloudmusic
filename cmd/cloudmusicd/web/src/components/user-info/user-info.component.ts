@@ -93,8 +93,6 @@ export class UserInfoComponent implements OnInit, OnDestroy {
         private _dlg: DialogService,
         private _cloudMusic: CloudMusicService) {
 
-        //this._userInfoStore = this._store.Bind(() => this.onUserInfo());
-
         this._dailyTaskToken = this._userInfoStore.Bind((evt: EventType) => this.onDailyTask(evt));
         this._playlistToken = this._playlistStore.Bind((evt: EventType) => this.onPlayList(evt));
         this._playlistDetailToken = this._playlistStore.Bind((evt: EventType) => this.onPlayListDetail(evt));
@@ -109,7 +107,6 @@ export class UserInfoComponent implements OnInit, OnDestroy {
             PlayList,
             (tracks: any[]): any[] => this.playlistDigger(tracks));
 
-        // this.handleDailyTask();
 
     }
 
@@ -139,6 +136,7 @@ export class UserInfoComponent implements OnInit, OnDestroy {
             item.album = {};
             item.album.name = song.al.name;
             item.album.id = song.al.id;
+            item.album.cover = song.al.picUrl;
 
             item.singers = [];
 
@@ -265,6 +263,8 @@ export class UserInfoComponent implements OnInit, OnDestroy {
                     this._dlg.alert(retVal.code);
                     return;
                 }
+                
+                console.log("handleMyPlaylistDetail", retVal);
 
                 let temp = this._cloudMusic.Dig(
                     PlayList,
