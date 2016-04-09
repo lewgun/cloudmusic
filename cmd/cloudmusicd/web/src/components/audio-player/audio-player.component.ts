@@ -194,7 +194,7 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
     public onEnded() {
         // this.audio.currentTime = 0;
         // this.audio.pause();
-        this.handleNext();
+        this.handleNext(null);
     }
 
     public onPlay() {
@@ -208,12 +208,12 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     //上一首
-    public handlePrev() {
+    public handlePrev($event) {
         this._playFollowUp( {mode: this.curPlayMode, dir: Direction.Prev});
     }
 
     //下一首
-    public handleNext() {
+    public handleNext($event) {
         this._playFollowUp({mode: this.curPlayMode});
     }
     
@@ -226,7 +226,7 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     //播放/暂停
-    public handlePnP() {
+    public handlePnP($event) {
         if (this.audio.paused || this.audio.ended) {
             if (this.audio.ended) {
                 this.audio.currentTime = 0;
@@ -237,6 +237,40 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
 
         this.audio.pause();
     }
+    
+    //准备拖动
+    public handleScrubbingBegin($event) {
+        this._stopTrackingProgress();
+        this.audio.pause();
+    }
+    
+    //拖动ing
+    public handleScrubbingMove($event) {
+        this._setPlayProgress($event.pageX);   
+    }
+    
+    //拖动结束
+    public handleScrubbingEnd($event) {
+        this.audio.play();
+        this._setPlayProgress($event.pageX);
+        this._trackingProgress();
+    }
+    
+    private _setPlayProgress ( clickX: number ) { 
+        
+		let newPercent = Math.max( 0, Math.min(1, (clickX - this._findPosX(this._bar.nativeElement)) / this._bar.nativeElement.offsetWidth) ); 
+		this.audio.currentTime = newPercent * this.audio.duration; 
+	}
+    
+    private _findPosX (pb : any) { 
+		let curleft = pb.offsetLeft;
+        
+		while( pb = pb.offsetParent ) { 
+			curleft += pb.offsetLeft; 
+		} 
+        
+		return curleft; 
+	}
 
     private _trackingProgress() {
         let f = () => {
@@ -299,9 +333,12 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
         }
         
         if (this._curPlaylist[index].song.canPlay){
+            console.log("play: ", this._curPlaylist[index].song.name);
             return this._curPlaylist[index].song.id;
             
         }
+        
+        console.log("can't play: next one", this._curPlaylist[index].song.name);
         
         return this._followUpSongId(this._curPlaylist[index].song.id, mode, dir);
 
@@ -336,3 +373,4 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
 }
+

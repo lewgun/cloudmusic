@@ -13,9 +13,9 @@
     <div class="main">
         <div class="dashboard">
             <div class="buttons">
-                <a class="prev" title="上一首(ctrl+←)" (click)="handlePrev()" (keyup.p)="handlePrev($event)"></a>
-                <a [ngClass]="{'play': isPlaying, 'pause': !isPlaying }" title="播放/暂停(p)" (click)="handlePnP()" (keyup.space)="handlePnP($event)"></a>
-                <a class="next" title="下一首(ctrl+←)" (click)="handleNext()" (keyup.n)="handleNext($event)"></a>
+                <a class="prev" title="上一首(ctrl+←)" (click)="handlePrev($event)" (keyup.p)="handlePrev($event)"></a>
+                <a [ngClass]="{'play': isPlaying, 'pause': !isPlaying }" title="播放/暂停(p)" (click)="handlePnP($event)" (keyup.space)="handlePnP($event)"></a>
+                <a class="next" title="下一首(ctrl+←)" (click)="handleNext($event)" (keyup.n)="handleNext($event)"></a>
             </div>
             <!-- end of <div class="buttons"> -->
 
@@ -36,7 +36,12 @@
                     <!-- end of <div class="header"> -->
 
                     <div class="progress">
-                        <div class="bar" #bar>
+                        <div class="bar"
+                         #bar
+                         (mousedown)="handleScrubbingBegin($event)"
+                         (mousemove)="handleScrubbingMove($event)"
+                         (mouseup)="handleScrubbingEnd($event)"
+                         >
                             <div class="buffered" [width]="bufferedWidth" ></div>
                             <div class="current" [width]="curWidth"></div>
                             <div class="index" [style.left]="curWidth"></div>
