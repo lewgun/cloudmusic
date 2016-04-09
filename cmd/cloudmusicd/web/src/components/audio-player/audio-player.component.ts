@@ -27,6 +27,7 @@ import {
 
     //stores
     PlayStore,
+    PlayListStore,
 
     //acitons
     PlayActionCreator,
@@ -47,6 +48,16 @@ import { EventType }from '../../types/types';
 import { DurationFormatPipe} from '../../pipes/duration-format/duration-format.pipe';
 
 import {WidthDirective} from '../../directives/width/width.directive'
+
+export enum Mode {
+    Single, //单曲
+    InOrder, //顺序
+    Random
+}
+export enum Direction {
+    Next,  //向后
+    Prev   //向前
+}
 
 @Component({
     templateUrl: "audio-player/audio-player.component.html",
@@ -75,6 +86,9 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
     private _curSongId = -1;
     private _curPlaylistId = -1;
 
+    //当前插放列表
+    private _curPlaylist: any[];
+
     private _totalWidth = 0;
 
     private audio: HTMLAudioElement;
@@ -84,10 +98,13 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
 
     private _progressInteval: any;
 
+
     constructor(
         private _cdr: ChangeDetectorRef,
 
         private _playStore: PlayStore,
+        private _playlistStore: PlayListStore,
+
         private _playAction: PlayActionCreator,
         private _cloudMusic: CloudMusicService,
         private _dlg: DialogService
@@ -100,7 +117,7 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
         //this._audio = document.getElementById("audio");
         this._curSongToken = this._playStore.Bind((evt: EventType) => this.onCurSong(evt));
         this._curPlaylistToken = this._playStore.Bind((evt: EventType) => this.onCurPlaylist(evt));
- 
+
 
     }
 
@@ -156,6 +173,7 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
         }
 
         this._curPlaylistId = this._playStore.CurrentPlaylist();
+        this._curPlaylist = this._playlistStore.PlayListDetail();
     }
 
     /*This event fires when the browser has finishe loading the meta data for the video */
@@ -168,8 +186,9 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public onEnded() {
-        this.audio.currentTime = 0;
-        this.audio.pause();
+        // this.audio.currentTime = 0;
+        // this.audio.pause();
+        this.handleNext();
     }
 
     public onPlay() {
@@ -184,12 +203,12 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
 
     //上一首
     public handlePrev() {
-
+        this._playFollowUp( {dir: Direction.Prev});
     }
 
     //下一首
     public handleNext() {
-
+        this._playFollowUp();
     }
 
     //播放/暂停
@@ -214,6 +233,65 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
 
     }
 
+    //接下来将播放的歌曲
+    private _playFollowUp(
+        params :{
+            mode?: Mode,
+            dir?: Direction
+        } = {
+             mode: Mode.Random,
+             dir : Direction.Next}
+        ) {
+
+        let songId = this._followUpSongId(this._curSongId, params.mode, params.dir);
+        
+        this._playAction.SaveCurrentSong(songId);
+        
+
+    }
+
+    private _followUpSongId(sid: number, mode: Mode = Mode.Random, dir: Direction = Direction.Next): number {
+
+        console.log(sid, mode, dir);
+        
+        if (mode === Mode.Single) {
+            return sid;
+        }
+        if (mode === Mode.Random) {
+            let index = Math.floor(Math.random() * this._curPlaylist.length);
+            return this._curPlaylist[index].song.id;
+        }
+
+        let index: number = 0;
+        for (let s of this._curPlaylist) {
+            if (s.song.id === sid) {
+                if (dir === Direction.Prev) {
+                    index -= 1;
+                } else {
+                    index += 1;
+                }
+                break;
+            }
+            index++;
+
+        }
+
+        if (index < 0) {
+            index = 0;
+        }
+
+        if (index > this._curPlaylist.length - 1) {
+            this._curPlaylist.length -= 1;
+        }
+        
+        if (this._curPlaylist[index].song.canPlay){
+            return this._curPlaylist[index].song.id;
+            
+        }
+        
+        return this._followUpSongId(this._curPlaylist[index].song.id, mode, dir);
+
+    }
 
     private _stopTrackingProgress() {
         clearTimeout(this._progressInteval);
@@ -222,7 +300,7 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
 
     private _updatePlayProgress() {
         this.curWidth = this.audio.currentTime / this.audio.duration * this._totalWidth;
- 
+
         // fix: EXCEPTION: Expression has changed after it was check
         this._cdr.detectChanges();
     }

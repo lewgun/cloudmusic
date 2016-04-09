@@ -6,7 +6,6 @@ import {Pipe, PipeTransform} from 'angular2/core';
 export class DurationFormatPipe implements PipeTransform {
   transform(duration: number, args: any[] = []) : string {
       
-      console.log("duration: ", duration);
       let unit = 1000;
       
       let base = 60 * unit;
