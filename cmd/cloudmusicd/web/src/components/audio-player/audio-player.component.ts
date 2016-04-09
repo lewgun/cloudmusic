@@ -12,6 +12,7 @@
 //http://stackoverflow.com/questions/34364880/expression-has-changed-after-it-was-checked
 //http://stackoverflow.com/questions/33472297/how-to-translate-html-string-to-real-html-element-by-ng-for-in-angular-2
 //http://dengo.org/archives/1048
+//http://stackoverflow.com/questions/34641281/how-to-add-class-to-host-element/34643330#34643330
 
 import {
     Component,
@@ -61,21 +62,23 @@ export enum Direction {
     Prev   //向前
 }
 
+
+const scrubbingClass = " scrubbing";
+    
 @Component({
     templateUrl: "audio-player/audio-player.component.html",
     styleUrls: ["audio-player/audio-player.component.css"],
     selector: "audio-player",
     directives: [WidthDirective],
     pipes: [DurationFormatPipe],
-    providers: [CloudMusicService]
+    providers: [CloudMusicService],
 
 })
 export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
 
     @ViewChild('audio') _audioRef: ElementRef;
-    @ViewChild('bar') _bar: ElementRef;
-    
-
+    @ViewChild('bar') _barRef: ElementRef;
+    @ViewChild('index') _indexRef: ElementRef;   
     @ViewChild('src') _srcRef: ElementRef;
 
     public bufferedWidth: number = 0;
@@ -86,6 +89,7 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
 
     private _curSongToken: StoreToken;
     private _curPlaylistToken: StoreToken;
+    
 
 
 
@@ -96,6 +100,8 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
 
     private audio: HTMLAudioElement;
     private source: HTMLSourceElement;
+    
+    private index: HTMLDivElement;
 
     //private _audio: any;
 
@@ -128,9 +134,11 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
         this.audio = this._audioRef.nativeElement;
 
         this.source = this._srcRef.nativeElement;
+        
+        this.index = this._indexRef.nativeElement;
 
         // this._audio.removeAttribute('controls');
-        this._totalWidth = this._bar.nativeElement.offsetWidth;
+        this._totalWidth = this._barRef.nativeElement.offsetWidth;
     }
 
 
@@ -238,19 +246,46 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
         this.audio.pause();
     }
     
+    
+    public handleScrubbingClick($event) {
+        this._handleScrubbingBeginHelper($event);  
+        this.handleScrubbingEnd($event); 
+    }
+    
+        //准备拖动
+    private _handleScrubbingBeginHelper($event) {
+        this._stopTrackingProgress();
+        this.audio.pause(); 
+    }
+    
     //准备拖动
     public handleScrubbingBegin($event) {
-        this._stopTrackingProgress();
-        this.audio.pause();
+        this._handleScrubbingBeginHelper($event); 
+        
+        console.log("handleScrubbingBegin+++++++++++++");
+        
+        this.index.onmousemove = ($evt) => this.handleScrubbingMove($evt);
+        this.index.onmouseup = ($evt) => this.handleScrubbingEnd($evt);
+        this.index.className += scrubbingClass;
     }
     
     //拖动ing
     public handleScrubbingMove($event) {
+        console.log("handleScrubbingMove");
         this._setPlayProgress($event.pageX);   
     }
     
     //拖动结束
     public handleScrubbingEnd($event) {
+        
+                console.log("handleScrubbingEnd---------------");
+        this._handleScrubbingEndHelper($event);
+        this.index.onmousemove = null;
+        this.index.onmouseup = null;
+        this.index.className = this.index.className.replace(scrubbingClass, "");
+    }
+    
+    private _handleScrubbingEndHelper($event) {
         this.audio.play();
         this._setPlayProgress($event.pageX);
         this._trackingProgress();
@@ -258,7 +293,7 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
     
     private _setPlayProgress ( clickX: number ) { 
         
-		let newPercent = Math.max( 0, Math.min(1, (clickX - this._findPosX(this._bar.nativeElement)) / this._bar.nativeElement.offsetWidth) ); 
+		let newPercent = Math.max( 0, Math.min(1, (clickX - this._findPosX(this._barRef.nativeElement)) / this._barRef.nativeElement.offsetWidth) ); 
 		this.audio.currentTime = newPercent * this.audio.duration; 
 	}
     

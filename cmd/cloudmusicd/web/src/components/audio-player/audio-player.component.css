@@ -220,6 +220,11 @@
     top:  -7px;
     z-index: 3; 
 }
+
+.bar .index.scrubbing{
+    cursor: pointer;
+}
+
     
 .duration {
     float: left;

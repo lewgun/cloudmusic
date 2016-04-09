@@ -36,15 +36,10 @@
                     <!-- end of <div class="header"> -->
 
                     <div class="progress">
-                        <div class="bar"
-                         #bar
-                         (mousedown)="handleScrubbingBegin($event)"
-                         (mousemove)="handleScrubbingMove($event)"
-                         (mouseup)="handleScrubbingEnd($event)"
-                         >
+                        <div #bar class="bar"  (click)="handleScrubbingClick($event)">
                             <div class="buffered" [width]="bufferedWidth" ></div>
                             <div class="current" [width]="curWidth"></div>
-                            <div class="index" [style.left]="curWidth"></div>
+                            <div #index class="index" [style.left]="curWidth"(mousedown)="handleScrubbingBegin($event)" ></div>
                         </div>
                         <div class="duration">
                             <span class="current">{{audio.currentTime | durationFormat:"s"}}</span>/ <span class="total">{{audio.duration | durationFormat:"s"}}</span>
