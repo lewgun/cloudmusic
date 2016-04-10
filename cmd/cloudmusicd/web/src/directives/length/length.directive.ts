@@ -20,12 +20,20 @@ import {
   primarily used in the form of HTML attributes to decorate Components with. 
  */
 @Directive({
-    selector: '[width]'
+    selector: '[length]'
 })
-export class WidthDirective implements OnInit, OnChanges {
+export class LengthDirective implements OnInit, OnChanges {
 
-    @Input('width')
-    width: number;
+    private _axis: string = "x";
+
+    @Input('length')
+    len: number;
+
+    @Input()
+    set axis(val: string) {
+        this._axis = val || this._axis;
+    }
+
 
     constructor(private _el: ElementRef, private _renderer: Renderer) {
     }
@@ -36,10 +44,13 @@ export class WidthDirective implements OnInit, OnChanges {
          this._renderer.setElementStyle(this._el, 'width', `${window.innerWidth}px`);
          this._renderer.setElementStyle(this._el, 'height', `${window.innerHeight}px`);
          */
-        this.width = changes['width'].currentValue;
-        
+        this.len = changes['len'].currentValue;
+     
         //this._el.nativeElement.style.width = this.width + "px";
-        this._renderer.setElementStyle(this._el.nativeElement, 'width', this.width + "px");
+        this._renderer.setElementStyle(
+            this._el.nativeElement,
+            this._axis === 'x' ? 'width' : 'height',
+            this.len + "px");
 
     }
 

@@ -49,7 +49,7 @@ import { EventType }from '../../types/types';
 
 import { DurationFormatPipe} from '../../pipes/duration-format/duration-format.pipe';
 
-import {WidthDirective} from '../../directives/width/width.directive'
+import {LengthDirective} from '../../directives/length/length.directive'
 
 export enum Mode {
     Single, //单曲
@@ -62,6 +62,10 @@ export enum Direction {
     Prev   //向前
 }
 
+export enum Axis {
+    X,
+    Y
+}
 
 const scrubbingClass = " scrubbing";
     
@@ -69,7 +73,7 @@ const scrubbingClass = " scrubbing";
     templateUrl: "audio-player/audio-player.component.html",
     styleUrls: ["audio-player/audio-player.component.css"],
     selector: "audio-player",
-    directives: [WidthDirective],
+    directives: [LengthDirective],
     pipes: [DurationFormatPipe],
     providers: [CloudMusicService],
 
@@ -77,35 +81,53 @@ const scrubbingClass = " scrubbing";
 export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
 
     @ViewChild('audio') _audioRef: ElementRef;
+    @ViewChild('src') _srcRef: ElementRef;
+        
     @ViewChild('bar') _barRef: ElementRef;
     @ViewChild('index') _indexRef: ElementRef;   
-    @ViewChild('src') _srcRef: ElementRef;
 
+    
+    @ViewChild('volIndex') _volIndexRef: ElementRef;
+    @ViewChild('volBar') _volBarRef: ElementRef;   
+    
+
+    //进度条相关
     public bufferedWidth: number = 0;
     public curWidth: number = 0;
+    
     public isPlaying: boolean = true;
     public curSong :any;
     public curPlayMode : Mode = Mode.Random;
+    
+    //声音相关
+    public curVolumeHeight : number = 0;
+    public isVolumeShow: boolean = false;  
+    //声音条长度
+    public volumeBarLen = 0;
+    public volIndexRadius = 0;
+    
 
     private _curSongToken: StoreToken;
     private _curPlaylistToken: StoreToken;
     
 
-
-
     //当前插放列表
     private _curPlaylist: any[];
 
-    private _totalWidth = 0;
+    //进度条长度
+    private _progressBarLen = 0;
+    
+    private _progressInteval: any;
+    
 
     private audio: HTMLAudioElement;
     private source: HTMLSourceElement;
     
+    //进度条指示点
     private index: HTMLDivElement;
-
+        
     //private _audio: any;
 
-    private _progressInteval: any;
 
 
     constructor(
@@ -138,7 +160,15 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
         this.index = this._indexRef.nativeElement;
 
         // this._audio.removeAttribute('controls');
-        this._totalWidth = this._barRef.nativeElement.offsetWidth;
+        this._progressBarLen = this._barRef.nativeElement.offsetWidth;
+        
+        
+        this.volumeBarLen = this._volBarRef.nativeElement.offsetHeight;
+        this.volIndexRadius = this._volIndexRef.nativeElement.offsetHeight / 2;
+        
+        
+        this._setVolumeHeight();
+        this._cdr.detectChanges();
     }
 
 
@@ -249,7 +279,7 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
     
     public handleScrubbingClick($event) {
         this._handleScrubbingBeginHelper($event);  
-        this.handleScrubbingEnd($event); 
+        this._handleScrubbingEndHelper($event); 
     }
     
         //准备拖动
@@ -261,9 +291,7 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
     //准备拖动
     public handleScrubbingBegin($event) {
         this._handleScrubbingBeginHelper($event); 
-        
-        console.log("handleScrubbingBegin+++++++++++++");
-        
+   
         this.index.onmousemove = ($evt) => this.handleScrubbingMove($evt);
         this.index.onmouseup = ($evt) => this.handleScrubbingEnd($evt);
         this.index.className += scrubbingClass;
@@ -271,40 +299,70 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
     
     //拖动ing
     public handleScrubbingMove($event) {
-        console.log("handleScrubbingMove");
         this._setPlayProgress($event.pageX);   
     }
     
     //拖动结束
     public handleScrubbingEnd($event) {
-        
-                console.log("handleScrubbingEnd---------------");
         this._handleScrubbingEndHelper($event);
         this.index.onmousemove = null;
         this.index.onmouseup = null;
         this.index.className = this.index.className.replace(scrubbingClass, "");
     }
     
-    private _handleScrubbingEndHelper($event) {
+    public handleVolume($event) {
+        this.isVolumeShow = !this.isVolumeShow;
+    }
+    
+    public handleVolumeChanged($event) {
+        this._handleScrubbingBeginHelper($event);
+        
+        let percent = 1 - this._newPercent($event.pageY, this._volBarRef,  Axis.Y);
+        console.log("volue percent: ", percent);
+        
+        this.audio.volume = percent;
+        
+        this._setVolumeHeight();
+        
+        this.audio.play();
+
+    }
+    
+    private _setVolumeHeight() {
+        this.curVolumeHeight = this.volumeBarLen * (1- this.audio.volume);
+        this._cdr.detectChanges();
+    }
+    private _handleScrubbingEndHelper($event) {            
         this.audio.play();
         this._setPlayProgress($event.pageX);
         this._trackingProgress();
     }
     
+
+    private _newPercent(clickPos: number, elemRef: any, axis: Axis ) : number{         
+        let range =  clickPos - this._findAxisPos(elemRef.nativeElement, axis );
+        let total = axis === Axis.X ? elemRef.nativeElement.offsetWidth : elemRef.nativeElement.offsetHeight;
+        let perecent = Math.min(1, range / total );
+          
+        return Math.max(0, perecent);
+        
+    }
     private _setPlayProgress ( clickX: number ) { 
-        
-		let newPercent = Math.max( 0, Math.min(1, (clickX - this._findPosX(this._barRef.nativeElement)) / this._barRef.nativeElement.offsetWidth) ); 
-		this.audio.currentTime = newPercent * this.audio.duration; 
-	}
+        let percent = this._newPercent(clickX, this._barRef,  Axis.X);
+        this.audio.currentTime = percent * this.audio.duration; 
+ 	}
     
-    private _findPosX (pb : any) { 
-		let curleft = pb.offsetLeft;
+    private _findAxisPos (pb : any, axis: Axis) { 
         
+        let curVal = 0;
+        
+        curVal = axis === Axis.X ? pb.offsetLeft : pb.offsetTop;
+		
 		while( pb = pb.offsetParent ) { 
-			curleft += pb.offsetLeft; 
+			curVal  += Axis.X ? pb.offsetLeft : pb.offsetTop;
 		} 
         
-		return curleft; 
+		return curVal; 
 	}
 
     private _trackingProgress() {
@@ -368,13 +426,9 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
         }
         
         if (this._curPlaylist[index].song.canPlay){
-            console.log("play: ", this._curPlaylist[index].song.name);
-            return this._curPlaylist[index].song.id;
+             return this._curPlaylist[index].song.id;
             
         }
-        
-        console.log("can't play: next one", this._curPlaylist[index].song.name);
-        
         return this._followUpSongId(this._curPlaylist[index].song.id, mode, dir);
 
     }
@@ -396,12 +450,11 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
     private _updatePlayProgress() {
-        this.curWidth = this.audio.currentTime / this.audio.duration * this._totalWidth;
-
+        this.curWidth = this.audio.currentTime / this.audio.duration * this._progressBarLen;
 
         let index = this.audio.buffered.length;
 	    if (index > 0 && this.audio.buffered != undefined) {
-                this.bufferedWidth = this.audio.buffered.end(index - 1) / this.audio.duration * this._totalWidth;
+                this.bufferedWidth = this.audio.buffered.end(index - 1) / this.audio.duration * this._progressBarLen;
         }
         // fix: EXCEPTION: Expression has changed after it was check
         this._cdr.detectChanges();

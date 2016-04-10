@@ -301,6 +301,7 @@
 
 
 .controls {
+    position: relative;
     float: left;
     width: 140px;
     height: 36px;
@@ -326,8 +327,58 @@
 }
 
 .controls .volume:hover {
-    background-position: -31px -248px;
-        
+    background-position: -31px -248px;     
+}
+
+.controls .volume-board {
+    visibility: hidden;
+    position: absolute;
+    top: -109px;
+    left: 6px;
+    /*clear: both;*/
+    width: 32px;
+    height: 113px;
+    z-index: 0;
+    background: transparent url("./resources/images/playbar.png") -0px -503px scroll no-repeat;
+
+}
+
+.volume-board #current {
+    position: absolute;
+    bottom: 4px;
+    left: 14px;
+    width: 4px;
+    height: 93px;
+    overflow: hidden;
+    background: transparent url("./resources/images/playbar.png") -40px bottom scroll no-repeat;
+    z-index: 1;
+}
+
+
+.volume-board #ruler {
+    visibility: hidden;
+    width: 14px;
+    height: 93px;
+    position: absolute;
+    top: 12px;
+    bottom: 4px;
+    left: 9px;
+ 
+  
+}
+
+.volume-board #index {
+    position: absolute;
+    top: 95px;
+    left: 7px;
+    width: 18px;
+    height: 20px;
+    background: transparent url("./resources/images/iconall.png")  -40px -250px scroll no-repeat;
+    cursor: pointer;
+    z-index: 2;
+}
+.volume-board #index:hover {
+    background-position: -40px -280px;
 }
 
 .controls .mode {

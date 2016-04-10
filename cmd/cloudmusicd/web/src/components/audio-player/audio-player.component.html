@@ -20,35 +20,35 @@
             <!-- end of <div class="buttons"> -->
 
             <!--<div class="guard" *ngIf="curSong">-->
-                <div class="cover">
-                    <img *ngIf="curSong" [src]="curSong.album.cover + '?param=34y34'">
-                    <a class="mask" (click)="handleSong()"> </a>
+            <div class="cover">
+                <img *ngIf="curSong" [src]="curSong.album.cover + '?param=34y34'">
+                <a class="mask" (click)="handleSong()"> </a>
+            </div>
+            <!--end of <div class="cover">-->
+
+            <div class="info">
+                <div class="header">
+                    <a class="title" *ngIf="curSong">{{curSong.song.name}}</a>
+                    <a class="mv" *ngIf="curSong && curSong.song.mv"></a>
+                    <a class="singer" *ngIf="curSong">{{curSong.singers[0].name}}</a>
+                    <a class="playlist" title="来自歌单"></a>
                 </div>
-                <!--end of <div class="cover">-->
+                <!-- end of <div class="header"> -->
 
-                <div class="info">
-                    <div class="header">
-                        <a class="title" *ngIf="curSong" >{{curSong.song.name}}</a>
-                        <a class="mv" *ngIf="curSong && curSong.song.mv"></a>
-                        <a class="singer" *ngIf="curSong">{{curSong.singers[0].name}}</a>
-                        <a class="playlist" title="来自歌单"></a>
+                <div class="progress">
+                    <div #bar class="bar" (click)="handleScrubbingClick($event)">
+                        <div class="buffered" [axis]="'x'" [length]="bufferedWidth"></div>
+                        <div class="current" [axis]="'x'" [length]="curWidth"></div>
+                        <div #index class="index" [style.left]="curWidth" (mousedown)="handleScrubbingBegin($event)"></div>
                     </div>
-                    <!-- end of <div class="header"> -->
-
-                    <div class="progress">
-                        <div #bar class="bar"  (click)="handleScrubbingClick($event)">
-                            <div class="buffered" [width]="bufferedWidth" ></div>
-                            <div class="current" [width]="curWidth"></div>
-                            <div #index class="index" [style.left]="curWidth"(mousedown)="handleScrubbingBegin($event)" ></div>
-                        </div>
-                        <div class="duration">
-                            <span class="current">{{audio.currentTime | durationFormat:"s"}}</span>/ <span class="total">{{audio.duration | durationFormat:"s"}}</span>
-                        </div>
+                    <div class="duration">
+                        <span class="current">{{audio.currentTime | durationFormat:"s"}}</span>/ <span class="total">{{audio.duration | durationFormat:"s"}}</span>
                     </div>
-                    <!-- end of <div class="progress">-->
-
                 </div>
-                <!-- end of <div class="info"> -->
+                <!-- end of <div class="progress">-->
+
+            </div>
+            <!-- end of <div class="info"> -->
 
             <!--</div>-->
             <!-- end  of   <div  class="guard" *ngIf="curSong">     -->
@@ -60,13 +60,19 @@
             <!-- end of <div class="operation"> -->
 
             <div class="controls">
-                <a class="volume" title="音量"></a>
-                <a class="mode "
-                 [ngClass]="{'inorder': curPlayMode === 1,
+                <div class="volume-board" [style.visibility] = "isVolumeShow ? 'visible' :'hidden'"  (click)="handleVolumeChanged($event)">
+                    <div id="current" [axis]="'y'" [length]="volumeBarLen-curVolumeHeight"  [style.top]="curVolumeHeight +volIndexRadius">
+                    </div>
+                    <div #volBar id="ruler">
+                    </div>
+                    <div #volIndex id="index" [style.top]="curVolumeHeight"></div>
+                </div>
+                <!-- <div class="volume-board"> -->
+
+                <a class="volume" title="音量" (click)="handleVolume()"></a>
+                <a class="mode " [ngClass]="{'inorder': curPlayMode === 1,
                              'single': curPlayMode === 0,
-                             'random': curPlayMode === 2 }"
-                 title="循环"
-                 (click)="handlePlayMode()"></a>
+                             'random': curPlayMode === 2 }" title="循环" (click)="handlePlayMode()"></a>
                 <a class="playlist" title="播放列表"></a>
 
             </div>
