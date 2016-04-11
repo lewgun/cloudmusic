@@ -103,7 +103,10 @@ export class CloudMusicService implements OnInit {
     PlaylistDetail(id:number): Promise<any> {
 
         let params = {
-            id: id
+            id: id,
+            total: true,
+            offset: 0,
+            limit: 154
         };
 
         let data = this._crypto.aesRsaEncrypt(JSON.stringify(params));

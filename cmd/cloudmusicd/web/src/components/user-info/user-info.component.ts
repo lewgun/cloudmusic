@@ -207,6 +207,7 @@ export class UserInfoComponent implements OnInit, OnDestroy {
     }
 
     // http://music.163.com/weapi/v3/playlist/detail?csrf_token=
+    //http://music.163.com/api/playlist/detail?id=3965559
     //歌单详情
     public handleMyPlaylistDetail(pid: number) {
         this._cloudMusic.PlaylistDetail(pid).
