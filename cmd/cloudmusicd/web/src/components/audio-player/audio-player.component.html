@@ -1,4 +1,4 @@
-<div class="player">
+<div #player class="player" (mouseenter)="handleSlideUp($event)" (mouseleave)="handleSlideDown($event)">
 
     <audio #audio (loadedmetadata)="onLoadMetaData()" (timeupdate)="onProgressUpdated()" (play)="onPlay()" (pause)="onPause()"
     (ended)="onEnded()">
@@ -8,7 +8,8 @@
     </audio>
 
     <div class="sub">
-        <a class="locker lock" title="锁定"></a>
+        <a class="locker" title="锁定" (click)="handleLock($event)" [ngClass]="{'lock': isLocking, 'unlock': !isLocking}">
+        </a>
     </div>
     <div class="main">
         <div class="dashboard">
@@ -60,8 +61,8 @@
             <!-- end of <div class="operation"> -->
 
             <div class="controls">
-                <div class="volume-board" [style.visibility] = "isVolumeShow ? 'visible' :'hidden'"  (click)="handleVolumeChanged($event)">
-                    <div id="current" [axis]="'y'" [length]="volumeBarLen-curVolumeHeight"  [style.top]="curVolumeHeight +volIndexRadius">
+                <div class="volume-board" [style.visibility]="isVolumeShow ? 'visible' :'hidden'" (click)="handleVolumeChanged($event)">
+                    <div id="current" [axis]="'y'" [length]="volumeBarLen-curVolumeHeight" [style.top]="curVolumeHeight +volIndexRadius">
                     </div>
                     <div #volBar id="ruler">
                     </div>

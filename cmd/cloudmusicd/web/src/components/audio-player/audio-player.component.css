@@ -1,7 +1,28 @@
 
+
+@keyframes slideup {
+    from {
+        top: -7px;
+    }
+    to {
+        top: -53px;
+    }
+}
+
+/*.player {
+    animation-name: slideup;
+    animation-duration: 2s;
+    animation-timing-function: ease-in;
+    animation-delay: 0s;
+    animation-iteration-count: 1;
+    animation-direction: normal;
+    animation-play-state: paused;
+}*/
+
 .player {
     height: 63px;
     min-width: 980px;
+    position: relative;
 }
 
 

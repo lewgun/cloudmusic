@@ -24,6 +24,8 @@ import {
     ChangeDetectorRef
 }  from 'angular2/core';
 
+import {AnimationBuilder} from 'angular2/animate';
+
 import {
     StoreToken,
 
@@ -84,7 +86,8 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('src') _srcRef: ElementRef;
         
     @ViewChild('bar') _barRef: ElementRef;
-    @ViewChild('index') _indexRef: ElementRef;   
+    @ViewChild('index') _indexRef: ElementRef;
+    @ViewChild('player') _playerRef: ElementRef;   
 
     
     @ViewChild('volIndex') _volIndexRef: ElementRef;
@@ -105,6 +108,10 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
     //声音条长度
     public volumeBarLen = 0;
     public volIndexRadius = 0;
+    
+    //锁定相关
+    public isLocking = true;
+    public isSlidedDown = false;
     
 
     private _curSongToken: StoreToken;
@@ -128,11 +135,10 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
         
     //private _audio: any;
 
-
-
     constructor(
         private _cdr: ChangeDetectorRef,
-
+        private _ab:AnimationBuilder,
+               
         private _playStore: PlayStore,
         private _playlistStore: PlayListStore,
 
@@ -310,16 +316,17 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
         this.index.className = this.index.className.replace(scrubbingClass, "");
     }
     
+    //点击音量
     public handleVolume($event) {
         this.isVolumeShow = !this.isVolumeShow;
     }
     
+    //调整音量
     public handleVolumeChanged($event) {
         this._handleScrubbingBeginHelper($event);
         
         let percent = 1 - this._newPercent($event.pageY, this._volBarRef,  Axis.Y);
-        console.log("volue percent: ", percent);
-        
+
         this.audio.volume = percent;
         
         this._setVolumeHeight();
@@ -327,6 +334,52 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
         this.audio.play();
 
     }
+    
+    //锁定
+    //locking: fixed
+    public handleLock($event) {
+        this.isLocking = !this.isLocking;
+        this.handleSlideUp($event);
+        
+    } 
+    
+    public handleSlideUp($event) {
+        if (this.isLocking || !this.isSlidedDown) {
+            return;
+        }
+        
+        console.log("handleSlideUp now ");
+        this._ab
+            .css()
+            .setDuration(1000)
+            .setFromStyles( {top: '0px' } )
+            .setToStyles({top: '40px' })
+            .start(this._playerRef.nativeElement)
+            .onComplete(()=> {
+                this.isSlidedDown = false;
+                console.log("slide up finished");
+            });
+      
+
+    } 
+    public handleSlideDown($event) {
+        if (this.isLocking || this.isSlidedDown) {
+            return;
+        }
+        console.log("handleSlideDOWN now ");
+        this._ab
+            .css()
+            .setDuration(1000)
+            .setFromStyles( {top: '40px' } )
+            .setToStyles({top: '0px' })
+            .start(this._playerRef.nativeElement)
+            .onComplete(()=> {
+                this.isSlidedDown = true;
+                console.log("slide DOWN finished");
+            });
+      
+    } 
+    
     
     private _setVolumeHeight() {
         this.curVolumeHeight = this.volumeBarLen * (1- this.audio.volume);
