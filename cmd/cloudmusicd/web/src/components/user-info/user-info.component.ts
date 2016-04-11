@@ -18,7 +18,7 @@ import {
     //stores
     UserInfoStore,
     PlayListStore,
-    PlayStore,
+
 
     //acitons
     UserInfoActionCreator,
@@ -26,10 +26,8 @@ import {
     PlayActionCreator,
 
     //events
-    CurrentPlaylist_Read,
-    CurrentSong_Read,
     PlayList_Read,
-    PlayListDetail_Read,
+
     UserInfo_Read,
     DailyTask_Read,
 
@@ -39,7 +37,7 @@ import {
 import { EventType }from '../../types/types';
 
 import {AudioPlayerComponent} from '../audio-player/audio-player.component'
-
+import {PlaylistComponent} from '../playlist/playlist.component'
 
 const PlayList = "playlist"
 
@@ -47,34 +45,21 @@ const PlayList = "playlist"
     templateUrl: "user-info/user-info.component.html",
     styleUrls: ["user-info/user-info.component.css"],
     providers: [DialogService, CloudMusicService],
-    pipes: [DurationFormatPipe, TextFormatPipe],
-    directives: [AudioPlayerComponent]
+    directives: [AudioPlayerComponent, PlaylistComponent]
 
 })
 export class UserInfoComponent implements OnInit, OnDestroy {
 
-    userInfo: any;
-    playlist: any;
-    playlistDetail: any[];
-
-    curSongUrl: string;
-    curSongId: number = -1;
-
-    curPlaylistId: number = -1;
-
-
     //tokens
-   // private _userInfoToken: StoreToken;
+    // private _userInfoToken: StoreToken;
     private _dailyTaskToken: StoreToken;
-
     private _playlistToken: StoreToken;
-    private _playlistDetailToken: StoreToken;
-
-    private _curSongToken: StoreToken;
-    private _curPlaylistToken: StoreToken;
 
     private _bgPosition = {};
 
+
+    userInfo: any;
+    playlist: any;
     isDailyTaskDone: boolean = false;
 
     constructor(
@@ -82,9 +67,7 @@ export class UserInfoComponent implements OnInit, OnDestroy {
         private _routeParams: RouteParams,
 
         private _userInfoStore: UserInfoStore,
-        
         private _playlistStore: PlayListStore,
-        private _playStore: PlayStore,
 
         private _userInfoAction: UserInfoActionCreator,
         private _playlistAction: PlayListActionCreator,
@@ -95,11 +78,6 @@ export class UserInfoComponent implements OnInit, OnDestroy {
 
         this._dailyTaskToken = this._userInfoStore.Bind((evt: EventType) => this.onDailyTask(evt));
         this._playlistToken = this._playlistStore.Bind((evt: EventType) => this.onPlayList(evt));
-        this._playlistDetailToken = this._playlistStore.Bind((evt: EventType) => this.onPlayListDetail(evt));
-
-        this._curSongToken = this._playStore.Bind((evt: EventType) => this.onCurSong(evt));
-        this._curPlaylistToken = this._playStore.Bind((evt: EventType) => this.onCurPlaylist(evt));
-
 
         this.userInfo = this._userInfoStore.UserInfo();
 
@@ -166,33 +144,6 @@ export class UserInfoComponent implements OnInit, OnDestroy {
         }
 
         this.playlist = this._playlistStore.PlayList();
-
-    }
-
-    public onCurSong(evt: EventType) {
-
-        if (evt != CurrentSong_Read) {
-            return;
-        }
-
-        this.curSongId = this._playStore.CurrentSong();
-    }
-
-    public onCurPlaylist(evt: EventType) {
-        if (evt != CurrentPlaylist_Read) {
-            return;
-        }
-
-        this.curPlaylistId = this._playStore.CurrentPlaylist();
-    }
-
-
-    public onPlayListDetail(evt: EventType) {
-        if (evt != PlayListDetail_Read) {
-            return;
-        }
-
-        this.playlistDetail = this._playlistStore.PlayListDetail();
 
     }
 
@@ -263,7 +214,7 @@ export class UserInfoComponent implements OnInit, OnDestroy {
                     this._dlg.alert(retVal.code);
                     return;
                 }
-                
+
                 console.log("handleMyPlaylistDetail", retVal);
 
                 let temp = this._cloudMusic.Dig(
@@ -280,38 +231,6 @@ export class UserInfoComponent implements OnInit, OnDestroy {
 
     }
 
-    public handlePlaySong(sid: number) {
-
-        this._playAction.SaveCurrentSong(sid);
-
-    }
-
-    public songName(song: any, sep: string): string {
-
-        let ret: string = song.name;
-        if (song.alias) {
-            ret += sep;
-            ret += "(";
-            ret += song.alias;
-            ret += ")";
-        }
-        return ret;
-    }
-
-    public singerName(singers: any, sep: string): string {
-
-        let ret: string = "";
-
-        for (let s of singers) {
-            ret += s.name;
-            ret += sep;
-        }
-
-
-        return ret.substr(0, ret.length - 1);
-
-    }
-
 
     ngOnInit() {
         this._bgPosition["gender"] = (): string => this._genderPostion();
@@ -320,13 +239,8 @@ export class UserInfoComponent implements OnInit, OnDestroy {
     ngOnDestroy(): any {
         //this._userInfoStore.Unbind(this._handlerToken ) ;
         this._userInfoStore.Unbind(this._dailyTaskToken);
-        
         this._playlistStore.Unbind(this._playlistToken);
-        this._playlistStore.Unbind(this._playlistDetailToken);
-        
-        this._playStore.Unbind(this._curSongToken);
-        this._playStore.Unbind(this._curPlaylistToken);
-        
+
         return null;
     }
 
