@@ -44,19 +44,19 @@
     height: 18px;
     left: 18px;
     top: 5px;
-    background: transparent url("./resources/images/playbar.png") -100px -380px scroll no-repeat;
+    /*background: transparent url("./resources/images/playbar.png") -100px -380px scroll no-repeat;*/
 }
 
 .locker.unlock {
-    background-position: -80px -380px;
+    background: transparent url("./resources/images/playbar.png") -80px -380px scroll no-repeat;
 }
 
 .locker.unlock:hover {
-        background-position: -80px -400px;
+    background-position: -80px -400px;
 }
 
 .locker.lock {
-        background-position: -100px -380px;
+    background: transparent url("./resources/images/playbar.png") -100px -380px scroll no-repeat;
 }
 
 .locker.lock:hover {

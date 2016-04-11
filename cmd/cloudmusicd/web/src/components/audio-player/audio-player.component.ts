@@ -339,44 +339,59 @@ export class AudioPlayerComponent implements OnInit, OnDestroy, AfterViewInit {
     //locking: fixed
     public handleLock($event) {
         this.isLocking = !this.isLocking;
-        this.handleSlideUp($event);
         
+        //如果当前处于slide down态,而切换到了锁定态,滑出之
+        if ( this.isLocking && this.isSlidedDown) {
+            this._ab
+                .css()
+                .setDuration(1000)
+                .setFromStyles( {top: '40px' } )
+                .setToStyles({top: '0px' })
+                .start(this._playerRef.nativeElement)
+                .onComplete(()=> {
+                    this.isSlidedDown = false;
+                    console.log("slide up finished");
+                });
+      
+        }
+      
     } 
-    
+
     public handleSlideUp($event) {
-        if (this.isLocking || !this.isSlidedDown) {
-            return;
+        
+        //只要处于slide down态,划上来
+        if ( this.isSlidedDown) {
+            this._ab
+                .css()
+                .setDuration(1000)
+                .setFromStyles( {top: '40px' } )
+                .setToStyles({top: '0px' })
+                .start(this._playerRef.nativeElement)
+                .onComplete(()=> {
+                    this.isSlidedDown = false;
+                    console.log("slide up finished");
+                });
+      
         }
         
-        console.log("handleSlideUp now ");
-        this._ab
-            .css()
-            .setDuration(1000)
-            .setFromStyles( {top: '0px' } )
-            .setToStyles({top: '40px' })
-            .start(this._playerRef.nativeElement)
-            .onComplete(()=> {
-                this.isSlidedDown = false;
-                console.log("slide up finished");
-            });
-      
 
     } 
     public handleSlideDown($event) {
-        if (this.isLocking || this.isSlidedDown) {
-            return;
+        
+        //只有当未锁定且是处于划出态时才slide down.
+        if (!this.isLocking && !this.isSlidedDown) {
+            this._ab
+                .css()
+                .setDuration(1000)
+                .setFromStyles( {top: '0px' } )
+                .setToStyles({top: '40px' })
+                .start(this._playerRef.nativeElement)
+                .onComplete(()=> {
+                    this.isSlidedDown = true;
+                    console.log("slide DOWN finished");
+                });
         }
-        console.log("handleSlideDOWN now ");
-        this._ab
-            .css()
-            .setDuration(1000)
-            .setFromStyles( {top: '40px' } )
-            .setToStyles({top: '0px' })
-            .start(this._playerRef.nativeElement)
-            .onComplete(()=> {
-                this.isSlidedDown = true;
-                console.log("slide DOWN finished");
-            });
+
       
     } 
     
