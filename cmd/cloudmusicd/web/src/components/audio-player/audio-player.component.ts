@@ -14,6 +14,8 @@
 //http://dengo.org/archives/1048
 //http://stackoverflow.com/questions/34641281/how-to-add-class-to-host-element/34643330#34643330
 
+// http://blog.thoughtram.io/angular/2016/02/22/angular-2-change-detection-explained.html change
+
 import {
     Component,
     OnInit,
