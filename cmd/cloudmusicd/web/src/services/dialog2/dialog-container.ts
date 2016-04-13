@@ -28,3 +28,40 @@ import {MdDialogRef} from './dialog-ref';
         },
         
 })
+export class MdDialogContainer {
+    
+  // Ref to the dialog content. Used by the DynamicComponentLoader to load the dialog content.
+ contentRef: ElementRef;
+ 
+ // Ref to the open dialog. Used to close the dialog based on certain events.
+ dlgRef: MdDialogRef;
+ 
+ constructor() {
+     this.contentRef = null;
+     this.dlgRef = null;
+ }
+ 
+ wrapFocus() {
+     
+ }
+ 
+ //  static ESCAPE = 27;
+ documentKeypress(e: KeyboardEvent) {
+     if (  true /*e.keyCode === KeyCodes.escape*/) {
+         this.dlgRef.close();
+     }
+ }
+}
+
+/**
+ * Simple decorator used only to communicate an ElementRef to the parent MdDialogContainer as the
+ * location for where the dialog content will be loaded.
+ */
+@Directive({
+    selector: 'md-dialog-content'
+})
+export class MdDialogContent {
+    constructor(@Host() @SkipSelf dlgContainer: MdDialogContainer, elemRef: ElementRef) {
+        dlgContainer.contentRef = elemRef;
+    }
+}

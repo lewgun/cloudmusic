@@ -26,7 +26,7 @@ export class MdDialogRef {
     contentRefDeferred: any;
 
     constructor(
-                private _ab:AnimationBuilder,
+              /*  private _ab:AnimationBuilder */,
     ) {
         this._backdropRef = null;
         this.containerRef = null;
