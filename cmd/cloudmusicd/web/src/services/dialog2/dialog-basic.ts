@@ -1,6 +1,6 @@
 import {NgIf} from "angular2/common";
 import {Component, Input} from "angular2/core";
-import {MdDialogRef} from "./dialog-ref";
+import {DialogRef} from "./dialog-ref";
 
 @Component({
     selector: "md-dialog-basic",
@@ -37,5 +37,5 @@ export class MdDialogBasic {
     @Input()
     type: string = "alert";
     
-    constructor( public dlg: MdDialogRef) {}
+    constructor( public dlg: DialogRef) {}
 }

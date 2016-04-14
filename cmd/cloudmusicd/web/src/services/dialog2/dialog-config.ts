@@ -1,7 +1,7 @@
-import { MdDialogRef } from "./dialog-ref";
+import { DialogRef } from "./dialog-ref";
 
 /** Configuration for a dialog to be opened. */
-export class MdDialogConfig {
+export class DialogConfig {
     
     width: string = null;
     height: string = null;
@@ -10,43 +10,43 @@ export class MdDialogConfig {
     clickClose: boolean = true;
     context: any = {}
     
-    parent( elem : HTMLElement) : MdDialogConfig {
+    parent( elem : HTMLElement) : DialogConfig {
         this.container = elem;
         return this;
     }
     
-    clickOutsideToClose( enabled: boolean) : MdDialogConfig {
+    clickOutsideToClose( enabled: boolean) : DialogConfig {
         this.clickClose = enabled;
         return this;
     }
     
-    title(txt: string): MdDialogConfig {
+    title(txt: string): DialogConfig {
         this.context.title = txt;
         return this;
     }
     
-    textContent( txt: string): MdDialogConfig {
+    textContent( txt: string): DialogConfig {
         this.context.textContent = txt;
         return this;
     }
     
-    ariaLabel( txt: string) : MdDialogConfig {
+    ariaLabel( txt: string) : DialogConfig {
         this.context.ariaLabel = txt;
         return this;
     }
     
-    ok( txt: string): MdDialogConfig {
+    ok( txt: string): DialogConfig {
         this.context.ok = txt;
         return this;
     }
     
-    cancel(txt: string): MdDialogConfig {
+    cancel(txt: string): DialogConfig {
         this.context.cancel = txt;
         return this;
     }
     
-    targetEvent( evt: Event): MdDialogConfig {
-        this.srcEvent = ev;
+    targetEvent( evt: Event): DialogConfig {
+        this.srcEvent = evt;
         return this;
     }
     
